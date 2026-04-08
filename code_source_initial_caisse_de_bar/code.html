@@ -254,6 +254,14 @@
       const [activeDenom,  setActiveDenom]  = useState(null);
       const [denomStr,     setDenomStr]     = useState('');
       const [syncing,      setSyncing]      = useState(true);
+      const [cartOpen,     setCartOpen]     = useState(false);
+      const [isMobile,    setIsMobile]    = useState(window.innerWidth < 768);
+      const loaded = React.useRef(false);
+      useEffect(()=>{
+        const onResize=()=>setIsMobile(window.innerWidth<768);
+        window.addEventListener('resize',onResize);
+        return()=>window.removeEventListener('resize',onResize);
+      },[]);
 
       useEffect(()=>{
         (async()=>{
@@ -264,12 +272,14 @@
             const m=JSON.parse(r.value);
             if(m.name){setSessionName(m.name);setSessionId(m.id||'');setFondVal(m.fondVal||0);setFondInput(String(m.fondVal||'231'));}
           }}catch{}
+          loaded.current = true;
           setSyncing(false);
         })();
       },[]);
-      useEffect(()=>{storage.set('lpb_pos_products',JSON.stringify(products));},[products]);
-      useEffect(()=>{storage.set('lpb_pos_tx',JSON.stringify(transactions));},[transactions]);
-      useEffect(()=>{storage.set('lpb_pos_sessions',JSON.stringify(sessions));},[sessions]);
+      // Ne sauvegarder qu'APRÈS le chargement initial (évite d'écraser les données cloud)
+      useEffect(()=>{if(loaded.current)storage.set('lpb_pos_products',JSON.stringify(products));},[products]);
+      useEffect(()=>{if(loaded.current)storage.set('lpb_pos_tx',JSON.stringify(transactions));},[transactions]);
+      useEffect(()=>{if(loaded.current)storage.set('lpb_pos_sessions',JSON.stringify(sessions));},[sessions]);
 
       const categories = useMemo(()=>[...new Set(products.map(p=>p.cat))],[products]);
 
@@ -621,7 +631,7 @@
                           <button key={cat} onClick={()=>setActiveCat(cat)} style={{whiteSpace:'nowrap',padding:'0.3rem 0.7rem',borderRadius:'20px',border:`1px solid ${activeCat===cat?C.amber:C.border}`,background:activeCat===cat?C.amber+'14':'transparent',color:activeCat===cat?C.amber:C.textMuted,cursor:'pointer',fontSize:'0.72rem',fontWeight:'500',transition:'all 0.15s',flexShrink:0}}>{cat}</button>
                         ))}
                       </div>
-                      <div style={{flex:1,overflowY:'auto',padding:'0.85rem',minHeight:0}}>
+                      <div style={{flex:1,overflowY:'auto',padding:'0.85rem',paddingBottom:isMobile?'90px':'0.85rem',minHeight:0}}>
                         <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(100px,1fr))',gap:'0.6rem'}}>
                           {filtered.map(p=>{
                             const inCart=cart.find(x=>x.id===p.id);
@@ -639,8 +649,8 @@
                       </div>
                     </div>
 
-                    {/* ── PANNEAU PANIER ── */}
-                    <div style={{width:'210px',background:C.cart,display:'flex',flexDirection:'column',flexShrink:0,color:C.textDark,borderLeft:'1px solid rgba(255,255,255,0.04)'}}>
+                    {/* ── PANNEAU PANIER (desktop uniquement) ── */}
+                    <div style={{width:'210px',background:C.cart,display:isMobile?'none':'flex',flexDirection:'column',flexShrink:0,color:C.textDark,borderLeft:'1px solid rgba(255,255,255,0.04)'}}>
                       <div style={{padding:'1rem 1rem 0.85rem',borderBottom:`1px solid ${C.borderDark}`,flexShrink:0}}>
                         <div style={{fontSize:'0.58rem',color:C.textDarkM,letterSpacing:'0.12em',textTransform:'uppercase',marginBottom:'0.25rem',fontWeight:'600'}}>Total commande</div>
                         <div style={{fontSize:'1.9rem',fontWeight:'800',fontFamily:"'DM Mono',monospace",color:'#fff',lineHeight:1,letterSpacing:'-0.02em',marginBottom:'0.85rem'}}>
@@ -706,6 +716,72 @@
                         })}
                       </div>
                     </div>
+
+                    {/* ── BARRE FLOTTANTE MOBILE ── */}
+                    {isMobile&&(
+                      <div style={{position:'fixed',bottom:0,left:0,right:0,zIndex:50,display:'flex',alignItems:'center',gap:'0.75rem',padding:'0.65rem 1rem',background:C.cart,borderTop:'1px solid rgba(255,255,255,0.08)',boxShadow:'0 -4px 24px rgba(0,0,0,0.35)'}}>
+                        <div style={{flex:1}}>
+                          <div style={{fontSize:'0.55rem',color:'rgba(255,255,255,0.45)',textTransform:'uppercase',letterSpacing:'0.1em',marginBottom:'1px'}}>Total</div>
+                          <div style={{fontSize:'1.35rem',fontWeight:'800',fontFamily:"'DM Mono',monospace",color:'#fff',lineHeight:1}}>{fmt(cartTotal)}</div>
+                        </div>
+                        <button
+                          onClick={()=>{if(cart.length>0)setCartOpen(true);}}
+                          style={{background:cart.length>0?C.amber:'rgba(255,255,255,0.1)',color:cart.length>0?'#fff':'rgba(255,255,255,0.3)',border:'none',borderRadius:'12px',padding:'0.75rem 1.1rem',fontSize:'0.88rem',fontWeight:'700',cursor:cart.length>0?'pointer':'default',fontFamily:"'Outfit',sans-serif",flexShrink:0,boxShadow:cart.length>0?`0 4px 14px ${C.amber}55`:'none'}}>
+                          {cart.length>0?`🛒 ${cartQty} · Voir panier`:'Panier vide'}
+                        </button>
+                      </div>
+                    )}
+
+                    {/* ── DRAWER PANIER MOBILE ── */}
+                    {isMobile&&cartOpen&&(
+                      <div style={{position:'fixed',inset:0,zIndex:200}}>
+                        <div onClick={()=>setCartOpen(false)} style={{position:'absolute',inset:0,background:'rgba(0,0,0,0.55)',backdropFilter:'blur(4px)'}}/>
+                        <div style={{position:'absolute',bottom:0,left:0,right:0,background:C.cart,borderRadius:'20px 20px 0 0',maxHeight:'82vh',display:'flex',flexDirection:'column',color:C.textDark}}>
+                          <div style={{display:'flex',justifyContent:'center',padding:'0.65rem 0 0.2rem'}}>
+                            <div style={{width:'40px',height:'4px',borderRadius:'2px',background:'rgba(255,255,255,0.2)'}}/>
+                          </div>
+                          <div style={{padding:'0.6rem 1.25rem 0.75rem',borderBottom:`1px solid ${C.borderDark}`,flexShrink:0,display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                            <div>
+                              <div style={{fontSize:'0.55rem',color:'rgba(255,255,255,0.45)',textTransform:'uppercase',letterSpacing:'0.1em',marginBottom:'2px'}}>Total commande</div>
+                              <div style={{fontSize:'1.9rem',fontWeight:'800',fontFamily:"'DM Mono',monospace",color:'#fff',lineHeight:1}}>{fmt(cartTotal)}</div>
+                            </div>
+                            <button onClick={()=>setCartOpen(false)} style={{background:'rgba(255,255,255,0.1)',border:'none',borderRadius:'10px',color:'rgba(255,255,255,0.6)',cursor:'pointer',padding:'0.45rem 0.8rem',fontSize:'0.78rem',fontFamily:"'Outfit',sans-serif"}}>✕ Fermer</button>
+                          </div>
+                          <div style={{padding:'0.35rem 1.25rem',display:'flex',justifyContent:'space-between',alignItems:'center',borderBottom:`1px solid ${C.borderDark}`,flexShrink:0}}>
+                            <span style={{fontSize:'0.62rem',color:'rgba(255,255,255,0.45)',fontWeight:'600',textTransform:'uppercase',letterSpacing:'0.08em'}}>Articles{cartQty>0?` · ${cartQty}`:''}</span>
+                            {cart.length>0&&<button onClick={()=>setCart([])} style={{background:'none',border:'none',color:'rgba(255,255,255,0.3)',cursor:'pointer',fontSize:'0.62rem',fontFamily:"'Outfit',sans-serif"}}>vider</button>}
+                          </div>
+                          <div style={{flex:1,overflowY:'auto',padding:'0.4rem 1.25rem',minHeight:0}}>
+                            {cart.length===0&&<div style={{textAlign:'center',marginTop:'2rem'}}><div style={{fontSize:'2rem',opacity:0.2,marginBottom:'0.5rem'}}>🛒</div><p style={{color:'rgba(255,255,255,0.4)',fontSize:'0.75rem'}}>Panier vide</p></div>}
+                            {cart.map(item=>{
+                              const p=products.find(x=>x.id===item.id);
+                              return(
+                                <div key={item.id} style={{padding:'0.65rem 0',borderBottom:`1px solid rgba(255,255,255,0.06)`}}>
+                                  <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'0.4rem'}}>
+                                    <span style={{fontSize:'0.88rem',color:'rgba(255,255,255,0.88)',fontWeight:'500',flex:1,marginRight:'0.5rem'}}>{p?.emoji} {p?.name}</span>
+                                    <span style={{fontSize:'0.85rem',color:C.amberL,fontWeight:'700',fontFamily:"'DM Mono',monospace",flexShrink:0}}>{fmt((p?.price||0)*item.qty)}</span>
+                                  </div>
+                                  <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
+                                    <button onClick={()=>removeFromCart(item.id)} style={{background:'rgba(255,255,255,0.07)',border:'1px solid rgba(255,255,255,0.1)',color:'rgba(255,255,255,0.65)',borderRadius:'7px',width:'32px',height:'32px',cursor:'pointer',fontSize:'1.1rem',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>−</button>
+                                    <span style={{fontSize:'0.88rem',width:'24px',textAlign:'center',fontWeight:'700',color:'#fff'}}>{item.qty}</span>
+                                    <button onClick={()=>{const prod=products.find(x=>x.id===item.id);if(prod)addToCart(prod);}} style={{background:'rgba(255,255,255,0.07)',border:'1px solid rgba(255,255,255,0.1)',color:'rgba(255,255,255,0.65)',borderRadius:'7px',width:'32px',height:'32px',cursor:'pointer',fontSize:'1.1rem',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>+</button>
+                                    <span style={{fontSize:'0.65rem',color:'rgba(255,255,255,0.3)',fontFamily:"'DM Mono',monospace"}}>{fmt(p?.price||0)}</span>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                          <div style={{padding:'0.85rem 1.25rem 1.25rem',flexShrink:0}}>
+                            <button
+                              onClick={()=>{if(cart.length>0){setCartOpen(false);setPayModal(true);}}}
+                              disabled={cart.length===0}
+                              style={{width:'100%',border:'none',borderRadius:'14px',padding:'1rem',fontSize:'1rem',fontWeight:'700',cursor:cart.length>0?'pointer':'not-allowed',background:cart.length>0?C.amber:'rgba(255,255,255,0.07)',color:cart.length>0?'#fff':'rgba(255,255,255,0.2)',boxShadow:cart.length>0?`0 4px 14px ${C.amber}55`:'none',fontFamily:"'Outfit',sans-serif"}}>
+                              {cart.length>0?`Encaisser ${fmt(cartTotal)} →`:'Panier vide'}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
 
