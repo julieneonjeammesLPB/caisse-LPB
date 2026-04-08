@@ -592,7 +592,6 @@
               {TABS.map(t=>(
                 <NavIcon key={t.id} icon={t.icon} active={view===t.id} onClick={()=>setView(t.id)}/>
               ))}
-              <div style={{flex:1}}/>
               <NavIcon icon='🔒' active={false} danger onClick={()=>setPhase('cloture')}/>
             </div>
 
