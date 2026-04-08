@@ -8,6 +8,26 @@
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDL0hOkHSdDXSk1G244LpVOdTCdU1OWtyU",
+      authDomain: "caisse-lpb.firebaseapp.com",
+      projectId: "caisse-lpb",
+      storageBucket: "caisse-lpb.firebasestorage.app",
+      messagingSenderId: "1081887927254",
+      appId: "1:1081887927254:web:6ef751e96d9a0661df1277"
+    };
+    firebase.initializeApp(firebaseConfig);
+    window._db = firebase.firestore();
+    // Cache offline : fonctionne sans réseau (événements en plein air)
+    window._db.enablePersistence({ synchronizeTabs: true }).catch(e => {
+      if (e.code === 'failed-precondition') console.warn('Multi-onglets : persistance désactivée');
+      else if (e.code === 'unimplemented') console.warn('Navigateur sans persistance offline');
+    });
+  </script>
 </head>
 <body>
   <div id="root"></div>
@@ -58,12 +78,23 @@
     input::placeholder{color:rgba(0,0,0,0.3);}
     `;
 
-    /* ── STORAGE (localStorage) ──────────────────────────────────────── */
+    /* ── STORAGE (Firestore cloud + localStorage fallback offline) ───── */
     const storage = {
-      get: (key) => {
+      get: async (key) => {
+        try {
+          const snap = await window._db.collection('lpb_store').doc(key).get();
+          if (snap.exists) {
+            try { localStorage.setItem(key, snap.data().value); } catch {}
+            return { value: snap.data().value };
+          }
+        } catch {}
+        // fallback localStorage (offline / pas de réseau)
         try { const v = localStorage.getItem(key); return v ? { value: v } : null; } catch { return null; }
       },
       set: (key, value) => {
+        // Firestore (fire & forget)
+        try { window._db.collection('lpb_store').doc(key).set({ value, ts: firebase.firestore.FieldValue.serverTimestamp() }); } catch {}
+        // localStorage en cache local
         try { localStorage.setItem(key, value); } catch {}
       },
     };
@@ -222,15 +253,19 @@
       const [cloture,      setCloture]      = useState({denoms:{}});
       const [activeDenom,  setActiveDenom]  = useState(null);
       const [denomStr,     setDenomStr]     = useState('');
+      const [syncing,      setSyncing]      = useState(true);
 
       useEffect(()=>{
-        try{const r=storage.get('lpb_pos_products');     if(r)setProducts(JSON.parse(r.value));}catch{}
-        try{const r=storage.get('lpb_pos_tx');           if(r)setTransactions(JSON.parse(r.value));}catch{}
-        try{const r=storage.get('lpb_pos_sessions');     if(r)setSessions(JSON.parse(r.value));}catch{}
-        try{const r=storage.get('lpb_pos_session_meta'); if(r){
-          const m=JSON.parse(r.value);
-          if(m.name){setSessionName(m.name);setSessionId(m.id||'');setFondVal(m.fondVal||0);setFondInput(String(m.fondVal||'231'));}
-        }}catch{}
+        (async()=>{
+          try{const r=await storage.get('lpb_pos_products');     if(r)setProducts(JSON.parse(r.value));}catch{}
+          try{const r=await storage.get('lpb_pos_tx');           if(r)setTransactions(JSON.parse(r.value));}catch{}
+          try{const r=await storage.get('lpb_pos_sessions');     if(r)setSessions(JSON.parse(r.value));}catch{}
+          try{const r=await storage.get('lpb_pos_session_meta'); if(r){
+            const m=JSON.parse(r.value);
+            if(m.name){setSessionName(m.name);setSessionId(m.id||'');setFondVal(m.fondVal||0);setFondInput(String(m.fondVal||'231'));}
+          }}catch{}
+          setSyncing(false);
+        })();
       },[]);
       useEffect(()=>{storage.set('lpb_pos_products',JSON.stringify(products));},[products]);
       useEffect(()=>{storage.set('lpb_pos_tx',JSON.stringify(transactions));},[transactions]);
@@ -323,6 +358,18 @@
         }
         XL.writeFile(wb,`LPB_${sessionName.replace(/[\s/\\:*?"<>|]+/g,'_')}_${dateFR.replace(/\//g,'-')}.xlsx`);
       };
+
+      /* ── CHARGEMENT ─────────────────────────────────────────────── */
+      if(syncing) return (
+        <>
+          <style>{FONTS}</style>
+          <div style={{minHeight:'100vh',background:C.bg,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'1rem'}}>
+            <div style={{fontSize:'2.5rem',animation:'spin 1.2s linear infinite'}}>🍺</div>
+            <div style={{color:C.textMuted,fontSize:'0.75rem',letterSpacing:'0.12em',textTransform:'uppercase',fontFamily:"'Outfit',sans-serif"}}>Synchronisation…</div>
+            <style>{`@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}`}</style>
+          </div>
+        </>
+      );
 
       /* ── OUVERTURE ──────────────────────────────────────────────── */
       if(phase==='ouverture') return (
