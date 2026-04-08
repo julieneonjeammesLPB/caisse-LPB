@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Les Papas Brasseurs — Caisse Événementielle</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect, useMemo } = React;
+
+    /* ── DESIGN TOKENS ───────────────────────────────────────────────── */
+    const C = {
+      bg:       '#e8e8e4',
+      surface:  '#ffffff',
+      sidebar:  '#1a1a1e',
+      sidebarHov:'#2a2a30',
+      cart:     '#1a1a1e',
+      cartSub:  '#252530',
+      amber:    '#c17d14',
+      amberL:   '#e8a020',
+      green:    '#4a8a3c',
+      greenL:   '#5daa4a',
+      teal:     '#1f7a62',
+      red:      '#c0392b',
+      text:     '#1a1a1e',
+      textMuted:'#7a7a82',
+      textDark: '#ffffff',
+      textDarkM:'rgba(255,255,255,0.5)',
+      border:   'rgba(0,0,0,0.08)',
+      borderDark:'rgba(255,255,255,0.1)',
+    };
+
+    const card = (extra={}) => ({
+      background: C.surface,
+      borderRadius: '14px',
+      boxShadow: '0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05)',
+      border: 'none',
+      ...extra,
+    });
+
+    const fmt  = (n) => Number(n).toFixed(2).replace('.',',') + ' €';
+    const fmtN = (n) => Number(n).toFixed(2);
+
+    const FONTS = `
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html,body{height:100%;overflow:hidden;}
+    body{background:${C.bg};font-family:'Outfit',system-ui,sans-serif;}
+    ::-webkit-scrollbar{width:3px;height:3px;}
+    ::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);border-radius:3px;}
+    input[type=number]::-webkit-inner-spin-button{opacity:0;}
+    input::placeholder{color:rgba(0,0,0,0.3);}
+    `;
+
+    /* ── STORAGE (localStorage) ──────────────────────────────────────── */
+    const storage = {
+      get: (key) => {
+        try { const v = localStorage.getItem(key); return v ? { value: v } : null; } catch { return null; }
+      },
+      set: (key, value) => {
+        try { localStorage.setItem(key, value); } catch {}
+      },
+    };
+
+    /* ── DÉNOMINATIONS ───────────────────────────────────────────────── */
+    const DENOMS = [
+      {val:500, label:'500€', type:'billet'},
+      {val:200, label:'200€', type:'billet'},
+      {val:100, label:'100€', type:'billet'},
+      {val:50,  label:'50€',  type:'billet'},
+      {val:20,  label:'20€',  type:'billet'},
+      {val:10,  label:'10€',  type:'billet'},
+      {val:5,   label:'5€',   type:'billet'},
+      {val:2,   label:'2€',   type:'piece'},
+      {val:1,   label:'1€',   type:'piece'},
+      {val:0.50,label:'50c',  type:'piece'},
+      {val:0.20,label:'20c',  type:'piece'},
+      {val:0.10,label:'10c',  type:'piece'},
+      {val:0.05,label:'5c',   type:'piece'},
+      {val:0.02,label:'2c',   type:'piece'},
+      {val:0.01,label:'1c',   type:'piece'},
+    ];
+    const QUICK_BILLS = [5,10,20,50,100];
+
+    const DEFAULT_PRODUCTS = [
+      {id:'p1',  name:'BT 33cl',           price:3.00, cat:'Cave',        emoji:'🍾'},
+      {id:'p2',  name:'BT 75cl',           price:7.00, cat:'Cave',        emoji:'🍾'},
+      {id:'p3',  name:'Coffret 33cl',      price:20.00,cat:'Cave',        emoji:'🎁'},
+      {id:'p4',  name:'Coffret 75cl',      price:20.00,cat:'Cave',        emoji:'🎁'},
+      {id:'p5',  name:'Blonde 25cl',       price:3.00, cat:'Bière',       emoji:'🍺'},
+      {id:'p6',  name:'Blonde 50cl',       price:6.00, cat:'Bière',       emoji:'🍺'},
+      {id:'p7',  name:'Permanente 25cl',   price:3.50, cat:'Bière',       emoji:'🍻'},
+      {id:'p8',  name:'Permanente 50cl',   price:7.00, cat:'Bière',       emoji:'🍻'},
+      {id:'p9',  name:'Éphémère 25cl',     price:4.00, cat:'Bière',       emoji:'✨'},
+      {id:'p10', name:'Éphémère 50cl',     price:8.00, cat:'Bière',       emoji:'✨'},
+      {id:'p11', name:'Soft 33cl',         price:3.50, cat:'Sans Alcool', emoji:'🥤'},
+      {id:'p12', name:'Eau 50cl',          price:2.00, cat:'Sans Alcool', emoji:'💧'},
+      {id:'p13', name:'Bière Sans Alcool', price:6.00, cat:'Sans Alcool', emoji:'🚫'},
+      {id:'p14', name:'Saucisson',         price:6.00, cat:'Snack',       emoji:'🥓'},
+      {id:'p15', name:'Chips',             price:4.00, cat:'Snack',       emoji:'🥔'},
+      {id:'p16', name:'Vin Rouge',         price:4.00, cat:'Vin',         emoji:'🍷'},
+      {id:'p17', name:'Muscadet',          price:3.00, cat:'Vin',         emoji:'🥂'},
+      {id:'p18', name:'Rosé',              price:4.00, cat:'Vin',         emoji:'🍷'},
+      {id:'p19', name:'Moelleux',          price:4.00, cat:'Vin',         emoji:'🍯'},
+    ];
+
+    /* ── SIDEBAR ICONS ───────────────────────────────────────────────── */
+    const NavIcon = ({icon,active,onClick,danger}) => (
+      <button onClick={onClick} style={{
+        width:'42px',height:'42px',borderRadius:'10px',border:'none',cursor:'pointer',
+        display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.1rem',
+        background: active ? 'rgba(255,255,255,0.12)' : 'transparent',
+        color: danger ? '#e05050' : active ? '#fff' : 'rgba(255,255,255,0.45)',
+        transition:'all 0.15s',
+      }}
+      onMouseEnter={e=>!active&&(e.currentTarget.style.background='rgba(255,255,255,0.07)')}
+      onMouseLeave={e=>!active&&(e.currentTarget.style.background='transparent')}>
+        {icon}
+      </button>
+    );
+
+    /* ── NUMPAD (coupures) ───────────────────────────────────────────── */
+    function Numpad({value,onChange,onConfirm,onCancel,label,subLabel,accentColor}) {
+      const accent = accentColor||C.amber;
+      const handle = k => {
+        if(k==='C'){onChange('');return;}
+        if(k==='⌫'){onChange(value.slice(0,-1));return;}
+        if(k==='.'){if(!value.includes('.'))onChange(value+'.');return;}
+        const[int='',dec=''] = value.split('.');
+        if(value.includes('.')&&dec.length>=2)return;
+        if(!value.includes('.')&&int.length>=5)return;
+        onChange(value+k);
+      };
+      const keys=['7','8','9','4','5','6','1','2','3','C','0','.'];
+      return (
+        <div style={{background:C.surface,...card(),overflow:'hidden',width:'100%',maxWidth:'300px'}}>
+          <div style={{background:C.bg,padding:'1rem 1.25rem',borderBottom:`1px solid ${C.border}`}}>
+            {label&&<div style={{color:C.textMuted,fontSize:'0.6rem',letterSpacing:'0.1em',textTransform:'uppercase',marginBottom:'0.3rem'}}>{label}</div>}
+            <div style={{color:accent,fontSize:'2rem',fontWeight:'700',fontFamily:"'DM Mono',monospace",minHeight:'2.5rem'}}>{value||'0'}</div>
+            {subLabel&&<div style={{color:C.green,fontSize:'0.7rem',marginTop:'0.2rem',fontWeight:'500'}}>{subLabel}</div>}
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'1px',background:C.border}}>
+            {keys.map(k=>(
+              <button key={k} onClick={()=>handle(k)} style={{
+                background:k==='C'?'#fff5f5':C.surface, border:'none',
+                padding:'0.85rem',fontSize:'1.05rem',cursor:'pointer',
+                color:k==='C'?C.red:C.text,fontFamily:"'DM Mono',monospace",fontWeight:'500',transition:'background 0.1s'
+              }}
+              onMouseDown={e=>e.currentTarget.style.background=k==='C'?'#ffe5e5':C.bg}
+              onMouseUp={e=>e.currentTarget.style.background=k==='C'?'#fff5f5':C.surface}
+              onMouseLeave={e=>e.currentTarget.style.background=k==='C'?'#fff5f5':C.surface}>{k}</button>
+            ))}
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 2fr',gap:'1px',background:C.border}}>
+            <button onClick={()=>handle('⌫')} style={{background:C.surface,border:'none',padding:'0.85rem',color:C.textMuted,cursor:'pointer',fontSize:'1rem',fontFamily:"'DM Mono',monospace"}}
+              onMouseDown={e=>e.currentTarget.style.background=C.bg}
+              onMouseUp={e=>e.currentTarget.style.background=C.surface}
+              onMouseLeave={e=>e.currentTarget.style.background=C.surface}>⌫</button>
+            <button onClick={onConfirm} style={{background:accent+'18',border:'none',padding:'0.85rem',color:accent,cursor:'pointer',fontSize:'0.85rem',fontWeight:'600',fontFamily:"'Outfit',sans-serif"}}
+              onMouseDown={e=>e.currentTarget.style.background=accent+'30'}
+              onMouseUp={e=>e.currentTarget.style.background=accent+'18'}
+              onMouseLeave={e=>e.currentTarget.style.background=accent+'18'}>✓ Confirmer</button>
+          </div>
+          {onCancel&&<button onClick={onCancel} style={{width:'100%',background:'none',border:'none',borderTop:`1px solid ${C.border}`,color:C.textMuted,padding:'0.6rem',fontSize:'0.65rem',letterSpacing:'0.1em',textTransform:'uppercase',cursor:'pointer'}}>Annuler</button>}
+        </div>
+      );
+    }
+
+    /* ── NUMPAD KEYS (paiement espèces) ──────────────────────────────── */
+    function NumpadKeys({value,onChange}) {
+      const handle = k => {
+        if(k==='C'){onChange('');return;}
+        if(k==='⌫'){onChange(value.slice(0,-1));return;}
+        if(k==='.'){if(!value.includes('.'))onChange(value+'.');return;}
+        const[int='',dec=''] = value.split('.');
+        if(value.includes('.')&&dec.length>=2)return;
+        if(!value.includes('.')&&int.length>=5)return;
+        onChange(value+k);
+      };
+      const keys=['7','8','9','4','5','6','1','2','3','C','0','.'];
+      return (
+        <div>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'6px',marginBottom:'6px'}}>
+            {keys.map(k=>(
+              <button key={k} onClick={()=>handle(k)} style={{
+                background:k==='C'?'#fff0f0':C.bg,border:`1px solid ${C.border}`,
+                borderRadius:'8px',padding:'0.75rem',fontSize:'1.05rem',cursor:'pointer',
+                color:k==='C'?C.red:C.text,fontFamily:"'DM Mono',monospace",fontWeight:'500',transition:'background 0.1s'
+              }}
+              onMouseDown={e=>e.currentTarget.style.background=k==='C'?'#ffe0e0':'rgba(0,0,0,0.08)'}
+              onMouseUp={e=>e.currentTarget.style.background=k==='C'?'#fff0f0':C.bg}
+              onMouseLeave={e=>e.currentTarget.style.background=k==='C'?'#fff0f0':C.bg}>{k}</button>
+            ))}
+          </div>
+          <button onClick={()=>handle('⌫')} style={{width:'100%',background:C.bg,border:`1px solid ${C.border}`,borderRadius:'8px',padding:'0.6rem',color:C.textMuted,cursor:'pointer',fontSize:'0.85rem',fontFamily:"'DM Mono',monospace"}}>⌫ effacer</button>
+        </div>
+      );
+    }
+
+    /* ────────────────────────────────────────────────────────────────── */
+    function App() {
+      const [phase,        setPhase]        = useState('ouverture');
+      const [view,         setView]         = useState('caisse');
+      const [sessionName,  setSessionName]  = useState('');
+      const [sessionId,    setSessionId]    = useState('');
+      const [fondInput,    setFondInput]    = useState('231');
+      const [fondVal,      setFondVal]      = useState(0);
+      const [products,     setProducts]     = useState(DEFAULT_PRODUCTS);
+      const [cart,         setCart]         = useState([]);
+      const [transactions, setTransactions] = useState([]);
+      const [sessions,     setSessions]     = useState([]);
+      const [activeCat,    setActiveCat]    = useState('all');
+      const [payModal,     setPayModal]     = useState(false);
+      const [payMode,      setPayMode]      = useState(null);
+      const [cashStr,      setCashStr]      = useState('');
+      const [cloture,      setCloture]      = useState({denoms:{}});
+      const [activeDenom,  setActiveDenom]  = useState(null);
+      const [denomStr,     setDenomStr]     = useState('');
+
+      useEffect(()=>{
+        try{const r=storage.get('lpb_pos_products');     if(r)setProducts(JSON.parse(r.value));}catch{}
+        try{const r=storage.get('lpb_pos_tx');           if(r)setTransactions(JSON.parse(r.value));}catch{}
+        try{const r=storage.get('lpb_pos_sessions');     if(r)setSessions(JSON.parse(r.value));}catch{}
+        try{const r=storage.get('lpb_pos_session_meta'); if(r){
+          const m=JSON.parse(r.value);
+          if(m.name){setSessionName(m.name);setSessionId(m.id||'');setFondVal(m.fondVal||0);setFondInput(String(m.fondVal||'231'));}
+        }}catch{}
+      },[]);
+      useEffect(()=>{storage.set('lpb_pos_products',JSON.stringify(products));},[products]);
+      useEffect(()=>{storage.set('lpb_pos_tx',JSON.stringify(transactions));},[transactions]);
+      useEffect(()=>{storage.set('lpb_pos_sessions',JSON.stringify(sessions));},[sessions]);
+
+      const categories = useMemo(()=>[...new Set(products.map(p=>p.cat))],[products]);
+
+      const stats = useMemo(()=>{
+        const totalCA=transactions.reduce((s,t)=>s+t.total,0);
+        const totalEsp=transactions.filter(t=>t.mode==='especes').reduce((s,t)=>s+t.total,0);
+        const totalCB=transactions.filter(t=>t.mode==='cb').reduce((s,t)=>s+t.total,0);
+        const counts={};
+        transactions.forEach(t=>t.items.forEach(i=>{counts[i.name]=(counts[i.name]||0)+i.qty;}));
+        const top=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,8);
+        const hourly={};
+        transactions.forEach(t=>{
+          const h=new Date(t.ts).getHours();
+          if(!hourly[h])hourly[h]={ca:0,nb:0};
+          hourly[h].ca+=t.total;hourly[h].nb+=1;
+        });
+        return{totalCA,totalEsp,totalCB,nb:transactions.length,top,hourly};
+      },[transactions]);
+
+      const cartTotal=useMemo(()=>cart.reduce((s,i)=>{const p=products.find(x=>x.id===i.id);return s+(p?p.price*i.qty:0);},0),[cart,products]);
+      const cartQty=cart.reduce((s,i)=>s+i.qty,0);
+      const filtered=activeCat==='all'?products:products.filter(p=>p.cat===activeCat);
+      const cashVal=parseFloat(cashStr)||0;
+      const monnaie=cashVal-cartTotal;
+
+      const espVal=Math.round(DENOMS.reduce((s,d)=>s+d.val*(cloture.denoms[d.val]||0),0)*100)/100;
+      const theorique=fondVal+stats.totalEsp;
+      const ecart=Math.round((espVal-theorique)*100)/100;
+      const avg=stats.nb>0?stats.totalCA/stats.nb:0;
+
+      const addToCart=p=>setCart(prev=>{const ex=prev.find(x=>x.id===p.id);return ex?prev.map(x=>x.id===p.id?{...x,qty:x.qty+1}:x):[...prev,{id:p.id,qty:1}];});
+      const removeFromCart=id=>setCart(prev=>{const ex=prev.find(x=>x.id===id);if(!ex)return prev;return ex.qty===1?prev.filter(x=>x.id!==id):prev.map(x=>x.id===id?{...x,qty:x.qty-1}:x);});
+      const confirmPay=()=>{
+        if(!payMode)return;
+        setTransactions(prev=>[...prev,{id:Date.now(),ts:new Date().toISOString(),sessionId,items:cart.map(i=>{const p=products.find(x=>x.id===i.id);return{name:p?.name,price:p?.price,qty:i.qty};}),total:cartTotal,mode:payMode}]);
+        setCart([]);setPayModal(false);setPayMode(null);setCashStr('');
+      };
+
+      const openSession=()=>{
+        const name=sessionName.trim()||`Session ${new Date().toLocaleDateString('fr-FR')}`;
+        const id='sess_'+Date.now(); const fondV=parseFloat(fondInput)||0;
+        setSessionName(name);setSessionId(id);setFondVal(fondV);
+        storage.set('lpb_pos_session_meta',JSON.stringify({name,id,fondVal:fondV}));
+        setPhase('main');
+      };
+
+      const archiveAndReset=()=>{
+        if(!window.confirm('Archiver cette session et en démarrer une nouvelle ?'))return;
+        setSessions(prev=>[{id:sessionId,name:sessionName,date:new Date().toISOString(),fondVal,transactions:[...transactions],cloture:{denoms:{...cloture.denoms},espVal,theorique,ecart},stats:{totalCA:stats.totalCA,totalEsp:stats.totalEsp,totalCB:stats.totalCB,nb:stats.nb,top:stats.top,hourly:stats.hourly}},...prev]);
+        setTransactions([]);setCart([]);setCloture({denoms:{}});setFondInput('231');setSessionName('');setSessionId('');
+        storage.set('lpb_pos_session_meta',JSON.stringify({}));
+        setPhase('ouverture');
+      };
+
+      const exportXLSX=()=>{
+        if(!window.XLSX){alert('SheetJS non chargé.');return;}
+        const XL=window.XLSX;const wb=XL.utils.book_new();
+        const dateFR=new Date().toLocaleDateString('fr-FR');
+        const heureFR=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+        const ws1=XL.utils.aoa_to_sheet([
+          ['LES PAPAS BRASSEURS — CLÔTURE'],[''],
+          ['Session',sessionName],['Date',dateFR],['Heure',heureFR],[''],
+          ['─── VENTES ───'],
+          ['CA Total (€)',        parseFloat(fmtN(stats.totalCA))],
+          ['CA Espèces (€)',      parseFloat(fmtN(stats.totalEsp))],
+          ['CA CB (€)',           parseFloat(fmtN(stats.totalCB))],
+          ['Nombre de tickets',   stats.nb],
+          ['Panier moyen (€)',    parseFloat(fmtN(avg))],[''],
+          ['─── CLÔTURE ESPÈCES ───'],
+          ['Fond ouverture (€)',  parseFloat(fmtN(fondVal))],
+          ['+ Ventes espèces (€)',parseFloat(fmtN(stats.totalEsp))],
+          ['= Théorique (€)',     parseFloat(fmtN(theorique))],
+          ['Compté (€)',          parseFloat(fmtN(espVal))],
+          ['Écart (€)',           parseFloat(fmtN(ecart))],
+        ]);
+        ws1['!cols']=[{wch:28},{wch:18}];XL.utils.book_append_sheet(wb,ws1,'Résumé');
+        const ws2=XL.utils.aoa_to_sheet([['Coupure','Quantité','Sous-total (€)'],...DENOMS.filter(d=>(cloture.denoms[d.val]||0)>0).map(d=>[d.label,cloture.denoms[d.val],parseFloat(fmtN(d.val*cloture.denoms[d.val]))]),['','TOTAL',parseFloat(fmtN(espVal))]]);
+        ws2['!cols']=[{wch:10},{wch:12},{wch:16}];XL.utils.book_append_sheet(wb,ws2,'Coupures');
+        const ws3=XL.utils.aoa_to_sheet([['Tranche horaire','Nb tickets','CA (€)','Panier moy. (€)'],...Object.entries(stats.hourly).sort((a,b)=>Number(a[0])-Number(b[0])).map(([h,d])=>[`${h}h–${(parseInt(h)+1)%24}h`,d.nb,parseFloat(fmtN(d.ca)),parseFloat(fmtN(d.ca/d.nb))])]);
+        ws3['!cols']=[{wch:16},{wch:12},{wch:12},{wch:16}];XL.utils.book_append_sheet(wb,ws3,'Par heure');
+        const ws4=XL.utils.aoa_to_sheet([['Heure','Mode','Total (€)','Détail articles'],...transactions.map(t=>[new Date(t.ts).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'}),t.mode==='especes'?'Espèces':'CB',parseFloat(fmtN(t.total)),t.items.map(i=>`${i.name}×${i.qty}`).join(' | ')])]);
+        ws4['!cols']=[{wch:10},{wch:10},{wch:12},{wch:60}];XL.utils.book_append_sheet(wb,ws4,'Transactions');
+        if(stats.top.length>0){
+          const ws5=XL.utils.aoa_to_sheet([['Produit','Quantité vendue'],...stats.top]);
+          ws5['!cols']=[{wch:24},{wch:18}];XL.utils.book_append_sheet(wb,ws5,'Top produits');
+        }
+        XL.writeFile(wb,`LPB_${sessionName.replace(/[\s/\\:*?"<>|]+/g,'_')}_${dateFR.replace(/\//g,'-')}.xlsx`);
+      };
+
+      /* ── OUVERTURE ──────────────────────────────────────────────── */
+      if(phase==='ouverture') return (
+        <>
+          <style>{FONTS}</style>
+          <div style={{minHeight:'100vh',background:C.bg,display:'flex',alignItems:'center',justifyContent:'center',padding:'2rem',fontFamily:"'Outfit',sans-serif"}}>
+            <div style={{width:'100%',maxWidth:'420px'}}>
+              <div style={{textAlign:'center',marginBottom:'2.5rem'}}>
+                <div style={{width:'64px',height:'64px',background:C.sidebar,borderRadius:'18px',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.8rem',margin:'0 auto 1rem'}}>🍺</div>
+                <h1 style={{fontSize:'1.6rem',fontWeight:'800',color:C.text,letterSpacing:'-0.03em'}}>Les Papas Brasseurs</h1>
+                <p style={{color:C.textMuted,fontSize:'0.8rem',marginTop:'0.25rem',fontWeight:'400',letterSpacing:'0.05em',textTransform:'uppercase'}}>Caisse Événementielle</p>
+              </div>
+              <div style={{...card(),padding:'2rem'}}>
+                <div style={{marginBottom:'1.25rem'}}>
+                  <label style={{display:'block',fontSize:'0.72rem',fontWeight:'600',color:C.textMuted,textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.5rem'}}>Lieu / Événement</label>
+                  <input type="text" value={sessionName} onChange={e=>setSessionName(e.target.value)}
+                    placeholder="Hellfest J1, Marché de Noël…" autoFocus
+                    style={{width:'100%',background:C.bg,border:'none',borderRadius:'10px',padding:'0.85rem 1rem',fontSize:'0.95rem',color:C.text,fontFamily:"'Outfit',sans-serif",outline:'none'}} />
+                </div>
+                <div style={{marginBottom:'1.75rem'}}>
+                  <label style={{display:'block',fontSize:'0.72rem',fontWeight:'600',color:C.textMuted,textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.5rem'}}>Fond de caisse (€)</label>
+                  <input type="number" value={fondInput} onChange={e=>setFondInput(e.target.value)}
+                    onKeyDown={e=>e.key==='Enter'&&openSession()}
+                    style={{width:'100%',background:C.bg,border:'none',borderRadius:'10px',padding:'0.85rem 1rem',fontSize:'2rem',fontWeight:'700',color:C.amber,fontFamily:"'DM Mono',monospace",outline:'none',textAlign:'center'}} />
+                </div>
+                <button onClick={openSession} style={{width:'100%',background:C.sidebar,color:'#fff',border:'none',borderRadius:'12px',padding:'1rem',fontSize:'0.9rem',fontWeight:'700',cursor:'pointer',letterSpacing:'0.02em',transition:'opacity 0.15s'}}
+                  onMouseEnter={e=>e.currentTarget.style.opacity='0.88'}
+                  onMouseLeave={e=>e.currentTarget.style.opacity='1'}>
+                  Démarrer la session →
+                </button>
+                {sessions.length>0&&<p style={{textAlign:'center',color:C.textMuted,fontSize:'0.7rem',marginTop:'1rem'}}>{sessions.length} session{sessions.length>1?'s':''} archivée{sessions.length>1?'s':''}</p>}
+              </div>
+              <p style={{textAlign:'center',color:C.textMuted,fontSize:'0.7rem',marginTop:'1.25rem'}}>
+                {new Date().toLocaleDateString('fr-FR',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}
+              </p>
+            </div>
+          </div>
+        </>
+      );
+
+      /* ── CLÔTURE ────────────────────────────────────────────────── */
+      if(phase==='cloture') return (
+        <>
+          <style>{FONTS}</style>
+          <div style={{height:'100vh',display:'flex',flexDirection:'column',background:C.bg,fontFamily:"'Outfit',sans-serif",color:C.text,overflow:'hidden'}}>
+            <div style={{background:C.surface,padding:'0.85rem 1.5rem',display:'flex',alignItems:'center',gap:'1rem',borderBottom:`1px solid ${C.border}`,boxShadow:'0 1px 3px rgba(0,0,0,0.05)',flexShrink:0}}>
+              <button onClick={()=>setPhase('main')} style={{background:C.bg,border:'none',borderRadius:'8px',padding:'0.5rem 0.85rem',cursor:'pointer',fontSize:'0.8rem',color:C.textMuted,fontFamily:"'Outfit',sans-serif",fontWeight:'500'}}>← Retour</button>
+              <div style={{flex:1}}>
+                <h1 style={{fontSize:'1.1rem',fontWeight:'800',letterSpacing:'-0.02em'}}>Clôture de session</h1>
+                <p style={{fontSize:'0.72rem',color:C.textMuted}}>{sessionName}</p>
+              </div>
+              {espVal>0&&(
+                <div style={{textAlign:'right'}}>
+                  <div style={{fontSize:'0.6rem',color:C.textMuted,textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.1rem'}}>Compté</div>
+                  <div style={{fontFamily:"'DM Mono',monospace",fontWeight:'700',fontSize:'1rem',color:ecart===0?C.green:ecart>0?C.green:C.red}}>{fmt(espVal)}</div>
+                </div>
+              )}
+            </div>
+
+            <div style={{flex:1,overflowY:'auto',minHeight:0}}>
+              <div style={{padding:'1.25rem',maxWidth:'680px',margin:'0 auto'}}>
+                <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'0.65rem',marginBottom:'0.75rem'}}>
+                  {[
+                    {label:'CA Total', val:fmt(stats.totalCA), accent:C.amber},
+                    {label:'💵 Espèces',val:fmt(stats.totalEsp),accent:C.text},
+                    {label:'💳 CB',     val:fmt(stats.totalCB), accent:C.teal},
+                  ].map(({label,val,accent})=>(
+                    <div key={label} style={{...card(),padding:'0.85rem 1rem'}}>
+                      <div style={{fontSize:'0.62rem',color:C.textMuted,fontWeight:'600',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.28rem'}}>{label}</div>
+                      <div style={{fontSize:'1rem',fontWeight:'700',color:accent,fontFamily:"'DM Mono',monospace"}}>{val}</div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.65rem',marginBottom:'1rem'}}>
+                  <div style={{...card(),padding:'0.85rem 1rem'}}>
+                    <div style={{fontSize:'0.62rem',color:C.textMuted,fontWeight:'600',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.28rem'}}>Tickets</div>
+                    <div style={{fontSize:'1.35rem',fontWeight:'800',color:C.text}}>{stats.nb}</div>
+                  </div>
+                  <div style={{...card(),padding:'0.85rem 1rem'}}>
+                    <div style={{fontSize:'0.62rem',color:C.textMuted,fontWeight:'600',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.28rem'}}>Panier moyen</div>
+                    <div style={{fontSize:'1rem',fontWeight:'700',color:C.text,fontFamily:"'DM Mono',monospace"}}>{fmt(avg)}</div>
+                  </div>
+                </div>
+
+                <div style={{...card(),padding:'1rem 1.25rem',marginBottom:'0.85rem'}}>
+                  <div style={{fontSize:'0.7rem',fontWeight:'700',color:C.textMuted,textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.7rem'}}>Référence théorique</div>
+                  {[['Fond ouverture',fondVal],['+ Ventes espèces',stats.totalEsp]].map(([label,val])=>(
+                    <div key={label} style={{display:'flex',justifyContent:'space-between',fontSize:'0.85rem',marginBottom:'0.32rem'}}>
+                      <span style={{color:C.textMuted}}>{label}</span>
+                      <span style={{fontWeight:'600',fontFamily:"'DM Mono',monospace"}}>{fmt(val)}</span>
+                    </div>
+                  ))}
+                  <div style={{display:'flex',justifyContent:'space-between',fontSize:'0.95rem',fontWeight:'700',paddingTop:'0.5rem',borderTop:`1px solid ${C.border}`,marginTop:'0.1rem'}}>
+                    <span>= Théorique caisse</span>
+                    <span style={{color:C.amber,fontFamily:"'DM Mono',monospace"}}>{fmt(theorique)}</span>
+                  </div>
+                </div>
+
+                <div style={{...card(),padding:'1rem 1.25rem',marginBottom:'0.85rem'}}>
+                  <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'0.85rem'}}>
+                    <div style={{fontSize:'0.7rem',fontWeight:'700',color:C.textMuted,textTransform:'uppercase',letterSpacing:'0.08em'}}>Comptage caisse</div>
+                    <div style={{display:'flex',alignItems:'center',gap:'0.6rem'}}>
+                      <div style={{fontFamily:"'DM Mono',monospace",fontWeight:'700',fontSize:'1.1rem',color:C.amber}}>{fmt(espVal)}</div>
+                      <button onClick={()=>setCloture({denoms:{}})} style={{background:C.bg,border:'none',borderRadius:'6px',padding:'0.2rem 0.5rem',cursor:'pointer',fontSize:'0.65rem',color:C.textMuted,fontFamily:"'Outfit',sans-serif"}}>raz</button>
+                    </div>
+                  </div>
+
+                  <div style={{fontSize:'0.65rem',color:C.teal,fontWeight:'700',textTransform:'uppercase',letterSpacing:'0.1em',marginBottom:'0.5rem'}}>🪙 Pièces</div>
+                  <div style={{display:'grid',gridTemplateColumns:'repeat(5,1fr)',gap:'0.45rem',marginBottom:'1rem'}}>
+                    {DENOMS.filter(d=>d.type==='piece').map(d=>{
+                      const qty=cloture.denoms[d.val]||0;
+                      const sub=Math.round(d.val*qty*100)/100;
+                      return(
+                        <button key={d.val} onClick={()=>{setActiveDenom(d);setDenomStr(qty>0?String(qty):'');}}
+                          style={{position:'relative',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',
+                            minHeight:'62px',padding:'0.55rem 0.15rem',borderRadius:'12px',cursor:'pointer',border:'none',
+                            background:qty>0?C.teal+'18':C.bg,
+                            outline:qty>0?`2.5px solid ${C.teal}`:'2.5px solid transparent',
+                            boxShadow:qty>0?`0 3px 10px ${C.teal}35`:'none',
+                            transition:'all 0.12s',gap:'0.12rem'}}
+                          onMouseDown={e=>e.currentTarget.style.transform='scale(0.91)'}
+                          onMouseUp={e=>e.currentTarget.style.transform='scale(1)'}
+                          onMouseLeave={e=>e.currentTarget.style.transform='scale(1)'}>
+                          {qty>0&&<span style={{position:'absolute',top:'-6px',right:'-6px',background:C.teal,color:'#fff',borderRadius:'8px',fontSize:'0.52rem',padding:'1px 4px',fontWeight:'800',lineHeight:'1.6',minWidth:'16px',textAlign:'center'}}>×{qty}</span>}
+                          <span style={{fontSize:'0.78rem',fontWeight:'700',color:qty>0?C.teal:C.text,fontFamily:"'DM Mono',monospace",lineHeight:1}}>{d.label}</span>
+                          <span style={{fontSize:'0.55rem',color:qty>0?C.teal:C.textMuted,fontFamily:"'DM Mono',monospace",marginTop:'2px'}}>
+                            {qty>0?fmt(sub):'—'}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div style={{fontSize:'0.65rem',color:C.amber,fontWeight:'700',textTransform:'uppercase',letterSpacing:'0.1em',marginBottom:'0.5rem'}}>💵 Billets</div>
+                  <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'0.45rem',marginBottom:'0.9rem'}}>
+                    {DENOMS.filter(d=>d.type==='billet').map(d=>{
+                      const qty=cloture.denoms[d.val]||0;
+                      const sub=Math.round(d.val*qty*100)/100;
+                      return(
+                        <button key={d.val} onClick={()=>{setActiveDenom(d);setDenomStr(qty>0?String(qty):'');}}
+                          style={{position:'relative',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',
+                            minHeight:'68px',padding:'0.65rem 0.3rem',borderRadius:'12px',cursor:'pointer',border:'none',
+                            background:qty>0?C.amber+'16':C.bg,
+                            outline:qty>0?`2.5px solid ${C.amber}`:'2.5px solid transparent',
+                            boxShadow:qty>0?`0 3px 10px ${C.amber}35`:'none',
+                            transition:'all 0.12s',gap:'0.15rem'}}
+                          onMouseDown={e=>e.currentTarget.style.transform='scale(0.91)'}
+                          onMouseUp={e=>e.currentTarget.style.transform='scale(1)'}
+                          onMouseLeave={e=>e.currentTarget.style.transform='scale(1)'}>
+                          {qty>0&&<span style={{position:'absolute',top:'-6px',right:'-6px',background:C.amber,color:'#fff',borderRadius:'8px',fontSize:'0.52rem',padding:'1px 4px',fontWeight:'800',lineHeight:'1.6',minWidth:'16px',textAlign:'center'}}>×{qty}</span>}
+                          <span style={{fontSize:'0.82rem',fontWeight:'700',color:qty>0?C.amber:C.text,fontFamily:"'DM Mono',monospace",lineHeight:1}}>{d.label}</span>
+                          <span style={{fontSize:'0.6rem',color:qty>0?C.amber:C.textMuted,fontFamily:"'DM Mono',monospace",marginTop:'3px'}}>
+                            {qty>0?fmt(sub):'—'}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div style={{background:espVal>0?(ecart===0?C.green+'10':ecart>0?C.green+'08':C.red+'08'):C.bg,borderRadius:'10px',padding:'0.75rem 1rem',border:`1px solid ${espVal>0?(ecart===0?C.green+'30':ecart>0?C.green+'20':C.red+'20'):C.border}`}}>
+                    <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                      <div>
+                        <div style={{fontSize:'0.65rem',color:C.textMuted,fontWeight:'600',textTransform:'uppercase',letterSpacing:'0.08em'}}>Écart caisse</div>
+                        {espVal>0&&<div style={{fontSize:'0.78rem',color:C.textMuted,marginTop:'0.15rem'}}>Théorique {fmt(theorique)}</div>}
+                      </div>
+                      <div style={{fontSize:'1.5rem',fontWeight:'800',fontFamily:"'DM Mono',monospace",color:espVal===0?C.textMuted:ecart===0?C.green:ecart>0?C.green:C.red}}>
+                        {espVal===0?'—':ecart===0?'✓ 0,00 €':ecart>0?`+${fmt(ecart)}`:fmt(ecart)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <button onClick={exportXLSX}
+                  style={{width:'100%',background:C.teal,color:'#fff',border:'none',borderRadius:'12px',padding:'0.85rem',fontSize:'0.88rem',fontWeight:'700',cursor:'pointer',marginBottom:'0.6rem',letterSpacing:'0.02em',transition:'opacity 0.15s'}}
+                  onMouseEnter={e=>e.currentTarget.style.opacity='0.88'}
+                  onMouseLeave={e=>e.currentTarget.style.opacity='1'}>
+                  📊 Exporter en Excel (.xlsx)
+                </button>
+                <button onClick={archiveAndReset}
+                  style={{width:'100%',background:C.bg,color:C.red,border:`1px solid ${C.red+'40'}`,borderRadius:'12px',padding:'0.85rem',fontSize:'0.88rem',fontWeight:'600',cursor:'pointer',letterSpacing:'0.02em',marginBottom:'1.5rem'}}>
+                  🔄 Archiver & Nouvelle session
+                </button>
+              </div>
+            </div>
+
+            {activeDenom&&(
+              <div style={{position:'fixed',inset:0,background:'rgba(26,26,30,0.55)',backdropFilter:'blur(6px)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:200,padding:'1rem'}}>
+                <Numpad value={denomStr} onChange={setDenomStr}
+                  label={`Quantité · ${activeDenom.label}`}
+                  subLabel={denomStr?`= ${fmt(Math.round(parseFloat(denomStr||0)*activeDenom.val*100)/100)}`:''}
+                  accentColor={activeDenom.type==='billet'?C.amber:C.teal}
+                  onConfirm={()=>{const qty=parseInt(denomStr)||0;setCloture(p=>({denoms:{...p.denoms,[activeDenom.val]:qty}}));setActiveDenom(null);setDenomStr('');}}
+                  onCancel={()=>{setActiveDenom(null);setDenomStr('');}} />
+              </div>
+            )}
+          </div>
+        </>
+      );
+
+      /* ── MAIN ───────────────────────────────────────────────────── */
+      const TABS=[{id:'caisse',icon:'🛒'},{id:'stats',icon:'📊'},{id:'catalogue',icon:'🗂'}];
+      return (
+        <>
+          <style>{FONTS}</style>
+          <div style={{display:'flex',height:'100vh',background:C.bg,fontFamily:"'Outfit',sans-serif",color:C.text,overflow:'hidden'}}>
+
+            {/* ── SIDEBAR ── */}
+            <div style={{width:'62px',background:C.sidebar,display:'flex',flexDirection:'column',alignItems:'center',padding:'0.85rem 0',flexShrink:0,gap:'0.25rem'}}>
+              <div style={{width:'38px',height:'38px',background:'rgba(255,255,255,0.1)',borderRadius:'10px',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1rem',marginBottom:'1rem',flexShrink:0}}>🍺</div>
+              {TABS.map(t=>(
+                <NavIcon key={t.id} icon={t.icon} active={view===t.id} onClick={()=>setView(t.id)}/>
+              ))}
+              <div style={{flex:1}}/>
+              <NavIcon icon='🔒' active={false} danger onClick={()=>setPhase('cloture')}/>
+            </div>
+
+            {/* ── MAIN CONTENT ── */}
+            <div style={{flex:1,display:'flex',flexDirection:'column',overflow:'hidden',minWidth:0}}>
+              <div style={{background:C.surface,padding:'0 1.25rem',borderBottom:`1px solid ${C.border}`,display:'flex',alignItems:'center',gap:'1rem',height:'52px',flexShrink:0}}>
+                <div style={{flex:1}}>
+                  <span style={{fontSize:'0.72rem',color:C.textMuted}}>Session</span>
+                  <span style={{fontSize:'0.72rem',color:C.textMuted}}> / </span>
+                  <span style={{fontSize:'0.72rem',fontWeight:'600',color:C.text}}>{sessionName||'—'}</span>
+                </div>
+                <div style={{display:'flex',gap:'1.5rem',alignItems:'center'}}>
+                  {[
+                    {label:'CA',val:fmt(stats.totalCA),color:C.text},
+                    {label:'💵',val:fmt(stats.totalEsp),color:C.amber},
+                    {label:'💳',val:fmt(stats.totalCB),color:C.teal},
+                    {label:'tickets',val:String(stats.nb),color:C.textMuted},
+                  ].map(({label,val,color})=>(
+                    <div key={label} style={{display:'flex',alignItems:'center',gap:'0.4rem',fontSize:'0.72rem'}}>
+                      <span style={{color:C.textMuted,fontSize:'0.65rem',fontWeight:'600',textTransform:'uppercase'}}>{label}</span>
+                      <span style={{color,fontFamily:"'DM Mono',monospace",fontWeight:'600'}}>{val}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div style={{flex:1,overflow:'hidden',display:'flex',minHeight:0}}>
+
+                {/* === CAISSE === */}
+                {view==='caisse'&&(
+                  <div style={{flex:1,display:'flex',overflow:'hidden',minWidth:0}}>
+                    <div style={{flex:1,display:'flex',flexDirection:'column',overflow:'hidden',minWidth:0}}>
+                      <div style={{padding:'0.6rem 1rem',display:'flex',gap:'0.4rem',overflowX:'auto',flexShrink:0,background:C.surface,borderBottom:`1px solid ${C.border}`}}>
+                        <button onClick={()=>setActiveCat('all')} style={{whiteSpace:'nowrap',padding:'0.3rem 0.7rem',borderRadius:'20px',border:'none',background:activeCat==='all'?C.sidebar:'transparent',color:activeCat==='all'?'#fff':C.textMuted,cursor:'pointer',fontSize:'0.72rem',fontWeight:'600',transition:'all 0.15s',flexShrink:0}}>Tout</button>
+                        {categories.map(cat=>(
+                          <button key={cat} onClick={()=>setActiveCat(cat)} style={{whiteSpace:'nowrap',padding:'0.3rem 0.7rem',borderRadius:'20px',border:`1px solid ${activeCat===cat?C.amber:C.border}`,background:activeCat===cat?C.amber+'14':'transparent',color:activeCat===cat?C.amber:C.textMuted,cursor:'pointer',fontSize:'0.72rem',fontWeight:'500',transition:'all 0.15s',flexShrink:0}}>{cat}</button>
+                        ))}
+                      </div>
+                      <div style={{flex:1,overflowY:'auto',padding:'0.85rem',minHeight:0}}>
+                        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(100px,1fr))',gap:'0.6rem'}}>
+                          {filtered.map(p=>{
+                            const inCart=cart.find(x=>x.id===p.id);
+                            return(
+                              <button key={p.id} onClick={()=>addToCart(p)} style={{...card(),border:`2px solid ${inCart?C.amber:'transparent'}`,padding:'0.8rem 0.4rem',display:'flex',flexDirection:'column',alignItems:'center',gap:'0.3rem',cursor:'pointer',position:'relative',fontFamily:"'Outfit',sans-serif",background:inCart?C.amber+'0a':C.surface,transition:'all 0.1s',boxShadow:inCart?`0 0 0 3px ${C.amber}25,0 2px 8px rgba(0,0,0,0.08)`:'0 1px 3px rgba(0,0,0,0.07)'}}>
+                                {inCart&&<span style={{position:'absolute',top:'5px',right:'6px',background:C.amber,color:'#fff',borderRadius:'8px',fontSize:'0.58rem',padding:'1px 5px',fontWeight:'700',lineHeight:'1.7'}}>{inCart.qty}</span>}
+                                <span style={{fontSize:'1.6rem'}}>{p.emoji}</span>
+                                <span style={{fontSize:'0.7rem',fontWeight:'600',textAlign:'center',color:C.text,lineHeight:1.2}}>{p.name}</span>
+                                <span style={{fontSize:'0.75rem',fontWeight:'700',color:C.amber,fontFamily:"'DM Mono',monospace"}}>{fmt(p.price)}</span>
+                              </button>
+                            );
+                          })}
+                          {filtered.length===0&&<div style={{gridColumn:'1/-1',textAlign:'center',color:C.textMuted,padding:'3rem',fontSize:'0.85rem'}}>Aucun produit</div>}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* ── PANNEAU PANIER ── */}
+                    <div style={{width:'210px',background:C.cart,display:'flex',flexDirection:'column',flexShrink:0,color:C.textDark,borderLeft:'1px solid rgba(255,255,255,0.04)'}}>
+                      <div style={{padding:'1rem 1rem 0.85rem',borderBottom:`1px solid ${C.borderDark}`,flexShrink:0}}>
+                        <div style={{fontSize:'0.58rem',color:C.textDarkM,letterSpacing:'0.12em',textTransform:'uppercase',marginBottom:'0.25rem',fontWeight:'600'}}>Total commande</div>
+                        <div style={{fontSize:'1.9rem',fontWeight:'800',fontFamily:"'DM Mono',monospace",color:'#fff',lineHeight:1,letterSpacing:'-0.02em',marginBottom:'0.85rem'}}>
+                          {fmt(cartTotal)}
+                        </div>
+                        <button
+                          onClick={()=>{if(cart.length>0)setPayModal(true);}}
+                          disabled={cart.length===0}
+                          style={{
+                            width:'100%',border:'none',borderRadius:'10px',
+                            padding:'0.7rem 0.5rem',fontSize:'0.88rem',fontWeight:'700',
+                            cursor:cart.length>0?'pointer':'not-allowed',
+                            transition:'all 0.15s',letterSpacing:'0.01em',
+                            background:cart.length>0?C.amber:'rgba(255,255,255,0.07)',
+                            color:cart.length>0?'#fff':'rgba(255,255,255,0.2)',
+                            boxShadow:cart.length>0?`0 4px 14px ${C.amber}55`:'none',
+                          }}>
+                          {cart.length>0?`Encaisser →`:'Panier vide'}
+                        </button>
+                      </div>
+
+                      <div style={{padding:'0.55rem 1rem',display:'flex',justifyContent:'space-between',alignItems:'center',borderBottom:`1px solid ${C.borderDark}`,flexShrink:0}}>
+                        <span style={{fontSize:'0.62rem',color:C.textDarkM,fontWeight:'600',textTransform:'uppercase',letterSpacing:'0.08em'}}>
+                          Articles{cartQty>0?` · ${cartQty}`:''}
+                        </span>
+                        {cart.length>0&&(
+                          <button onClick={()=>setCart([])}
+                            style={{background:'none',border:'none',color:'rgba(255,255,255,0.3)',cursor:'pointer',fontSize:'0.62rem',fontFamily:"'Outfit',sans-serif",letterSpacing:'0.04em'}}>
+                            vider
+                          </button>
+                        )}
+                      </div>
+
+                      <div style={{flex:1,overflowY:'auto',padding:'0.35rem 0.75rem',minHeight:0}}>
+                        {cart.length===0&&(
+                          <div style={{textAlign:'center',marginTop:'2.5rem'}}>
+                            <div style={{fontSize:'1.5rem',opacity:0.2,marginBottom:'0.5rem'}}>🛒</div>
+                            <p style={{color:C.textDarkM,fontSize:'0.68rem',lineHeight:1.6,opacity:0.7}}>Ajoutez des<br/>articles</p>
+                          </div>
+                        )}
+                        {cart.map(item=>{
+                          const p=products.find(x=>x.id===item.id);
+                          return(
+                            <div key={item.id} style={{padding:'0.45rem 0',borderBottom:`1px solid rgba(255,255,255,0.06)`}}>
+                              <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'0.3rem'}}>
+                                <span style={{fontSize:'0.73rem',color:'rgba(255,255,255,0.88)',fontWeight:'500',flex:1,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',marginRight:'0.3rem'}}>
+                                  {p?.emoji} {p?.name}
+                                </span>
+                                <span style={{fontSize:'0.7rem',color:C.amberL,fontWeight:'700',fontFamily:"'DM Mono',monospace",flexShrink:0}}>
+                                  {fmt((p?.price||0)*item.qty)}
+                                </span>
+                              </div>
+                              <div style={{display:'flex',alignItems:'center',gap:'5px'}}>
+                                <button onClick={()=>removeFromCart(item.id)}
+                                  style={{background:'rgba(255,255,255,0.07)',border:'1px solid rgba(255,255,255,0.1)',color:'rgba(255,255,255,0.65)',borderRadius:'5px',width:'20px',height:'20px',cursor:'pointer',fontSize:'0.9rem',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>−</button>
+                                <span style={{fontSize:'0.72rem',width:'18px',textAlign:'center',fontWeight:'700',color:'#fff'}}>{item.qty}</span>
+                                <button onClick={()=>{const prod=products.find(x=>x.id===item.id);if(prod)addToCart(prod);}}
+                                  style={{background:'rgba(255,255,255,0.07)',border:'1px solid rgba(255,255,255,0.1)',color:'rgba(255,255,255,0.65)',borderRadius:'5px',width:'20px',height:'20px',cursor:'pointer',fontSize:'0.9rem',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>+</button>
+                                <span style={{fontSize:'0.6rem',color:'rgba(255,255,255,0.3)',marginLeft:'2px',fontFamily:"'DM Mono',monospace"}}>{fmt(p?.price||0)}</span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {view==='stats'&&<StatsView stats={stats} transactions={transactions} sessions={sessions}/>}
+                {view==='catalogue'&&<CatalogueView products={products} setProducts={setProducts} categories={categories}/>}
+              </div>
+            </div>
+
+            {/* ── MODAL PAIEMENT ── */}
+            {payModal&&(
+              <div style={{position:'fixed',inset:0,background:'rgba(26,26,30,0.6)',backdropFilter:'blur(8px)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100,padding:'1rem'}}>
+                <div style={{...card(),width:'100%',maxWidth:'360px',overflow:'hidden'}}>
+
+                  {!payMode?(
+                    <div style={{padding:'1.75rem'}}>
+                      <div style={{textAlign:'center',marginBottom:'1.5rem'}}>
+                        <div style={{fontSize:'0.65rem',color:C.textMuted,fontWeight:'600',textTransform:'uppercase',letterSpacing:'0.1em',marginBottom:'0.4rem'}}>À encaisser</div>
+                        <div style={{fontSize:'2.5rem',fontWeight:'800',color:C.text,fontFamily:"'DM Mono',monospace",letterSpacing:'-0.03em'}}>{fmt(cartTotal)}</div>
+                      </div>
+                      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.75rem',marginBottom:'1.25rem'}}>
+                        <button onClick={()=>setPayMode('especes')}
+                          style={{background:C.amber+'12',border:`2px solid ${C.amber+'40'}`,borderRadius:'14px',padding:'1.25rem',display:'flex',flexDirection:'column',alignItems:'center',gap:'0.4rem',cursor:'pointer',transition:'all 0.15s'}}
+                          onMouseEnter={e=>e.currentTarget.style.background=C.amber+'22'}
+                          onMouseLeave={e=>e.currentTarget.style.background=C.amber+'12'}>
+                          <span style={{fontSize:'1.8rem'}}>💵</span>
+                          <span style={{fontSize:'0.78rem',fontWeight:'700',color:C.amber}}>Espèces</span>
+                        </button>
+                        <button onClick={()=>setPayMode('cb')}
+                          style={{background:C.teal+'12',border:`2px solid ${C.teal+'40'}`,borderRadius:'14px',padding:'1.25rem',display:'flex',flexDirection:'column',alignItems:'center',gap:'0.4rem',cursor:'pointer',transition:'all 0.15s'}}
+                          onMouseEnter={e=>e.currentTarget.style.background=C.teal+'22'}
+                          onMouseLeave={e=>e.currentTarget.style.background=C.teal+'12'}>
+                          <span style={{fontSize:'1.8rem'}}>💳</span>
+                          <span style={{fontSize:'0.78rem',fontWeight:'700',color:C.teal}}>Carte</span>
+                        </button>
+                      </div>
+                      <button onClick={()=>{setPayModal(false);setPayMode(null);setCashStr('');}}
+                        style={{width:'100%',background:'none',border:`1px solid ${C.border}`,borderRadius:'10px',padding:'0.7rem',cursor:'pointer',color:C.textMuted,fontSize:'0.8rem',fontFamily:"'Outfit',sans-serif"}}>Annuler</button>
+                    </div>
+
+                  ):payMode==='cb'?(
+                    <div style={{padding:'1.75rem'}}>
+                      <div style={{textAlign:'center',marginBottom:'1.75rem'}}>
+                        <div style={{fontSize:'2.5rem',marginBottom:'0.75rem'}}>💳</div>
+                        <div style={{fontSize:'0.65rem',color:C.textMuted,fontWeight:'600',textTransform:'uppercase',letterSpacing:'0.1em',marginBottom:'0.5rem'}}>Paiement par carte</div>
+                        <div style={{fontSize:'2.2rem',fontWeight:'800',color:C.text,fontFamily:"'DM Mono',monospace",letterSpacing:'-0.03em'}}>{fmt(cartTotal)}</div>
+                        <div style={{fontSize:'0.8rem',color:C.textMuted,marginTop:'0.5rem',lineHeight:1.4}}>
+                          Présentez le terminal CB au client,<br/>puis confirmez l'encaissement.
+                        </div>
+                      </div>
+                      <button onClick={confirmPay}
+                        style={{width:'100%',background:C.teal,color:'#fff',border:'none',borderRadius:'12px',padding:'1rem',fontSize:'0.95rem',fontWeight:'700',cursor:'pointer',letterSpacing:'0.02em',marginBottom:'0.6rem',boxShadow:`0 4px 14px ${C.teal}55`,fontFamily:"'Outfit',sans-serif"}}>
+                        ✓ Paiement CB confirmé
+                      </button>
+                      <button onClick={()=>setPayMode(null)}
+                        style={{width:'100%',background:'none',border:`1px solid ${C.border}`,borderRadius:'10px',padding:'0.7rem',cursor:'pointer',color:C.textMuted,fontSize:'0.8rem',fontFamily:"'Outfit',sans-serif"}}>
+                        ← Retour
+                      </button>
+                    </div>
+                  ):payMode==='especes'?(
+                    <div style={{display:'flex',flexDirection:'column',maxHeight:'96vh'}}>
+                      <div style={{padding:'1rem 1.25rem',background:C.bg,borderBottom:`1px solid ${C.border}`,display:'flex',justifyContent:'space-between',alignItems:'center',flexShrink:0}}>
+                        <div>
+                          <div style={{fontSize:'0.62rem',color:C.textMuted,fontWeight:'600',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.15rem'}}>Total dû</div>
+                          <div style={{fontSize:'1.35rem',fontWeight:'800',fontFamily:"'DM Mono',monospace",color:C.text}}>{fmt(cartTotal)}</div>
+                        </div>
+                        <div style={{textAlign:'right'}}>
+                          <div style={{fontSize:'0.62rem',color:C.textMuted,fontWeight:'600',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.15rem'}}>Monnaie</div>
+                          <div style={{fontSize:'1.35rem',fontWeight:'800',fontFamily:"'DM Mono',monospace",color:!cashStr?C.textMuted:monnaie>=0?C.green:C.red}}>
+                            {!cashStr?'—':monnaie>=0?fmt(monnaie):'Insuff.'}
+                          </div>
+                        </div>
+                      </div>
+                      <div style={{display:'flex',gap:'0.4rem',padding:'0.7rem 1rem',borderBottom:`1px solid ${C.border}`,overflowX:'auto',flexShrink:0}}>
+                        {QUICK_BILLS.map(b=>(
+                          <button key={b} onClick={()=>setCashStr(String(b))}
+                            style={{flexShrink:0,padding:'0.42rem 0.8rem',background:cashStr===String(b)?C.amber:C.bg,border:`1px solid ${cashStr===String(b)?C.amber:C.border}`,borderRadius:'8px',color:cashStr===String(b)?'#fff':C.amber,fontSize:'0.78rem',fontWeight:'700',cursor:'pointer',fontFamily:"'DM Mono',monospace",transition:'all 0.15s'}}>
+                            {b}€
+                          </button>
+                        ))}
+                      </div>
+                      <div style={{padding:'0.75rem 1rem',flex:1,overflowY:'auto'}}>
+                        <div style={{fontSize:'0.62rem',color:C.textMuted,fontWeight:'600',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.35rem'}}>Montant reçu</div>
+                        <div style={{fontSize:'1.75rem',fontWeight:'700',fontFamily:"'DM Mono',monospace",color:C.amber,minHeight:'2.2rem',marginBottom:'0.6rem'}}>{cashStr||<span style={{color:C.border}}>0</span>}</div>
+                        <NumpadKeys value={cashStr} onChange={setCashStr}/>
+                      </div>
+                      <div style={{padding:'0.75rem 1rem',borderTop:`1px solid ${C.border}`,display:'flex',gap:'0.5rem',flexShrink:0}}>
+                        <button onClick={()=>{setPayMode(null);setCashStr('');}}
+                          style={{background:C.bg,border:`1px solid ${C.border}`,borderRadius:'10px',padding:'0.65rem 0.85rem',cursor:'pointer',color:C.textMuted,fontSize:'0.9rem',fontFamily:"'Outfit',sans-serif"}}>←</button>
+                        <button onClick={()=>confirmPay()}
+                          style={{flex:1,border:'none',borderRadius:'10px',padding:'0.75rem',cursor:'pointer',fontFamily:"'Outfit',sans-serif",fontSize:'0.88rem',fontWeight:'700',transition:'all 0.15s',
+                            background: cashStr && monnaie<0 ? C.bg : C.amber,
+                            color:      cashStr && monnaie<0 ? C.textMuted : '#fff',
+                            boxShadow:  cashStr && monnaie<0 ? 'none' : `0 4px 14px ${C.amber}55`}}
+                          disabled={cashStr && monnaie<0}>
+                          {cashStr
+                            ? monnaie<0
+                              ? 'Insuffisant'
+                              : monnaie===0
+                                ? '✓ Confirmer (appoint)'
+                                : `✓ Rendre ${fmt(monnaie)}`
+                            : '✓ Confirmer sans montant'}
+                        </button>
+                      </div>
+                    </div>
+                  ):null}
+                </div>
+              </div>
+            )}
+          </div>
+        </>
+      );
+    }
+
+    /* ── STATS VIEW ──────────────────────────────────────────────────── */
+    function StatsView({stats,transactions,sessions}) {
+      const [tab,setTab]=useState('session');
+      return(
+        <div style={{flex:1,display:'flex',flexDirection:'column',overflow:'hidden',minWidth:0,width:'100%'}}>
+          <div style={{display:'flex',background:C.surface,borderBottom:`1px solid ${C.border}`,padding:'0 1rem',flexShrink:0}}>
+            {[['session','📈 Session'],['heures','🕐 Heures'],['historique','🗄 Historique']].map(([t,label])=>(
+              <button key={t} onClick={()=>setTab(t)} style={{
+                padding:'0.75rem 1rem',background:'none',border:'none',
+                borderBottom:tab===t?`2px solid ${C.teal}`:'2px solid transparent',
+                color:tab===t?C.teal:C.textMuted,cursor:'pointer',
+                fontSize:'0.78rem',fontWeight:tab===t?'700':'500',
+                transition:'all 0.15s',marginBottom:'-1px',fontFamily:"'Outfit',sans-serif",
+              }}>{label}</button>
+            ))}
+          </div>
+          <div style={{flex:1,overflow:'hidden',display:'flex',flexDirection:'column',minHeight:0}}>
+            {tab==='session'   && <SessionStatsTab stats={stats} transactions={transactions}/>}
+            {tab==='heures'    && <HeuresTab hourly={stats.hourly}/>}
+            {tab==='historique'&& <HistoriqueTab sessions={sessions}/>}
+          </div>
+        </div>
+      );
+    }
+
+    function Kpi({label,val,color,mono}) {
+      return(
+        <div style={{...card(),padding:'0.9rem 1.1rem'}}>
+          <div style={{fontSize:'0.62rem',fontWeight:'600',color:C.textMuted,textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.3rem'}}>{label}</div>
+          <div style={{fontSize:'1.05rem',fontWeight:'700',color:color||C.text,fontFamily:mono?"'DM Mono',monospace":"'Outfit',sans-serif"}}>{val}</div>
+        </div>
+      );
+    }
+
+    function SessionStatsTab({stats,transactions}) {
+      const avg=stats.nb>0?stats.totalCA/stats.nb:0;
+      return(
+        <div style={{flex:1,overflowY:'auto',padding:'1rem',width:'100%',minHeight:0}}>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'0.6rem',marginBottom:'0.75rem'}}>
+            <Kpi label="CA Total"  val={fmt(stats.totalCA)}  color={C.amber} mono/>
+            <Kpi label="Espèces"   val={fmt(stats.totalEsp)} color={C.text}  mono/>
+            <Kpi label="CB"        val={fmt(stats.totalCB)}  color={C.teal}  mono/>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'0.6rem',marginBottom:'1rem'}}>
+            <Kpi label="Tickets"     val={stats.nb}                                              color={C.text}/>
+            <Kpi label="Panier moy." val={stats.nb?fmt(avg):'—'}                                color={C.text} mono/>
+            <Kpi label="% Espèces"   val={stats.totalCA>0?Math.round(stats.totalEsp/stats.totalCA*100)+'%':'—'} color={C.textMuted}/>
+          </div>
+
+          {stats.nb===0&&(
+            <div style={{textAlign:'center',paddingTop:'2rem',color:C.textMuted}}>
+              <div style={{fontSize:'2.5rem',marginBottom:'0.75rem',opacity:0.3}}>📊</div>
+              <p style={{fontSize:'0.85rem',fontWeight:'500'}}>Aucune vente pour l'instant</p>
+            </div>
+          )}
+
+          {stats.top.length>0&&(
+            <div style={{...card(),padding:'1rem 1.1rem',marginBottom:'0.75rem'}}>
+              <div style={{fontSize:'0.7rem',fontWeight:'700',color:C.textMuted,textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.85rem'}}>Top ventes</div>
+              {stats.top.map(([name,qty],i)=>(
+                <div key={name} style={{marginBottom:'0.55rem'}}>
+                  <div style={{display:'flex',justifyContent:'space-between',fontSize:'0.82rem',marginBottom:'0.2rem'}}>
+                    <span style={{fontWeight:'500',color:C.text}}>{name}</span>
+                    <span style={{color:C.amber,fontWeight:'700',fontFamily:"'DM Mono',monospace"}}>×{qty}</span>
+                  </div>
+                  <div style={{height:'4px',background:C.bg,borderRadius:'2px'}}>
+                    <div style={{height:'100%',width:`${(qty/stats.top[0][1])*100}%`,background:i===0?C.amber:C.teal,borderRadius:'2px',transition:'width 0.4s'}}/>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {transactions.length>0&&(
+            <div style={{...card(),padding:'1rem 1.1rem'}}>
+              <div style={{fontSize:'0.7rem',fontWeight:'700',color:C.textMuted,textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.75rem'}}>
+                Dernières transactions ({transactions.length})
+              </div>
+              {[...transactions].reverse().slice(0,20).map(t=>(
+                <div key={t.id} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'0.45rem 0',borderBottom:`1px solid ${C.border}`}}>
+                  <div style={{display:'flex',alignItems:'center',gap:'0.5rem',flex:1,minWidth:0}}>
+                    <span style={{fontSize:'0.7rem',color:C.textMuted,fontFamily:"'DM Mono',monospace",flexShrink:0}}>
+                      {new Date(t.ts).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}
+                    </span>
+                    <span style={{flexShrink:0}}>{t.mode==='especes'?'💵':'💳'}</span>
+                    <span style={{fontSize:'0.65rem',color:C.textMuted,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>
+                      {t.items.map(i=>`${i.name}×${i.qty}`).join(', ')}
+                    </span>
+                  </div>
+                  <span style={{fontWeight:'700',color:C.amber,fontFamily:"'DM Mono',monospace",fontSize:'0.85rem',flexShrink:0,marginLeft:'0.5rem'}}>
+                    {fmt(t.total)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    function HeuresTab({hourly}) {
+      const entries=Object.entries(hourly||{}).sort((a,b)=>Number(a[0])-Number(b[0]));
+      if(entries.length===0) return(
+        <div style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center',color:C.textMuted,flexDirection:'column',gap:'0.75rem',minHeight:0}}>
+          <span style={{fontSize:'2.5rem',opacity:0.3}}>🕐</span>
+          <span style={{fontSize:'0.85rem',fontWeight:'500'}}>Aucune vente enregistrée</span>
+        </div>
+      );
+      const maxCA=Math.max(...entries.map(([,d])=>d.ca));
+      const maxNb=Math.max(...entries.map(([,d])=>d.nb));
+      const BW=40; const TW=entries.length*BW;
+      return(
+        <div style={{flex:1,overflowY:'auto',padding:'1rem',width:'100%',minHeight:0}}>
+          <div style={{...card(),padding:'1rem 1.1rem',marginBottom:'0.75rem'}}>
+            <div style={{fontSize:'0.7rem',fontWeight:'700',color:C.textMuted,textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.75rem'}}>CA par heure</div>
+            <div style={{overflowX:'auto'}}>
+              <svg viewBox={`0 0 ${Math.max(TW,300)} 80`} style={{display:'block',minWidth:`${TW}px`,width:'100%'}}>
+                {entries.map(([h,d],i)=>{
+                  const barH=maxCA>0?Math.round((d.ca/maxCA)*58):2; const x=i*BW+6;
+                  return(<g key={h}>
+                    <rect x={x} y={70-barH} width={28} height={barH} rx={4} fill={C.amber}/>
+                    <text x={x+14} y={70-barH-5} textAnchor="middle" fontSize="7.5" fill={C.amber} fontFamily="DM Mono,monospace" fontWeight="600">{d.ca.toFixed(0)}</text>
+                    <text x={x+14} y={78} textAnchor="middle" fontSize="7.5" fill={C.textMuted} fontFamily="Outfit,sans-serif">{h}h</text>
+                  </g>);
+                })}
+              </svg>
+            </div>
+          </div>
+          <div style={{...card(),padding:'1rem 1.1rem',marginBottom:'0.75rem'}}>
+            <div style={{fontSize:'0.7rem',fontWeight:'700',color:C.textMuted,textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.75rem'}}>Tickets par heure</div>
+            <div style={{overflowX:'auto'}}>
+              <svg viewBox={`0 0 ${Math.max(TW,300)} 70`} style={{display:'block',minWidth:`${TW}px`,width:'100%'}}>
+                {entries.map(([h,d],i)=>{
+                  const barH=maxNb>0?Math.round((d.nb/maxNb)*50):2; const x=i*BW+6;
+                  return(<g key={h}>
+                    <rect x={x} y={60-barH} width={28} height={barH} rx={4} fill={C.teal}/>
+                    <text x={x+14} y={60-barH-4} textAnchor="middle" fontSize="7.5" fill={C.teal} fontFamily="DM Mono,monospace" fontWeight="600">{d.nb}</text>
+                    <text x={x+14} y={68} textAnchor="middle" fontSize="7.5" fill={C.textMuted} fontFamily="Outfit,sans-serif">{h}h</text>
+                  </g>);
+                })}
+              </svg>
+            </div>
+          </div>
+          <div style={{...card(),overflow:'hidden'}}>
+            <div style={{display:'grid',gridTemplateColumns:'1.2fr 0.8fr 1.2fr 1.2fr',padding:'0.6rem 1rem',background:C.bg,borderBottom:`1px solid ${C.border}`}}>
+              {['Heure','Tickets','CA','Panier moy.'].map(h=>(
+                <div key={h} style={{fontSize:'0.62rem',fontWeight:'700',color:C.textMuted,textTransform:'uppercase',letterSpacing:'0.08em'}}>{h}</div>
+              ))}
+            </div>
+            {entries.map(([h,d],i)=>(
+              <div key={h} style={{display:'grid',gridTemplateColumns:'1.2fr 0.8fr 1.2fr 1.2fr',padding:'0.5rem 1rem',borderBottom:i<entries.length-1?`1px solid ${C.border}`:'none',background:i%2===0?C.surface:C.bg}}>
+                <div style={{fontSize:'0.8rem',fontWeight:'600',color:C.text}}>{h}h – {(parseInt(h)+1)%24}h</div>
+                <div style={{fontSize:'0.8rem',fontWeight:'600',color:C.teal}}>{d.nb}</div>
+                <div style={{fontSize:'0.8rem',fontWeight:'700',color:C.amber,fontFamily:"'DM Mono',monospace"}}>{fmt(d.ca)}</div>
+                <div style={{fontSize:'0.78rem',color:C.textMuted,fontFamily:"'DM Mono',monospace"}}>{fmt(d.ca/d.nb)}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    function HistoriqueTab({sessions}) {
+      const [mode,setMode]=useState('list');
+      const [selected,setSelected]=useState(null);
+      const [idA,setIdA]=useState(null);
+      const [idB,setIdB]=useState(null);
+      useEffect(()=>{if(sessions.length>=1&&!idA)setIdA(sessions[0].id);},[sessions]);
+      useEffect(()=>{if(sessions.length>=2&&!idB)setIdB(sessions[1].id);},[sessions]);
+      if(sessions.length===0)return(
+        <div style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center',color:C.textMuted,flexDirection:'column',gap:'0.75rem',minHeight:0}}>
+          <span style={{fontSize:'2.5rem',opacity:0.3}}>🗄</span>
+          <span style={{fontSize:'0.85rem',fontWeight:'500'}}>Aucune session archivée</span>
+        </div>
+      );
+      if(mode==='list')return(
+        <div style={{flex:1,overflowY:'auto',padding:'1rem',minHeight:0}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'0.85rem'}}>
+            <h3 style={{fontSize:'1rem',fontWeight:'700'}}>{sessions.length} session{sessions.length>1?'s':''}</h3>
+            {sessions.length>=2&&<button onClick={()=>setMode('compare')} style={{background:C.teal,color:'#fff',border:'none',borderRadius:'8px',padding:'0.4rem 0.85rem',fontSize:'0.75rem',fontWeight:'600',cursor:'pointer'}}>⚖ Comparer</button>}
+          </div>
+          {sessions.map(sess=>{
+            const avg=sess.stats.nb>0?sess.stats.totalCA/sess.stats.nb:0;
+            return(
+              <div key={sess.id} onClick={()=>{setSelected(sess);setMode('detail');}}
+                style={{...card(),padding:'1rem 1.1rem',marginBottom:'0.6rem',cursor:'pointer',transition:'all 0.15s'}}
+                onMouseEnter={e=>{e.currentTarget.style.boxShadow=`0 0 0 2px ${C.amber},0 4px 16px rgba(0,0,0,0.1)`;}}
+                onMouseLeave={e=>{e.currentTarget.style.boxShadow='0 1px 3px rgba(0,0,0,0.07),0 4px 16px rgba(0,0,0,0.05)';}}>
+                <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'0.5rem'}}>
+                  <div>
+                    <div style={{fontWeight:'700',fontSize:'0.9rem'}}>{sess.name}</div>
+                    <div style={{fontSize:'0.68rem',color:C.textMuted}}>{new Date(sess.date).toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'})}</div>
+                  </div>
+                  <div style={{textAlign:'right'}}>
+                    <div style={{fontWeight:'800',fontSize:'0.95rem',color:C.amber,fontFamily:"'DM Mono',monospace"}}>{fmt(sess.stats.totalCA)}</div>
+                    <div style={{fontSize:'0.65rem',color:C.textMuted}}>{sess.stats.nb} tickets</div>
+                  </div>
+                </div>
+                <div style={{display:'flex',gap:'1rem',flexWrap:'wrap'}}>
+                  {[['💵',fmt(sess.stats.totalEsp)],['💳',fmt(sess.stats.totalCB)],['~',fmt(avg)]].map(([icon,val])=>(
+                    <div key={icon} style={{fontSize:'0.7rem',color:C.textMuted}}>{icon} <span style={{fontWeight:'600',color:C.text}}>{val}</span></div>
+                  ))}
+                  {sess.cloture.espVal>0&&<div style={{fontSize:'0.7rem',marginLeft:'auto',fontWeight:'700',color:sess.cloture.ecart===0?C.green:sess.cloture.ecart>0?C.green:C.red}}>écart {sess.cloture.ecart>0?'+':''}{fmt(sess.cloture.ecart)}</div>}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      );
+      if(mode==='detail'&&selected){
+        const s=selected;const avg=s.stats.nb>0?s.stats.totalCA/s.stats.nb:0;
+        const hourEntries=Object.entries(s.stats.hourly||{}).sort((a,b)=>Number(a[0])-Number(b[0]));
+        const maxCA=hourEntries.length>0?Math.max(...hourEntries.map(([,d])=>d.ca)):0;
+        const BW=36;const TW=hourEntries.length*BW;
+        return(
+          <div style={{flex:1,overflowY:'auto',padding:'1rem',minHeight:0}}>
+            <div style={{display:'flex',alignItems:'center',gap:'0.75rem',marginBottom:'1rem'}}>
+              <button onClick={()=>setMode('list')} style={{background:C.bg,border:'none',borderRadius:'8px',padding:'0.45rem 0.8rem',cursor:'pointer',fontSize:'0.78rem',color:C.textMuted,fontFamily:"'Outfit',sans-serif"}}>← Retour</button>
+              <div>
+                <div style={{fontWeight:'800',fontSize:'1rem'}}>{s.name}</div>
+                <div style={{fontSize:'0.7rem',color:C.textMuted}}>{new Date(s.date).toLocaleDateString('fr-FR',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div>
+              </div>
+            </div>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'0.6rem',marginBottom:'0.75rem'}}>
+              <Kpi label="CA Total" val={fmt(s.stats.totalCA)} color={C.amber} mono/>
+              <Kpi label="Tickets" val={s.stats.nb} color={C.text}/>
+              <Kpi label="Écart" val={s.cloture.espVal>0?(s.cloture.ecart===0?'✓ 0':fmt(s.cloture.ecart)):'N/A'} color={s.cloture.ecart===0?C.green:s.cloture.ecart>0?C.green:C.red} mono/>
+            </div>
+            {s.stats.top&&s.stats.top.length>0&&(
+              <div style={{...card(),padding:'1rem 1.1rem',marginBottom:'0.75rem'}}>
+                <div style={{fontSize:'0.7rem',fontWeight:'700',color:C.textMuted,textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.75rem'}}>Top produits</div>
+                {s.stats.top.map(([name,qty],i)=>(
+                  <div key={name} style={{marginBottom:'0.45rem'}}>
+                    <div style={{display:'flex',justifyContent:'space-between',fontSize:'0.8rem',marginBottom:'0.15rem'}}><span style={{fontWeight:'500'}}>{name}</span><span style={{color:C.amber,fontWeight:'700'}}>×{qty}</span></div>
+                    <div style={{height:'3px',background:C.bg,borderRadius:'2px'}}><div style={{height:'100%',width:`${(qty/s.stats.top[0][1])*100}%`,background:i===0?C.amber:C.teal,borderRadius:'2px'}}/></div>
+                  </div>
+                ))}
+              </div>
+            )}
+            {hourEntries.length>0&&(
+              <div style={{...card(),padding:'1rem 1.1rem'}}>
+                <div style={{fontSize:'0.7rem',fontWeight:'700',color:C.textMuted,textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.75rem'}}>CA par heure</div>
+                <div style={{overflowX:'auto'}}>
+                  <svg viewBox={`0 0 ${Math.max(TW,250)} 72`} style={{display:'block',minWidth:`${TW}px`,width:'100%'}}>
+                    {hourEntries.map(([h,d],i)=>{const barH=maxCA>0?Math.round((d.ca/maxCA)*52):2;const x=i*BW+4;return(<g key={h}><rect x={x} y={60-barH} width={26} height={barH} rx={3} fill={C.amber+'bb'}/><text x={x+13} y={68} textAnchor="middle" fontSize="7" fill={C.textMuted} fontFamily="Outfit">{h}h</text></g>);})}
+                  </svg>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      }
+      if(mode==='compare'){
+        const sA=sessions.find(s=>s.id===idA)||sessions[0];
+        const sB=sessions.find(s=>s.id===idB)||sessions[1];
+        const rows=sA&&sB?[
+          ['CA Total',fmt(sA.stats.totalCA),fmt(sB.stats.totalCA),sA.stats.totalCA>sB.stats.totalCA?'A':'B'],
+          ['Tickets',sA.stats.nb,sB.stats.nb,sA.stats.nb>sB.stats.nb?'A':'B'],
+          ['CA Espèces',fmt(sA.stats.totalEsp),fmt(sB.stats.totalEsp),null],
+          ['CA CB',fmt(sA.stats.totalCB),fmt(sB.stats.totalCB),null],
+          ['Panier moy.',sA.stats.nb>0?fmt(sA.stats.totalCA/sA.stats.nb):'—',sB.stats.nb>0?fmt(sB.stats.totalCA/sB.stats.nb):'—',sA.stats.nb>0&&sB.stats.nb>0?(sA.stats.totalCA/sA.stats.nb>sB.stats.totalCA/sB.stats.nb?'A':'B'):null],
+        ]:[];
+        return(
+          <div style={{flex:1,overflowY:'auto',padding:'1rem',minHeight:0}}>
+            <div style={{display:'flex',alignItems:'center',gap:'0.75rem',marginBottom:'1rem'}}>
+              <button onClick={()=>setMode('list')} style={{background:C.bg,border:'none',borderRadius:'8px',padding:'0.45rem 0.8rem',cursor:'pointer',fontSize:'0.78rem',color:C.textMuted,fontFamily:"'Outfit',sans-serif"}}>← Retour</button>
+              <h3 style={{fontWeight:'800',fontSize:'1rem'}}>Comparaison</h3>
+            </div>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.6rem',marginBottom:'1rem'}}>
+              {[['A',idA,setIdA],['B',idB,setIdB]].map(([label,val,setter])=>(
+                <div key={label}>
+                  <div style={{fontSize:'0.62rem',fontWeight:'700',color:C.textMuted,textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.35rem'}}>Session {label}</div>
+                  <select value={val||''} onChange={e=>setter(e.target.value)} style={{width:'100%',background:C.bg,border:`1px solid ${C.border}`,borderRadius:'8px',padding:'0.55rem',fontSize:'0.78rem',color:C.text,fontFamily:"'Outfit',sans-serif",outline:'none',cursor:'pointer'}}>
+                    {sessions.map(s=><option key={s.id} value={s.id}>{s.name} — {new Date(s.date).toLocaleDateString('fr-FR')}</option>)}
+                  </select>
+                </div>
+              ))}
+            </div>
+            {sA&&sB&&(
+              <div style={{...card(),overflow:'hidden'}}>
+                <div style={{display:'grid',gridTemplateColumns:'1.5fr 1fr 1fr',background:C.bg,padding:'0.6rem 1rem',borderBottom:`1px solid ${C.border}`}}>
+                  <div/>
+                  {[sA,sB].map(s=><div key={s.id} style={{textAlign:'center',fontSize:'0.72rem',fontWeight:'700',color:C.text,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{s.name}</div>)}
+                </div>
+                {rows.map(([label,vA,vB,winner],ri)=>(
+                  <div key={label} style={{display:'grid',gridTemplateColumns:'1.5fr 1fr 1fr',padding:'0.55rem 1rem',borderBottom:ri<rows.length-1?`1px solid ${C.border}`:'none',background:ri%2===0?C.surface:C.bg,alignItems:'center'}}>
+                    <div style={{fontSize:'0.78rem',color:C.textMuted,fontWeight:'500'}}>{label}</div>
+                    {[['A',vA],['B',vB]].map(([id,val])=>(
+                      <div key={id} style={{textAlign:'center',fontSize:'0.8rem',fontWeight:winner===id?'800':'500',color:winner===id?C.amber:C.text,fontFamily:"'DM Mono',monospace"}}>
+                        {winner===id&&'▲ '}{val}
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      }
+      return null;
+    }
+
+    /* ── CATALOGUE VIEW ──────────────────────────────────────────────── */
+    function CatalogueView({products,setProducts,categories}) {
+      const [editProd,setEditProd]=useState(null);
+      const [form,setForm]=useState({name:'',price:'',cat:'Bière Maison',emoji:'🍺'});
+      const [dragIdx,setDragIdx]=useState(null);
+      const [overIdx,setOverIdx]=useState(null);
+      const openNew=()=>{setForm({name:'',price:'',cat:categories[0]||'Bière Maison',emoji:'🍺'});setEditProd('new');};
+      const openEdit=p=>{setForm({name:p.name,price:String(p.price),cat:p.cat,emoji:p.emoji});setEditProd(p);};
+      const save=()=>{
+        if(!form.name||!form.price)return;
+        const price=parseFloat(form.price.replace(',','.'));
+        if(editProd==='new')setProducts(prev=>[...prev,{id:'p'+Date.now(),name:form.name,price,cat:form.cat,emoji:form.emoji||'🍺'}]);
+        else setProducts(prev=>prev.map(p=>p.id===editProd.id?{...p,name:form.name,price,cat:form.cat,emoji:form.emoji}:p));
+        setEditProd(null);
+      };
+      const del=id=>{if(window.confirm('Supprimer ce produit ?')){setProducts(prev=>prev.filter(p=>p.id!==id));setEditProd(null);}};
+      const onDragStart=i=>setDragIdx(i);
+      const onDragOver=(e,i)=>{e.preventDefault();setOverIdx(i);};
+      const onDrop=i=>{
+        if(dragIdx===null||dragIdx===i){setDragIdx(null);setOverIdx(null);return;}
+        const arr=[...products];const[item]=arr.splice(dragIdx,1);arr.splice(i,0,item);
+        setProducts(arr);setDragIdx(null);setOverIdx(null);
+      };
+      const allCats=['Bière Maison','Bière Ext.','Sans Alcool','Snack','Vin','Cave','Autre',...categories].filter((v,i,a)=>a.indexOf(v)===i);
+      return(
+        <div style={{flex:1,overflowY:'auto',padding:'1rem'}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'0.85rem'}}>
+            <h2 style={{fontSize:'1rem',fontWeight:'800'}}>Carte · {products.length} produits</h2>
+            <button onClick={openNew} style={{background:C.sidebar,color:'#fff',border:'none',borderRadius:'10px',padding:'0.55rem 1rem',fontSize:'0.8rem',fontWeight:'600',cursor:'pointer',letterSpacing:'0.02em'}}>+ Ajouter</button>
+          </div>
+          <p style={{fontSize:'0.68rem',color:C.textMuted,marginBottom:'0.85rem'}}>✦ Glisser-déposer pour réorganiser</p>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(110px,1fr))',gap:'0.6rem'}}>
+            {products.map((p,i)=>(
+              <div key={p.id} draggable onDragStart={()=>onDragStart(i)} onDragOver={e=>onDragOver(e,i)} onDrop={()=>onDrop(i)} onDragEnd={()=>{setDragIdx(null);setOverIdx(null);}}
+                style={{...card(),padding:'0.8rem 0.45rem',display:'flex',flexDirection:'column',alignItems:'center',gap:'0.28rem',cursor:'grab',position:'relative',opacity:dragIdx===i?0.35:1,transform:dragIdx===i?'scale(0.95)':'scale(1)',outline:overIdx===i&&dragIdx!==i?`2px solid ${C.amber}`:'none',transition:'all 0.12s'}}>
+                <div style={{position:'absolute',top:'5px',left:'7px',color:C.textMuted,fontSize:'0.6rem',opacity:0.35}}>⠿</div>
+                <button onClick={()=>openEdit(p)} style={{position:'absolute',top:'4px',right:'5px',background:'none',border:'none',cursor:'pointer',color:C.textMuted,fontSize:'0.78rem',padding:'2px'}}>✏️</button>
+                <span style={{fontSize:'1.55rem',marginTop:'0.3rem'}}>{p.emoji}</span>
+                <span style={{fontSize:'0.7rem',fontWeight:'600',textAlign:'center',lineHeight:1.2,color:C.text}}>{p.name}</span>
+                <span style={{fontSize:'0.75rem',fontWeight:'700',color:C.amber,fontFamily:"'DM Mono',monospace"}}>{fmt(p.price)}</span>
+                <span style={{fontSize:'0.58rem',color:C.textMuted,background:C.bg,padding:'1px 6px',borderRadius:'4px'}}>{p.cat}</span>
+              </div>
+            ))}
+          </div>
+          {editProd&&(
+            <div style={{position:'fixed',inset:0,background:'rgba(26,26,30,0.55)',backdropFilter:'blur(6px)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100,padding:'1rem'}}>
+              <div style={{...card(),padding:'1.5rem',width:'100%',maxWidth:'340px'}}>
+                <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'1.25rem'}}>
+                  <h2 style={{fontSize:'1rem',fontWeight:'800'}}>{editProd==='new'?'Nouveau produit':'Modifier produit'}</h2>
+                  {editProd!=='new'&&<button onClick={()=>del(editProd.id)} style={{background:'#fff0f0',border:'none',color:C.red,borderRadius:'8px',padding:'0.35rem 0.7rem',cursor:'pointer',fontSize:'0.75rem',fontWeight:'600'}}>🗑 Suppr.</button>}
+                </div>
+                {[
+                  {lbl:'Emoji',name:'emoji',type:'text',val:form.emoji,max:2,style:{textAlign:'center',fontSize:'1.6rem'}},
+                  {lbl:'Nom du produit',name:'name',type:'text',val:form.name,ph:'Ex : IPA Session'},
+                  {lbl:'Prix (€)',name:'price',type:'number',val:form.price,ph:'0.00',step:'0.5'},
+                ].map(f=>(
+                  <div key={f.name} style={{marginBottom:'0.85rem'}}>
+                    <label style={{display:'block',fontSize:'0.65rem',fontWeight:'700',color:C.textMuted,textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.35rem'}}>{f.lbl}</label>
+                    <input type={f.type} value={f.val} maxLength={f.max} step={f.step}
+                      onChange={e=>setForm(p=>({...p,[f.name]:e.target.value}))} placeholder={f.ph||''}
+                      style={{width:'100%',background:C.bg,border:'none',borderRadius:'8px',padding:'0.75rem',fontSize:'0.9rem',color:C.text,fontFamily:"'Outfit',sans-serif",outline:'none',...(f.style||{})}}/>
+                  </div>
+                ))}
+                <div style={{marginBottom:'1.25rem'}}>
+                  <label style={{display:'block',fontSize:'0.65rem',fontWeight:'700',color:C.textMuted,textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.35rem'}}>Catégorie</label>
+                  <input value={form.cat} onChange={e=>setForm(p=>({...p,cat:e.target.value}))} list="cats-dl"
+                    style={{width:'100%',background:C.bg,border:'none',borderRadius:'8px',padding:'0.75rem',fontSize:'0.9rem',color:C.text,fontFamily:"'Outfit',sans-serif",outline:'none'}}/>
+                  <datalist id="cats-dl">{allCats.map(c=><option key={c} value={c}/>)}</datalist>
+                </div>
+                <div style={{display:'flex',gap:'0.6rem'}}>
+                  <button onClick={()=>setEditProd(null)} style={{flex:1,background:C.bg,border:'none',borderRadius:'10px',padding:'0.75rem',cursor:'pointer',color:C.textMuted,fontSize:'0.85rem',fontFamily:"'Outfit',sans-serif"}}>Annuler</button>
+                  <button onClick={save} disabled={!form.name||!form.price}
+                    style={{flex:2,background:!form.name||!form.price?C.bg:C.sidebar,border:'none',borderRadius:'10px',padding:'0.75rem',cursor:'pointer',color:!form.name||!form.price?C.textMuted:'#fff',fontSize:'0.85rem',fontWeight:'700',fontFamily:"'Outfit',sans-serif",transition:'all 0.15s'}}>
+                    Enregistrer
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

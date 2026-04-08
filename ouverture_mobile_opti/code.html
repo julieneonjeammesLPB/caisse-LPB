@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@400;500;600;700&amp;family=DM+Mono:wght@400;500;700&amp;family=Outfit:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#FFBF00", // Amber
+                        "on-primary": "#1A1A1A", // Anthracite text on amber
+                        "primary-container": "#FFD54F",
+                        "on-primary-container": "#212121",
+                        "surface": "#F5F5F5",
+                        "on-surface": "#121212",
+                        "surface-variant": "#E0E0E0",
+                        "on-surface-variant": "#424242",
+                        "background": "#FFFFFF",
+                        "on-background": "#121212",
+                        "outline": "#BDBDBD",
+                        "inverse-surface": "#263238", // Anthracite
+                        "on-inverse-surface": "#ECEFF1",
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "2xl": "1.5rem",
+                        "3xl": "2rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Outfit", "sans-serif"],
+                        "body": ["Plus Jakarta Sans", "sans-serif"],
+                        "label": ["Space Grotesk", "sans-serif"],
+                        "mono": ["DM Mono", "monospace"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48; /* Larger opsz for mobile */
+        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .font-outfit { font-family: 'Outfit', sans-serif; }
+        .font-mono { font-family: 'DM Mono', monospace; }
+        
+        /* Ensure inputs don't zoom on iOS */
+        input[type="text"], input[type="number"] {
+            font-size: 16px !important;
+        }
+        
+        /* Larger tap targets for touch accessibility */
+        .touch-target {
+            min-height: 48px;
+            min-width: 48px;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col items-center">
+<main class="w-full max-w-lg flex-grow flex flex-col items-center justify-between py-8 px-6">
+<!-- Header / Brand -->
+<div class="w-full text-center mt-4">
+<div class="mb-4 inline-flex items-center justify-center w-20 h-20 rounded-full bg-inverse-surface">
+<span class="material-symbols-outlined text-primary text-5xl" data-icon="sports_bar">sports_bar</span>
+</div>
+<h1 class="font-outfit text-3xl font-black tracking-tight text-on-surface mb-1">Les Papas Brasseurs</h1>
+<p class="font-outfit text-on-surface-variant font-bold uppercase tracking-widest text-xs opacity-70">Caisse Événementielle</p>
+</div>
+<!-- Login Form Container -->
+<div class="w-full bg-white rounded-3xl shadow-sm border border-surface-variant p-6 sm:p-8 mt-8 mb-auto">
+<form class="space-y-8">
+<!-- Session Name Input -->
+<div class="space-y-3">
+<label class="font-outfit text-on-surface-variant font-bold text-sm ml-1" for="session-name">NOM DE LA SESSION</label>
+<div class="relative">
+<input class="w-full h-14 px-5 bg-surface rounded-2xl border-2 border-transparent focus:border-primary focus:ring-0 transition-all text-lg font-outfit text-on-surface placeholder:text-stone-400 touch-target" id="session-name" placeholder="ex: Marché de Noël" type="text"/>
+</div>
+</div>
+<!-- Initial Cash Input - Highly Prominent -->
+<div class="space-y-3">
+<label class="font-outfit text-on-surface-variant font-bold text-sm ml-1 text-center block w-full" for="initial-cash">FOND DE CAISSE INITIAL</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-6 flex items-center pointer-events-none">
+<span class="font-mono text-3xl text-primary font-bold">€</span>
+</div>
+<input class="w-full h-28 pl-14 pr-8 bg-surface-variant/30 border-2 border-transparent focus:border-primary focus:ring-0 rounded-3xl transition-all text-5xl font-mono text-on-surface font-bold placeholder:text-surface-variant text-right touch-target" id="initial-cash" inputmode="decimal" placeholder="0.00" step="0.01" type="number"/>
+</div>
+</div>
+<!-- Action Button - Highly Prominent -->
+<div class="pt-4">
+<button class="w-full h-20 bg-primary text-on-primary rounded-2xl font-outfit text-xl font-black tracking-tight flex items-center justify-center gap-4 hover:brightness-105 active:scale-[0.97] transition-all shadow-lg shadow-primary/20 touch-target" type="submit">
+                        DÉMARRER
+                        <span class="material-symbols-outlined text-3xl" data-icon="play_arrow">play_arrow</span>
+</button>
+</div>
+</form>
+</div>
+<!-- Contextual Information -->
+<div class="w-full mt-8 flex flex-col items-center gap-6">
+<div class="flex items-center gap-3 bg-inverse-surface/5 rounded-full px-5 h-12">
+<span class="material-symbols-outlined text-on-surface-variant text-xl" data-icon="calendar_today">calendar_today</span>
+<span class="font-outfit text-on-surface-variant font-extrabold text-sm tracking-wider uppercase">8 AVRIL 2026</span>
+</div>
+<div class="flex items-center gap-3 py-2">
+<div class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
+</div>
+<span class="font-outfit text-[10px] text-on-surface-variant font-black uppercase tracking-[0.2em]">Terminal 01 • En Ligne</span>
+</div>
+</div>
+</main>
+<!-- Visual Accent -->
+<div class="fixed bottom-[-50px] right-[-50px] opacity-[0.04] pointer-events-none select-none">
+<span class="material-symbols-outlined text-[280px] leading-none" data-icon="water_drop">water_drop</span>
+</div>
+</body></html>

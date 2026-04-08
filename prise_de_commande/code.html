@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;900&amp;family=DM+Mono:wght@400;500&amp;family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;family=Space+Grotesk:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-container": "#fffbff",
+                        "surface": "#faf9f5",
+                        "secondary": "#5f5e62",
+                        "on-primary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "tertiary": "#00628a",
+                        "surface-bright": "#faf9f5",
+                        "surface-container-low": "#f4f4f0",
+                        "primary-fixed-dim": "#ffb95f",
+                        "inverse-primary": "#ffb95f",
+                        "outline-variant": "#d7c3b0",
+                        "surface-container-high": "#e8e8e4",
+                        "inverse-on-surface": "#f1f1ed",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#004c6b",
+                        "on-secondary-fixed-variant": "#47464b",
+                        "on-surface-variant": "#524436",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#2a1700",
+                        "surface-container-highest": "#e3e3df",
+                        "surface-dim": "#dadad6",
+                        "tertiary-fixed-dim": "#83cfff",
+                        "primary-fixed": "#ffddb8",
+                        "inverse-surface": "#2f312e",
+                        "on-error-container": "#93000a",
+                        "on-secondary-container": "#656468",
+                        "surface-tint": "#855300",
+                        "outline": "#847464",
+                        "on-primary-fixed-variant": "#653e00",
+                        "on-tertiary-container": "#fcfcff",
+                        "on-surface": "#1a1c1a",
+                        "surface-variant": "#e3e3df",
+                        "secondary-fixed": "#e4e1e7",
+                        "tertiary-container": "#007dad",
+                        "on-tertiary-fixed": "#001e2d",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#1b1b1f",
+                        "tertiary-fixed": "#c6e7ff",
+                        "secondary-container": "#e4e1e7",
+                        "primary-container": "#a46700",
+                        "surface-container": "#eeeeea",
+                        "secondary-fixed-dim": "#c8c5cb",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#1a1c1a",
+                        "error-container": "#ffdad6",
+                        "background": "#faf9f5",
+                        "primary": "#825100"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Outfit", "Plus Jakarta Sans"],
+                        "body": ["Outfit", "Plus Jakarta Sans"],
+                        "label": ["Space Grotesk"],
+                        "mono": ["DM Mono"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono-ledger { font-family: 'DM Mono', monospace; }
+        .font-brand { font-family: 'Outfit', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface flex h-screen overflow-hidden">
+<!-- Sidebar Navigation Shell -->
+<aside class="fixed left-0 top-0 h-full flex flex-col items-center py-8 z-40 bg-stone-100 dark:bg-stone-950 h-screen w-20 flex flex-col border-r-0">
+<div class="mb-12">
+<span class="text-xl font-black text-amber-700 font-brand">A</span>
+</div>
+<nav class="flex flex-col gap-6 items-center flex-1">
+<button class="bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 rounded-xl w-12 h-12 flex items-center justify-center transition-all duration-150 active:scale-95">
+<span class="material-symbols-outlined">grid_view</span>
+</button>
+<button class="text-stone-500 dark:text-stone-400 hover:text-amber-600 dark:hover:text-amber-400 w-12 h-12 flex items-center justify-center transition-all duration-150 active:scale-95">
+<span class="material-symbols-outlined">bar_chart</span>
+</button>
+<button class="text-stone-500 dark:text-stone-400 hover:text-amber-600 dark:hover:text-amber-400 w-12 h-12 flex items-center justify-center transition-all duration-150 active:scale-95">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</nav>
+<div class="mt-auto">
+<button class="text-stone-500 w-12 h-12 flex items-center justify-center">
+<span class="material-symbols-outlined">logout</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-20 flex flex-col overflow-hidden">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-6 py-4 bg-stone-50 dark:bg-stone-900 z-30">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-amber-700 dark:text-amber-500">sensors</span>
+<h1 class="text-lg font-bold tracking-tight text-stone-900 dark:text-stone-50 font-brand">Session: Les Papas Brasseurs</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="bg-surface-container-high px-4 py-2 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+<span class="text-sm font-medium font-brand">Terminal #04</span>
+</div>
+<span class="material-symbols-outlined text-stone-500">account_circle</span>
+</div>
+</header>
+<!-- Product Interface -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Left Side: Catalog -->
+<section class="flex-1 flex flex-col p-6 overflow-hidden">
+<!-- Categories Bar -->
+<nav class="flex gap-3 mb-8 overflow-x-auto pb-2 scrollbar-hide">
+<button class="px-6 py-3 rounded-xl bg-amber-700 text-white font-bold font-brand whitespace-nowrap shadow-sm">Tout</button>
+<button class="px-6 py-3 rounded-xl bg-surface-container-high text-on-surface-variant font-semibold font-brand whitespace-nowrap hover:bg-stone-200 transition-colors">Cave</button>
+<button class="px-6 py-3 rounded-xl bg-surface-container-high text-on-surface-variant font-semibold font-brand whitespace-nowrap hover:bg-stone-200 transition-colors">Bière</button>
+<button class="px-6 py-3 rounded-xl bg-surface-container-high text-on-surface-variant font-semibold font-brand whitespace-nowrap hover:bg-stone-200 transition-colors">Sans Alcool</button>
+<button class="px-6 py-3 rounded-xl bg-surface-container-high text-on-surface-variant font-semibold font-brand whitespace-nowrap hover:bg-stone-200 transition-colors">Snack</button>
+<button class="px-6 py-3 rounded-xl bg-surface-container-high text-on-surface-variant font-semibold font-brand whitespace-nowrap hover:bg-stone-200 transition-colors">Vin</button>
+</nav>
+<!-- Grid -->
+<div class="flex-1 overflow-y-auto pr-2 grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 content-start pb-12">
+<button class="group flex flex-col items-start p-5 bg-surface-container-lowest rounded-xl shadow-[0_4px_0_0_rgba(232,232,228,1)] active:shadow-none active:translate-y-1 transition-all duration-150 text-left">
+<span class="text-4xl mb-4">🍺</span>
+<h3 class="text-on-surface font-bold text-lg leading-tight font-brand mb-1">Blonde 25cl</h3>
+<p class="text-stone-500 text-xs mb-3 font-brand">Cave • Bière maison</p>
+<span class="text-amber-700 font-mono-ledger font-medium">3,00 €</span>
+</button>
+<button class="group flex flex-col items-start p-5 bg-surface-container-lowest rounded-xl shadow-[0_4px_0_0_rgba(232,232,228,1)] active:shadow-none active:translate-y-1 transition-all duration-150 text-left">
+<span class="text-4xl mb-4">🍺</span>
+<h3 class="text-on-surface font-bold text-lg leading-tight font-brand mb-1">Blonde 50cl</h3>
+<p class="text-stone-500 text-xs mb-3 font-brand">Bière • Maison</p>
+<span class="text-amber-700 font-mono-ledger font-medium">6,00 €</span>
+</button>
+<button class="group flex flex-col items-start p-5 bg-surface-container-lowest rounded-xl shadow-[0_4px_0_0_rgba(232,232,228,1)] active:shadow-none active:translate-y-1 transition-all duration-150 text-left">
+<span class="text-4xl mb-4">🍻</span>
+<h3 class="text-on-surface font-bold text-lg leading-tight font-brand mb-1">Permanente 25cl</h3>
+<p class="text-stone-500 text-xs mb-3 font-brand">Bière • Maison</p>
+<span class="text-amber-700 font-mono-ledger font-medium">3,50 €</span>
+</button>
+<button class="group flex flex-col items-start p-5 bg-surface-container-lowest rounded-xl shadow-[0_4px_0_0_rgba(232,232,228,1)] active:shadow-none active:translate-y-1 transition-all duration-150 text-left">
+<span class="text-4xl mb-4">🍻</span>
+<h3 class="text-on-surface font-bold text-lg leading-tight font-brand mb-1">Permanente 50cl</h3>
+<p class="text-stone-500 text-xs mb-3 font-brand">Bière • Maison</p>
+<span class="text-amber-700 font-mono-ledger font-medium">7,00 €</span>
+</button>
+<button class="group flex flex-col items-start p-5 bg-surface-container-lowest rounded-xl shadow-[0_4px_0_0_rgba(232,232,228,1)] active:shadow-none active:translate-y-1 transition-all duration-150 text-left">
+<span class="text-4xl mb-4">✨</span>
+<h3 class="text-on-surface font-bold text-lg leading-tight font-brand mb-1">Éphémère 25cl</h3>
+<p class="text-stone-500 text-xs mb-3 font-brand">Bière • Saisonnière</p>
+<span class="text-amber-700 font-mono-ledger font-medium">4,00 €</span>
+</button>
+<button class="group flex flex-col items-start p-5 bg-surface-container-lowest rounded-xl shadow-[0_4px_0_0_rgba(232,232,228,1)] active:shadow-none active:translate-y-1 transition-all duration-150 text-left">
+<span class="text-4xl mb-4">✨</span>
+<h3 class="text-on-surface font-bold text-lg leading-tight font-brand mb-1">Éphémère 50cl</h3>
+<p class="text-stone-500 text-xs mb-3 font-brand">Bière • Saisonnière</p>
+<span class="text-amber-700 font-mono-ledger font-medium">8,00 €</span>
+</button>
+<button class="group flex flex-col items-start p-5 bg-surface-container-lowest rounded-xl shadow-[0_4px_0_0_rgba(232,232,228,1)] active:shadow-none active:translate-y-1 transition-all duration-150 text-left">
+<span class="text-4xl mb-4">🍾</span>
+<h3 class="text-on-surface font-bold text-lg leading-tight font-brand mb-1">BT 33cl</h3>
+<p class="text-stone-500 text-xs mb-3 font-brand">Cave • Bouteille</p>
+<span class="text-amber-700 font-mono-ledger font-medium">3,00 €</span>
+</button>
+<button class="group flex flex-col items-start p-5 bg-surface-container-lowest rounded-xl shadow-[0_4px_0_0_rgba(232,232,228,1)] active:shadow-none active:translate-y-1 transition-all duration-150 text-left">
+<span class="text-4xl mb-4">🍾</span>
+<h3 class="text-on-surface font-bold text-lg leading-tight font-brand mb-1">BT 75cl</h3>
+<p class="text-stone-500 text-xs mb-3 font-brand">Cave • Bouteille</p>
+<span class="text-amber-700 font-mono-ledger font-medium">7,00 €</span>
+</button>
+<button class="group flex flex-col items-start p-5 bg-surface-container-lowest rounded-xl shadow-[0_4px_0_0_rgba(232,232,228,1)] active:shadow-none active:translate-y-1 transition-all duration-150 text-left">
+<span class="text-4xl mb-4">🎁</span>
+<h3 class="text-on-surface font-bold text-lg leading-tight font-brand mb-1">Coffret 33cl</h3>
+<p class="text-stone-500 text-xs mb-3 font-brand">Cave • Coffret cadeau</p>
+<span class="text-amber-700 font-mono-ledger font-medium">20,00 €</span>
+</button>
+<button class="group flex flex-col items-start p-5 bg-surface-container-lowest rounded-xl shadow-[0_4px_0_0_rgba(232,232,228,1)] active:shadow-none active:translate-y-1 transition-all duration-150 text-left">
+<span class="text-4xl mb-4">🎁</span>
+<h3 class="text-on-surface font-bold text-lg leading-tight font-brand mb-1">Coffret 75cl</h3>
+<p class="text-stone-500 text-xs mb-3 font-brand">Cave • Coffret cadeau</p>
+<span class="text-amber-700 font-mono-ledger font-medium">20,00 €</span>
+</button>
+<button class="group flex flex-col items-start p-5 bg-surface-container-lowest rounded-xl shadow-[0_4px_0_0_rgba(232,232,228,1)] active:shadow-none active:translate-y-1 transition-all duration-150 text-left">
+<span class="text-4xl mb-4">🥤</span>
+<h3 class="text-on-surface font-bold text-lg leading-tight font-brand mb-1">Soft 33cl</h3>
+<p class="text-stone-500 text-xs mb-3 font-brand">Sans Alcool</p>
+<span class="text-amber-700 font-mono-ledger font-medium">3,50 €</span>
+</button>
+<button class="group flex flex-col items-start p-5 bg-surface-container-lowest rounded-xl shadow-[0_4px_0_0_rgba(232,232,228,1)] active:shadow-none active:translate-y-1 transition-all duration-150 text-left">
+<span class="text-4xl mb-4">💧</span>
+<h3 class="text-on-surface font-bold text-lg leading-tight font-brand mb-1">Eau 50cl</h3>
+<p class="text-stone-500 text-xs mb-3 font-brand">Sans Alcool</p>
+<span class="text-amber-700 font-mono-ledger font-medium">2,00 €</span>
+</button>
+<button class="group flex flex-col items-start p-5 bg-surface-container-lowest rounded-xl shadow-[0_4px_0_0_rgba(232,232,228,1)] active:shadow-none active:translate-y-1 transition-all duration-150 text-left">
+<span class="text-4xl mb-4">🥓</span>
+<h3 class="text-on-surface font-bold text-lg leading-tight font-brand mb-1">Saucisson</h3>
+<p class="text-stone-500 text-xs mb-3 font-brand">Snack</p>
+<span class="text-amber-700 font-mono-ledger font-medium">6,00 €</span>
+</button>
+<button class="group flex flex-col items-start p-5 bg-surface-container-lowest rounded-xl shadow-[0_4px_0_0_rgba(232,232,228,1)] active:shadow-none active:translate-y-1 transition-all duration-150 text-left">
+<span class="text-4xl mb-4">🥔</span>
+<h3 class="text-on-surface font-bold text-lg leading-tight font-brand mb-1">Chips</h3>
+<p class="text-stone-500 text-xs mb-3 font-brand">Snack</p>
+<span class="text-amber-700 font-mono-ledger font-medium">4,00 €</span>
+</button>
+<button class="group flex flex-col items-start p-5 bg-surface-container-lowest rounded-xl shadow-[0_4px_0_0_rgba(232,232,228,1)] active:shadow-none active:translate-y-1 transition-all duration-150 text-left">
+<span class="text-4xl mb-4">🍷</span>
+<h3 class="text-on-surface font-bold text-lg leading-tight font-brand mb-1">Vin Rouge</h3>
+<p class="text-stone-500 text-xs mb-3 font-brand">Vin</p>
+<span class="text-amber-700 font-mono-ledger font-medium">4,00 €</span>
+</button>
+<button class="group flex flex-col items-start p-5 bg-surface-container-lowest rounded-xl shadow-[0_4px_0_0_rgba(232,232,228,1)] active:shadow-none active:translate-y-1 transition-all duration-150 text-left">
+<span class="text-4xl mb-4">🥂</span>
+<h3 class="text-on-surface font-bold text-lg leading-tight font-brand mb-1">Muscadet</h3>
+<p class="text-stone-500 text-xs mb-3 font-brand">Vin</p>
+<span class="text-amber-700 font-mono-ledger font-medium">3,00 €</span>
+</button>
+<button class="group flex flex-col items-start p-5 bg-surface-container-lowest rounded-xl shadow-[0_4px_0_0_rgba(232,232,228,1)] active:shadow-none active:translate-y-1 transition-all duration-150 text-left">
+<span class="text-4xl mb-4">🍷</span>
+<h3 class="text-on-surface font-bold text-lg leading-tight font-brand mb-1">Rosé</h3>
+<p class="text-stone-500 text-xs mb-3 font-brand">Vin</p>
+<span class="text-amber-700 font-mono-ledger font-medium">4,00 €</span>
+</button>
+<button class="group flex flex-col items-start p-5 bg-surface-container-lowest rounded-xl shadow-[0_4px_0_0_rgba(232,232,228,1)] active:shadow-none active:translate-y-1 transition-all duration-150 text-left">
+<span class="text-4xl mb-4">🍯</span>
+<h3 class="text-on-surface font-bold text-lg leading-tight font-brand mb-1">Moelleux</h3>
+<p class="text-stone-500 text-xs mb-3 font-brand">Vin</p>
+<span class="text-amber-700 font-mono-ledger font-medium">4,00 €</span>
+</button>
+</div>
+</section>
+<!-- Right Side: The Cart Panneau -->
+<aside class="w-full md:w-96 bg-inverse-surface text-inverse-on-surface flex flex-col shadow-2xl relative z-40">
+<div class="p-6 border-b border-white/10 flex justify-between items-center">
+<h2 class="text-xl font-black tracking-tight font-brand">Panier Actuel</h2>
+<button class="text-stone-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined">delete_sweep</span>
+</button>
+</div>
+<!-- Cart Items -->
+<div class="flex-1 overflow-y-auto p-6 space-y-4">
+<!-- Item 1 -->
+<div class="flex items-center gap-4 group">
+<div class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center font-mono-ledger font-bold text-amber-500">2x</div>
+<div class="flex-1">
+<p class="font-bold font-brand text-sm">Blonde 50cl</p>
+<p class="text-xs text-stone-400 font-mono-ledger">12,00 €</p>
+</div>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-error text-lg">remove_circle</span>
+</button>
+</div>
+<!-- Item 2 -->
+<div class="flex items-center gap-4 group">
+<div class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center font-mono-ledger font-bold text-amber-500">1x</div>
+<div class="flex-1">
+<p class="font-bold font-brand text-sm">Éphémère 25cl</p>
+<p class="text-xs text-stone-400 font-mono-ledger">4,00 €</p>
+</div>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-error text-lg">remove_circle</span>
+</button>
+</div>
+<!-- Item 3 -->
+<div class="flex items-center gap-4 group">
+<div class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center font-mono-ledger font-bold text-amber-500">1x</div>
+<div class="flex-1">
+<p class="font-bold font-brand text-sm">Saucisson</p>
+<p class="text-xs text-stone-400 font-mono-ledger">6,00 €</p>
+</div>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-error text-lg">remove_circle</span>
+</button>
+</div>
+</div>
+<!-- Checkout Summary -->
+<div class="p-8 bg-white/5 space-y-6">
+<div class="flex justify-between items-center">
+<span class="text-stone-400 font-brand">Sous-total</span>
+<span class="font-mono-ledger text-lg">22,00 €</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-stone-400 font-brand">Taxes (TVA 20%)</span>
+<span class="font-mono-ledger text-lg">5.10 €</span>
+</div>
+<div class="pt-6 border-t border-white/10 flex justify-between items-end">
+<div>
+<span class="text-stone-400 text-xs font-brand uppercase tracking-widest block mb-1">Total à régler</span>
+<span class="text-4xl font-black font-brand text-white">22,00 €</span>
+</div>
+<span class="bg-amber-500/10 text-amber-500 px-3 py-1 rounded-full text-xs font-mono-ledger">4 articles</span>
+</div>
+<button class="w-full h-16 bg-primary text-on-primary rounded-xl font-black text-xl font-brand uppercase tracking-wider flex items-center justify-center gap-3 transition-transform active:scale-[0.98] shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">payments</span>
+                        Encaisser
+                    </button>
+</div>
+</aside>
+</div>
+</main>
+<!-- Contextual Floating Action Button -->
+<div class="fixed bottom-8 right-[410px] md:flex hidden">
+<button class="w-14 h-14 bg-surface-container-lowest rounded-full shadow-xl flex items-center justify-center text-primary active:scale-95 transition-all">
+<span class="material-symbols-outlined">qr_code_scanner</span>
+</button>
+</div>
+</body></html>

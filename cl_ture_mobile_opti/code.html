@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Clôture de Session — Les Papas Brasseurs</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&amp;family=Outfit:wght@100..900&amp;family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-primary-container": "#fffbff",
+                "surface": "#faf9f5",
+                "secondary": "#5f5e62",
+                "on-primary": "#ffffff",
+                "error": "#ba1a1a",
+                "tertiary": "#00628a",
+                "surface-bright": "#faf9f5",
+                "surface-container-low": "#f4f4f0",
+                "primary-fixed-dim": "#ffb95f",
+                "inverse-primary": "#ffb95f",
+                "outline-variant": "#d7c3b0",
+                "surface-container-high": "#e8e8e4",
+                "inverse-on-surface": "#f1f1ed",
+                "on-error": "#ffffff",
+                "on-tertiary-fixed-variant": "#004c6b",
+                "on-secondary-fixed-variant": "#47464b",
+                "on-surface-variant": "#524436",
+                "surface-container-lowest": "#ffffff",
+                "on-primary-fixed": "#2a1700",
+                "surface-container-highest": "#e3e3df",
+                "surface-dim": "#dadad6",
+                "tertiary-fixed-dim": "#83cfff",
+                "primary-fixed": "#ffddb8",
+                "inverse-surface": "#262626",
+                "on-error-container": "#93000a",
+                "on-secondary-container": "#656468",
+                "surface-tint": "#855300",
+                "outline": "#847464",
+                "on-primary-fixed-variant": "#653e00",
+                "on-tertiary-container": "#fcfcff",
+                "on-surface": "#1a1c1a",
+                "surface-variant": "#e3e3df",
+                "secondary-fixed": "#e4e1e7",
+                "tertiary-container": "#007dad",
+                "on-tertiary-fixed": "#001e2d",
+                "on-tertiary": "#ffffff",
+                "on-secondary-fixed": "#1b1b1f",
+                "tertiary-fixed": "#c6e7ff",
+                "secondary-container": "#e4e1e7",
+                "primary-container": "#a46700",
+                "surface-container": "#eeeeea",
+                "secondary-fixed-dim": "#c8c5cb",
+                "on-secondary": "#ffffff",
+                "on-background": "#1a1c1a",
+                "error-container": "#ffdad6",
+                "background": "#faf9f5",
+                "primary": "#825100"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "fontFamily": {
+                "headline": ["Outfit", "Plus Jakarta Sans"],
+                "body": ["Outfit", "Plus Jakarta Sans"],
+                "label": ["Space Grotesk"],
+                "mono": ["DM Mono"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Outfit', sans-serif; }
+        .dm-mono { font-family: 'DM Mono', monospace; }
+        /* Mobile-first adjustments */
+        @media (max-width: 640px) {
+            .denomination-btn {
+                min-width: 48px;
+                min-height: 48px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface flex flex-col min-h-screen">
+<!-- Mobile Header / TopAppBar -->
+<header class="sticky top-0 z-50 flex justify-between items-center w-full px-4 py-4 bg-white/80 backdrop-blur-md border-b border-surface-container-highest">
+<div class="flex items-center gap-2">
+<span class="text-xl font-black text-amber-700">A</span>
+<div class="h-4 w-[1px] bg-stone-300 mx-1"></div>
+<div class="flex flex-col">
+<h1 class="text-xs font-bold uppercase tracking-tight text-stone-900">Les Papas Brasseurs</h1>
+<span class="text-[10px] text-stone-500 font-label">CLÔTURE DE SESSION</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-stone-500 text-xl" data-icon="account_circle">account_circle</span>
+<button class="p-2 text-stone-500">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="p-4 flex flex-col gap-6 w-full max-w-md mx-auto mb-24">
+<!-- KPI Summary Section (Optimized for mobile) -->
+<section class="grid grid-cols-1 gap-4">
+<div class="bg-amber-50 p-6 rounded-2xl border border-amber-100 flex flex-col justify-between h-36">
+<div>
+<span class="text-[10px] font-label uppercase tracking-widest text-amber-800/60 font-bold">CA Total Réalisé</span>
+<div class="flex items-baseline gap-2 mt-1">
+<h2 class="text-4xl font-bold tracking-tight text-amber-900">856,50</h2>
+<span class="text-xl font-mono text-amber-700">€</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5 text-amber-700 font-bold text-xs">
+<span class="material-symbols-outlined text-xs" data-icon="trending_up">trending_up</span>
+<span>Caisse Événementielle LPB</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-white p-4 rounded-2xl border border-stone-100 shadow-sm flex flex-col gap-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="payments">payments</span>
+<span class="text-[10px] font-label text-secondary uppercase font-bold">Espèces</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="text-lg font-mono font-bold">312,00</span>
+<span class="text-[10px] font-mono text-secondary">€</span>
+</div>
+</div>
+<div class="bg-white p-4 rounded-2xl border border-stone-100 shadow-sm flex flex-col gap-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-tertiary text-sm" data-icon="credit_card">credit_card</span>
+<span class="text-[10px] font-label text-secondary uppercase font-bold">CB / Sans C.</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="text-lg font-mono font-bold">544,50</span>
+<span class="text-[10px] font-mono text-secondary">€</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Cash Counting Section (Mobile Optimized Grid) -->
+<section class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h3 class="text-lg font-bold">Détail du comptage</h3>
+<div class="flex bg-stone-100 p-1 rounded-lg">
+<button class="px-3 py-1 bg-white text-stone-900 shadow-sm rounded-md text-[10px] font-bold uppercase tracking-wider">Billets</button>
+<button class="px-3 py-1 text-stone-500 rounded-md text-[10px] font-bold uppercase tracking-wider">Pièces</button>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-3">
+<!-- Denomination Row 50€ -->
+<div class="bg-white p-3 rounded-2xl flex items-center justify-between border border-stone-100 shadow-sm">
+<div class="flex flex-col">
+<span class="dm-mono text-lg font-bold text-stone-900">50 €</span>
+<span class="text-[10px] text-stone-400 uppercase font-label">Billet</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="denomination-btn w-12 h-12 flex items-center justify-center bg-stone-100 text-stone-600 rounded-xl active:bg-stone-200 transition-colors">
+<span class="material-symbols-outlined" data-icon="remove">remove</span>
+</button>
+<span class="dm-mono font-bold text-xl w-10 text-center">12</span>
+<button class="denomination-btn w-12 h-12 flex items-center justify-center bg-amber-100 text-amber-700 rounded-xl active:bg-amber-200 transition-colors">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</div>
+</div>
+<!-- Denomination Row 20€ -->
+<div class="bg-white p-3 rounded-2xl flex items-center justify-between border border-stone-100 shadow-sm">
+<div class="flex flex-col">
+<span class="dm-mono text-lg font-bold text-stone-900">20 €</span>
+<span class="text-[10px] text-stone-400 uppercase font-label">Billet</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="denomination-btn w-12 h-12 flex items-center justify-center bg-stone-100 text-stone-600 rounded-xl active:bg-stone-200 transition-colors">
+<span class="material-symbols-outlined" data-icon="remove">remove</span>
+</button>
+<span class="dm-mono font-bold text-xl w-10 text-center">25</span>
+<button class="denomination-btn w-12 h-12 flex items-center justify-center bg-amber-100 text-amber-700 rounded-xl active:bg-amber-200 transition-colors">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</div>
+</div>
+<!-- Denomination Row 10€ -->
+<div class="bg-white p-3 rounded-2xl flex items-center justify-between border border-stone-100 shadow-sm">
+<div class="flex flex-col">
+<span class="dm-mono text-lg font-bold text-stone-900">10 €</span>
+<span class="text-[10px] text-stone-400 uppercase font-label">Billet</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="denomination-btn w-12 h-12 flex items-center justify-center bg-stone-100 text-stone-600 rounded-xl active:bg-stone-200 transition-colors">
+<span class="material-symbols-outlined" data-icon="remove">remove</span>
+</button>
+<span class="dm-mono font-bold text-xl w-10 text-center">18</span>
+<button class="denomination-btn w-12 h-12 flex items-center justify-center bg-amber-100 text-amber-700 rounded-xl active:bg-amber-200 transition-colors">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</div>
+</div>
+<!-- Denomination Row 5€ -->
+<div class="bg-white p-3 rounded-2xl flex items-center justify-between border border-stone-100 shadow-sm">
+<div class="flex flex-col">
+<span class="dm-mono text-lg font-bold text-stone-900">5 €</span>
+<span class="text-[10px] text-stone-400 uppercase font-label">Billet</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="denomination-btn w-12 h-12 flex items-center justify-center bg-stone-100 text-stone-600 rounded-xl active:bg-stone-200 transition-colors">
+<span class="material-symbols-outlined" data-icon="remove">remove</span>
+</button>
+<span class="dm-mono font-bold text-xl w-10 text-center">42</span>
+<button class="denomination-btn w-12 h-12 flex items-center justify-center bg-amber-100 text-amber-700 rounded-xl active:bg-amber-200 transition-colors">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Recap Section (Anthracite Style) -->
+<section class="bg-inverse-surface text-white rounded-3xl p-6 shadow-xl">
+<h3 class="text-lg font-bold mb-6">Récapitulatif</h3>
+<div class="space-y-4">
+<div class="flex justify-between items-center pb-3 border-b border-white/10">
+<span class="text-stone-400 font-label uppercase text-[10px] tracking-widest">Théorique</span>
+<span class="dm-mono text-lg">312,00 €</span>
+</div>
+<div class="flex justify-between items-center pb-3 border-b border-white/10">
+<span class="text-stone-400 font-label uppercase text-[10px] tracking-widest">Compté</span>
+<span class="dm-mono text-lg text-amber-400">309,50 €</span>
+</div>
+<div class="bg-white/5 p-4 rounded-xl">
+<div class="flex justify-between items-center mb-1">
+<span class="text-xs font-bold uppercase tracking-wider">Écart</span>
+<span class="dm-mono text-lg font-bold text-red-400">- 2,50 €</span>
+</div>
+<p class="text-[10px] text-stone-400 italic">Ecart négatif. Justifier ci-dessous.</p>
+</div>
+<div class="pt-2">
+<textarea class="w-full bg-white/10 border-none rounded-xl p-3 text-sm focus:ring-1 focus:ring-amber-500 h-20 placeholder:text-stone-600 text-white" placeholder="Justification de l'écart..."></textarea>
+</div>
+</div>
+</section>
+<!-- Final Buttons Group (Full Width / Easy Tap) -->
+<section class="flex flex-col gap-3 mt-4">
+<button class="w-full py-5 flex items-center justify-center gap-3 bg-stone-100 text-stone-700 font-bold rounded-2xl active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined text-xl" data-icon="print">print</span>
+            Imprimer le ticket Z
+        </button>
+<button class="w-full py-5 flex items-center justify-center gap-3 bg-emerald-800 text-white font-bold rounded-2xl active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined text-xl" data-icon="description">description</span>
+            Exporter en Excel
+        </button>
+<button class="w-full py-5 flex items-center justify-center gap-3 bg-stone-900 text-white font-bold rounded-2xl shadow-lg active:scale-[0.98] active:bg-amber-700 transition-all">
+<span class="material-symbols-outlined text-xl" data-icon="lock_clock">lock_clock</span>
+            Archiver &amp; Fermer
+        </button>
+</section>
+</main>
+<!-- Sticky Mobile Navigation (Bottom) -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg border-t border-stone-200 px-6 py-3 flex justify-between items-center z-50">
+<button class="p-2 text-amber-700">
+<span class="material-symbols-outlined text-2xl" data-icon="grid_view">grid_view</span>
+</button>
+<button class="p-2 text-stone-400">
+<span class="material-symbols-outlined text-2xl" data-icon="bar_chart">bar_chart</span>
+</button>
+<button class="p-2 text-stone-400">
+<span class="material-symbols-outlined text-2xl" data-icon="settings">settings</span>
+</button>
+<button class="p-2 text-stone-400">
+<span class="material-symbols-outlined text-2xl" data-icon="logout">logout</span>
+</button>
+</nav>
+<!-- Decorative background element -->
+<div class="fixed top-0 right-0 -z-10 w-full h-1/2 opacity-30 pointer-events-none">
+<div class="absolute inset-0 bg-gradient-to-b from-amber-100/50 to-transparent blur-3xl"></div>
+</div>
+</body></html>
