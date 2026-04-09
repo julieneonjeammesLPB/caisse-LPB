@@ -3236,14 +3236,14 @@ const COND_SESSIONS_INIT = [{
     type: "Bouteille 33cl",
     volume: 1106,
     contenants: 3352,
-    lot: "323-FV-02-03-26"
+    lot: "B61-FV-02-03-26"
   }, {
     type: "Bouteille 75cl",
     volume: 568,
     contenants: 758,
-    lot: "323-FV-02-03-26"
+    lot: "B61-FV-02-03-26"
   }],
-  notes: "Lot: 26-323/25-276",
+  notes: "",
   operateur: "Équipe B"
 }];
 const TIREUSES_INIT = [{
@@ -9984,7 +9984,7 @@ function ModuleConditionnement({
     t: "N\xB0 lot BK *"
   }), /*#__PURE__*/React.createElement("input", {
     value: condForm.lotBK,
-    placeholder: "ex: 63",
+    placeholder: "ex: B61",
     onChange: e => {
       const bk = e.target.value.trim();
       setCondForm(f => {

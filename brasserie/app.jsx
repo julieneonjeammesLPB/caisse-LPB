@@ -301,7 +301,7 @@ const STOCK_COND_INIT=[
 ];
 const COND_SESSIONS_INIT=[
  {id:1,brassinId:2,brassinNom:"L'Impèrtinente",date:"2025-10-09",lots:[{type:"Bouteille 33cl",volume:556,contenants:1685,lot:"2520409011"},{type:"Bouteille 75cl",volume:493,contenants:658,lot:"2520409011"}],notes:"pH = 4,31",operateur:"Équipe A"},
- {id:2,brassinId:29,brassinNom:"La Pèrlimpinpin",date:"2026-03-03",lots:[{type:"Bouteille 33cl",volume:1106,contenants:3352,lot:"323-FV-02-03-26"},{type:"Bouteille 75cl",volume:568,contenants:758,lot:"323-FV-02-03-26"}],notes:"Lot: 26-323/25-276",operateur:"Équipe B"},
+ {id:2,brassinId:29,brassinNom:"La Pèrlimpinpin",date:"2026-03-03",lots:[{type:"Bouteille 33cl",volume:1106,contenants:3352,lot:"B61-FV-02-03-26"},{type:"Bouteille 75cl",volume:568,contenants:758,lot:"B61-FV-02-03-26"}],notes:"",operateur:"Équipe B"},
 ];
 
 const TIREUSES_INIT=[
@@ -3379,7 +3379,7 @@ function ModuleConditionnement({brassins,setBrassins,stockCond,setStockCond,cond
       </div>
       <div>
        <Label t="N° lot BK *"/>
-       <input value={condForm.lotBK} placeholder="ex: 63"
+       <input value={condForm.lotBK} placeholder="ex: B61"
         onChange={e=>{
          const bk=e.target.value.trim();
          setCondForm(f=>{
