@@ -8796,49 +8796,215 @@ function App() {
  };
  const sousMods = FAMILLES.find(f=>f.id===familleActive)?.modules || [];
 
+ // ── Responsive : desktop (≥768px) = sidebar, mobile = bottom nav ──────
+ const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
+ useEffect(() => {
+   const onResize = () => setIsMobile(window.innerWidth < 768);
+   window.addEventListener('resize', onResize);
+   return () => window.removeEventListener('resize', onResize);
+ }, []);
+
+ const SIDEBAR_W = 220;
+
+ // Module courant label + icone pour le header desktop
+ const allMods = FAMILLES.flatMap(f => f.modules);
+ const currentMod = allMods.find(m => m.id === module) || {label: 'Tableau de bord', icon: '🏠'};
+ const currentFam = FAMILLES.find(f => f.modules.some(m => m.id === module)) || FAMILLES[0];
+
  return (
-  <div style={{minHeight:'100vh',background:C.bg,fontFamily:"'DM Sans',sans-serif",color:C.text,maxWidth:640,margin:'0 auto'}}>
+  <div style={{minHeight:'100vh',background:C.bg,fontFamily:"'Inter',sans-serif",color:C.text,display:'flex'}}>
    <style>{FONTS}</style>
-   <header style={{position:'sticky',top:0,zIndex:100,background:C.bgDark,
-    borderBottom:`1px solid ${C.border}`}}>
-    <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',
-     padding:'10px 16px 0'}}>
-     <div style={{fontFamily:FA,fontSize:18,
-      color:C.amberL,lineHeight:1}}>Les Papas Brasseurs Dashboard</div>
-     <div style={{display:'flex',gap:5}}>
-      <span style={{background:C.greenPale,color:C.greenL,fontSize:9,
-       padding:'2px 8px',borderRadius:4,fontFamily:FM,
-       fontWeight:700,letterSpacing:0.5}}>🌿 BIO</span>
-      {actifs>0&&<span style={{background:C.amberPale,color:C.amberL,fontSize:9,
-       padding:'2px 8px',borderRadius:4,fontFamily:FM,
-       fontWeight:700}}>⚗️ {actifs}</span>}
+
+   {/* ── SIDEBAR DESKTOP ─────────────────────────────────────────── */}
+   {!isMobile && (
+    <aside style={{
+     position:'fixed',top:0,left:0,bottom:0,
+     width:SIDEBAR_W,
+     background:C.bgCard,
+     borderRight:`1px solid ${C.border}`,
+     display:'flex',flexDirection:'column',
+     zIndex:300,overflowY:'auto',
+     scrollbarWidth:'none',
+    }}>
+     {/* Logo */}
+     <div style={{padding:'24px 20px 20px',borderBottom:`1px solid ${C.border}`}}>
+      <div style={{display:'flex',alignItems:'center',gap:10}}>
+       <div style={{width:36,height:36,borderRadius:10,
+        background:`linear-gradient(135deg,${C.amber},${C.amberL})`,
+        display:'flex',alignItems:'center',justifyContent:'center',
+        fontSize:20,flexShrink:0}}>🍺</div>
+       <div>
+        <div style={{fontFamily:FB,fontWeight:800,fontSize:13,
+         color:C.text,lineHeight:1.2}}>Les Papas</div>
+        <div style={{fontFamily:FB,fontWeight:800,fontSize:13,
+         color:C.amber,lineHeight:1.2}}>Brasseurs</div>
+       </div>
+      </div>
+      <div style={{marginTop:10,display:'flex',gap:6,flexWrap:'wrap'}}>
+       <span style={{background:C.greenPale,color:C.greenL,fontSize:9,
+        padding:'2px 8px',borderRadius:20,fontWeight:700,
+        letterSpacing:0.5}}>🌿 FR-BIO-09</span>
+       {actifs>0&&<span style={{background:C.amberPale,color:C.amberL,fontSize:9,
+        padding:'2px 8px',borderRadius:20,fontWeight:700}}>⚗️ {actifs} actifs</span>}
+      </div>
      </div>
-    </div>
-    {sousMods.length>1&&(
-     <div style={{display:'flex',overflowX:'auto',scrollbarWidth:'none',
-      padding:'8px 12px 0',marginTop:8,borderTop:`1px solid ${C.border}`}}>
-      {sousMods.map(m=>{
-       const act=module===m.id;
+
+     {/* Navigation */}
+     <nav style={{flex:1,padding:'12px 0'}}>
+      {FAMILLES.map(f => {
+       const famAct = familleActive === f.id;
        return (
-        <button key={m.id} onClick={()=>setModule(m.id)}
-         style={{flexShrink:0,padding:'6px 14px 8px',fontSize:11,
-          fontWeight:700,fontFamily:FM,
-          letterSpacing:0.5,textTransform:'uppercase',whiteSpace:'nowrap',
-          background:'none',border:'none',cursor:'pointer',
-          color:act?C.amber:C.textLight,
-          borderBottom:act?`2px solid ${C.amber}`:'2px solid transparent',
-          transition:'color 0.15s'}}>
-         {m.icon} {m.label}
-         {m.badge&&<span style={{marginLeft:4,background:m.bc||C.amber,
-          color:C.bgDark,borderRadius:6,padding:'1px 5px',
-          fontSize:8,fontWeight:900}}>{m.badge}</span>}
-        </button>
+        <div key={f.id}>
+         {/* Famille header */}
+         <button onClick={()=>setFamille(f.id)} style={{
+          width:'100%',display:'flex',alignItems:'center',gap:10,
+          padding:'8px 20px',background:'none',border:'none',cursor:'pointer',
+          color: famAct ? C.amber : C.textMid,
+          fontSize:11,fontWeight:700,letterSpacing:1,textTransform:'uppercase',
+          fontFamily:FM,transition:'color 0.15s',
+         }}>
+          <span style={{fontSize:14,opacity:famAct?1:0.6}}>{f.icon}</span>
+          <span>{f.label}</span>
+          {f.badge && <span style={{marginLeft:'auto',background:f.bc||C.amber,
+           color:'#000',borderRadius:10,padding:'1px 6px',fontSize:9,fontWeight:900,
+           minWidth:16,textAlign:'center'}}>{f.badge}</span>}
+         </button>
+         {/* Sous-modules si famille active */}
+         {famAct && f.modules.length > 1 && f.modules.map(m => {
+          const modAct = module === m.id;
+          return (
+           <button key={m.id} onClick={()=>setModule(m.id)} style={{
+            width:'100%',display:'flex',alignItems:'center',gap:8,
+            padding:'7px 20px 7px 40px',background: modAct ? `${C.amber}15` : 'none',
+            border:'none',cursor:'pointer',
+            borderLeft: modAct ? `2px solid ${C.amber}` : '2px solid transparent',
+            color: modAct ? C.amber : C.textLight,
+            fontSize:12,fontWeight: modAct ? 600 : 400,
+            transition:'all 0.15s',
+           }}>
+            <span style={{fontSize:12}}>{m.icon}</span>
+            <span style={{flex:1,textAlign:'left'}}>{m.label}</span>
+            {m.badge && <span style={{background:m.bc||C.amber,color:'#000',
+             borderRadius:10,padding:'1px 5px',fontSize:9,fontWeight:900}}>{m.badge}</span>}
+           </button>
+          );
+         })}
+         {famAct && f.modules.length === 1 && null}
+        </div>
        );
       })}
+     </nav>
+
+     {/* Footer sidebar */}
+     <div style={{padding:'16px 20px',borderTop:`1px solid ${C.border}`}}>
+      <div style={{fontSize:10,color:C.textLight,lineHeight:1.6}}>
+       <div style={{fontWeight:600,color:C.textMid,marginBottom:2}}>Clisson · Loire-Atlantique</div>
+       <div>Microbrasserie artisanale</div>
+       <div style={{color:C.green,marginTop:4}}>🌿 Certifiée bio FR-BIO-09</div>
+      </div>
      </div>
+    </aside>
+   )}
+
+   {/* ── ZONE PRINCIPALE ─────────────────────────────────────────── */}
+   <div style={{
+    flex:1,
+    marginLeft: isMobile ? 0 : SIDEBAR_W,
+    minHeight:'100vh',
+    display:'flex',flexDirection:'column',
+   }}>
+    {/* Header desktop */}
+    {!isMobile && (
+     <header style={{
+      position:'sticky',top:0,zIndex:100,
+      background:`${C.bg}ee`,
+      backdropFilter:'blur(12px)',
+      borderBottom:`1px solid ${C.border}`,
+      padding:'0 28px',
+      display:'flex',alignItems:'center',
+      justifyContent:'space-between',
+      height:60,
+      flexShrink:0,
+     }}>
+      <div style={{display:'flex',alignItems:'center',gap:8}}>
+       <span style={{color:C.textLight,fontSize:13}}>{currentFam.icon} {currentFam.label}</span>
+       {sousMods.length > 1 && <>
+        <span style={{color:C.border}}>›</span>
+        <span style={{color:C.text,fontSize:13,fontWeight:600}}>{currentMod.icon} {currentMod.label}</span>
+       </>}
+      </div>
+      {/* Sous-modules tabs (desktop header) */}
+      {sousMods.length > 1 && (
+       <div style={{display:'flex',gap:2}}>
+        {sousMods.map(m => {
+         const act = module === m.id;
+         return (
+          <button key={m.id} onClick={()=>setModule(m.id)} style={{
+           padding:'6px 14px',background: act ? `${C.amber}20` : 'none',
+           border:'none',borderRadius:8,cursor:'pointer',
+           color: act ? C.amber : C.textLight,
+           fontSize:12,fontWeight: act ? 700 : 400,
+           display:'flex',alignItems:'center',gap:5,
+           transition:'all 0.15s',
+          }}>
+           {m.icon} {m.label}
+           {m.badge && <span style={{background:m.bc||C.amber,color:'#000',
+            borderRadius:10,padding:'1px 5px',fontSize:9,fontWeight:900}}>{m.badge}</span>}
+          </button>
+         );
+        })}
+       </div>
+      )}
+     </header>
     )}
-   </header>
-   <main>
+
+    {/* Header mobile */}
+    {isMobile && (
+     <header style={{position:'sticky',top:0,zIndex:100,background:C.bgDark,
+      borderBottom:`1px solid ${C.border}`}}>
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',
+       padding:'10px 16px 0'}}>
+       <div style={{fontFamily:FA,fontSize:18,color:C.amberL,lineHeight:1}}>
+        Les Papas Brasseurs
+       </div>
+       <div style={{display:'flex',gap:5}}>
+        <span style={{background:C.greenPale,color:C.greenL,fontSize:9,
+         padding:'2px 8px',borderRadius:4,fontWeight:700,letterSpacing:0.5}}>🌿 BIO</span>
+        {actifs>0&&<span style={{background:C.amberPale,color:C.amberL,fontSize:9,
+         padding:'2px 8px',borderRadius:4,fontWeight:700}}>⚗️ {actifs}</span>}
+       </div>
+      </div>
+      {sousMods.length>1&&(
+       <div style={{display:'flex',overflowX:'auto',scrollbarWidth:'none',
+        padding:'8px 12px 0',marginTop:8,borderTop:`1px solid ${C.border}`}}>
+        {sousMods.map(m=>{
+         const act=module===m.id;
+         return (
+          <button key={m.id} onClick={()=>setModule(m.id)}
+           style={{flexShrink:0,padding:'6px 14px 8px',fontSize:11,
+            fontWeight:700,fontFamily:FM,letterSpacing:0.5,
+            textTransform:'uppercase',whiteSpace:'nowrap',
+            background:'none',border:'none',cursor:'pointer',
+            color:act?C.amber:C.textLight,
+            borderBottom:act?`2px solid ${C.amber}`:'2px solid transparent',
+            transition:'color 0.15s'}}>
+           {m.icon} {m.label}
+           {m.badge&&<span style={{marginLeft:4,background:m.bc||C.amber,
+            color:C.bgDark,borderRadius:6,padding:'1px 5px',
+            fontSize:8,fontWeight:900}}>{m.badge}</span>}
+          </button>
+         );
+        })}
+       </div>
+      )}
+     </header>
+    )}
+
+    {/* Contenu */}
+    <main style={{
+     flex:1,
+     paddingBottom: isMobile ? 'calc(56px + env(safe-area-inset-bottom,0px))' : 24,
+    }}>
     {module==='dashboard'       &&<ModuleDashboard stock={stock} brassins={brassins} fournisseurs={fournisseurs} condSessions={condSessions} recettes={recettes} stockCond={stockCond} stockPF={stockPF} locations={locations} setModule={setModule}/>}
     {module==='stocks'          &&<ModuleStocks stock={stock} setStock={setStock} fournisseurs={fournisseurs}/>}
     {module==='recettes'        &&<ModuleRecettes recettes={recettes} setRecettes={setRecettes} stock={stock} stockCond={stockCond}/>}
@@ -8856,9 +9022,13 @@ function App() {
     {module==='prediction'      &&<ModulePrediction brassins={brassins} recettes={recettes}/>}
     {module==='agenda'          &&<ModuleAgendaImport locations={locations} setLocations={setLocations} brassins={brassins} setBrassins={setBrassins} recettes={recettes}/>}
     {module==='anticipation'   &&<ModuleAnticipation brassins={brassins} setBrassins={setBrassins} recettes={recettes} locations={locations} stock={stock} stockPF={stockPF} condSessions={condSessions}/>}
-   </main>
+    </main>
+
+   </div>{/* fin zone principale */}
+
+   {/* ── BOTTOM NAV MOBILE UNIQUEMENT ────────────────────────────── */}
+   {isMobile && (
    <nav style={{position:'fixed',bottom:0,left:0,right:0,
-    width:'100%',
     background:C.bgDark,borderTop:`1px solid ${C.border}`,
     zIndex:200,paddingBottom:'env(safe-area-inset-bottom,0px)'}}>
     <div style={{display:'flex',height:56}}>
@@ -8892,6 +9062,8 @@ function App() {
      })}
     </div>
    </nav>
+   )}
+
   </div>
  );
 }

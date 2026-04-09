@@ -20429,16 +20429,297 @@ function App() {
     if (f) setModule(f.modules[0].id);
   };
   const sousMods = FAMILLES.find(f => f.id === familleActive)?.modules || [];
+
+  // ── Responsive : desktop (≥768px) = sidebar, mobile = bottom nav ──────
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+  const SIDEBAR_W = 220;
+
+  // Module courant label + icone pour le header desktop
+  const allMods = FAMILLES.flatMap(f => f.modules);
+  const currentMod = allMods.find(m => m.id === module) || {
+    label: 'Tableau de bord',
+    icon: '🏠'
+  };
+  const currentFam = FAMILLES.find(f => f.modules.some(m => m.id === module)) || FAMILLES[0];
   return /*#__PURE__*/React.createElement("div", {
     style: {
       minHeight: '100vh',
       background: C.bg,
-      fontFamily: "'DM Sans',sans-serif",
+      fontFamily: "'Inter',sans-serif",
       color: C.text,
-      maxWidth: 640,
-      margin: '0 auto'
+      display: 'flex'
     }
-  }, /*#__PURE__*/React.createElement("style", null, FONTS), /*#__PURE__*/React.createElement("header", {
+  }, /*#__PURE__*/React.createElement("style", null, FONTS), !isMobile && /*#__PURE__*/React.createElement("aside", {
+    style: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      bottom: 0,
+      width: SIDEBAR_W,
+      background: C.bgCard,
+      borderRight: `1px solid ${C.border}`,
+      display: 'flex',
+      flexDirection: 'column',
+      zIndex: 300,
+      overflowY: 'auto',
+      scrollbarWidth: 'none'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: '24px 20px 20px',
+      borderBottom: `1px solid ${C.border}`
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 36,
+      height: 36,
+      borderRadius: 10,
+      background: `linear-gradient(135deg,${C.amber},${C.amberL})`,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontSize: 20,
+      flexShrink: 0
+    }
+  }, "\uD83C\uDF7A"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: FB,
+      fontWeight: 800,
+      fontSize: 13,
+      color: C.text,
+      lineHeight: 1.2
+    }
+  }, "Les Papas"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: FB,
+      fontWeight: 800,
+      fontSize: 13,
+      color: C.amber,
+      lineHeight: 1.2
+    }
+  }, "Brasseurs"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 10,
+      display: 'flex',
+      gap: 6,
+      flexWrap: 'wrap'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      background: C.greenPale,
+      color: C.greenL,
+      fontSize: 9,
+      padding: '2px 8px',
+      borderRadius: 20,
+      fontWeight: 700,
+      letterSpacing: 0.5
+    }
+  }, "\uD83C\uDF3F FR-BIO-09"), actifs > 0 && /*#__PURE__*/React.createElement("span", {
+    style: {
+      background: C.amberPale,
+      color: C.amberL,
+      fontSize: 9,
+      padding: '2px 8px',
+      borderRadius: 20,
+      fontWeight: 700
+    }
+  }, "\u2697\uFE0F ", actifs, " actifs"))), /*#__PURE__*/React.createElement("nav", {
+    style: {
+      flex: 1,
+      padding: '12px 0'
+    }
+  }, FAMILLES.map(f => {
+    const famAct = familleActive === f.id;
+    return /*#__PURE__*/React.createElement("div", {
+      key: f.id
+    }, /*#__PURE__*/React.createElement("button", {
+      onClick: () => setFamille(f.id),
+      style: {
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10,
+        padding: '8px 20px',
+        background: 'none',
+        border: 'none',
+        cursor: 'pointer',
+        color: famAct ? C.amber : C.textMid,
+        fontSize: 11,
+        fontWeight: 700,
+        letterSpacing: 1,
+        textTransform: 'uppercase',
+        fontFamily: FM,
+        transition: 'color 0.15s'
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 14,
+        opacity: famAct ? 1 : 0.6
+      }
+    }, f.icon), /*#__PURE__*/React.createElement("span", null, f.label), f.badge && /*#__PURE__*/React.createElement("span", {
+      style: {
+        marginLeft: 'auto',
+        background: f.bc || C.amber,
+        color: '#000',
+        borderRadius: 10,
+        padding: '1px 6px',
+        fontSize: 9,
+        fontWeight: 900,
+        minWidth: 16,
+        textAlign: 'center'
+      }
+    }, f.badge)), famAct && f.modules.length > 1 && f.modules.map(m => {
+      const modAct = module === m.id;
+      return /*#__PURE__*/React.createElement("button", {
+        key: m.id,
+        onClick: () => setModule(m.id),
+        style: {
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
+          padding: '7px 20px 7px 40px',
+          background: modAct ? `${C.amber}15` : 'none',
+          border: 'none',
+          cursor: 'pointer',
+          borderLeft: modAct ? `2px solid ${C.amber}` : '2px solid transparent',
+          color: modAct ? C.amber : C.textLight,
+          fontSize: 12,
+          fontWeight: modAct ? 600 : 400,
+          transition: 'all 0.15s'
+        }
+      }, /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 12
+        }
+      }, m.icon), /*#__PURE__*/React.createElement("span", {
+        style: {
+          flex: 1,
+          textAlign: 'left'
+        }
+      }, m.label), m.badge && /*#__PURE__*/React.createElement("span", {
+        style: {
+          background: m.bc || C.amber,
+          color: '#000',
+          borderRadius: 10,
+          padding: '1px 5px',
+          fontSize: 9,
+          fontWeight: 900
+        }
+      }, m.badge));
+    }), famAct && f.modules.length === 1 && null);
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: '16px 20px',
+      borderTop: `1px solid ${C.border}`
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: C.textLight,
+      lineHeight: 1.6
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 600,
+      color: C.textMid,
+      marginBottom: 2
+    }
+  }, "Clisson \xB7 Loire-Atlantique"), /*#__PURE__*/React.createElement("div", null, "Microbrasserie artisanale"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      color: C.green,
+      marginTop: 4
+    }
+  }, "\uD83C\uDF3F Certifi\xE9e bio FR-BIO-09")))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      marginLeft: isMobile ? 0 : SIDEBAR_W,
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column'
+    }
+  }, !isMobile && /*#__PURE__*/React.createElement("header", {
+    style: {
+      position: 'sticky',
+      top: 0,
+      zIndex: 100,
+      background: `${C.bg}ee`,
+      backdropFilter: 'blur(12px)',
+      borderBottom: `1px solid ${C.border}`,
+      padding: '0 28px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      height: 60,
+      flexShrink: 0
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: C.textLight,
+      fontSize: 13
+    }
+  }, currentFam.icon, " ", currentFam.label), sousMods.length > 1 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: C.border
+    }
+  }, "\u203A"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: C.text,
+      fontSize: 13,
+      fontWeight: 600
+    }
+  }, currentMod.icon, " ", currentMod.label))), sousMods.length > 1 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 2
+    }
+  }, sousMods.map(m => {
+    const act = module === m.id;
+    return /*#__PURE__*/React.createElement("button", {
+      key: m.id,
+      onClick: () => setModule(m.id),
+      style: {
+        padding: '6px 14px',
+        background: act ? `${C.amber}20` : 'none',
+        border: 'none',
+        borderRadius: 8,
+        cursor: 'pointer',
+        color: act ? C.amber : C.textLight,
+        fontSize: 12,
+        fontWeight: act ? 700 : 400,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 5,
+        transition: 'all 0.15s'
+      }
+    }, m.icon, " ", m.label, m.badge && /*#__PURE__*/React.createElement("span", {
+      style: {
+        background: m.bc || C.amber,
+        color: '#000',
+        borderRadius: 10,
+        padding: '1px 5px',
+        fontSize: 9,
+        fontWeight: 900
+      }
+    }, m.badge));
+  }))), isMobile && /*#__PURE__*/React.createElement("header", {
     style: {
       position: 'sticky',
       top: 0,
@@ -20460,7 +20741,7 @@ function App() {
       color: C.amberL,
       lineHeight: 1
     }
-  }, "Les Papas Brasseurs Dashboard"), /*#__PURE__*/React.createElement("div", {
+  }, "Les Papas Brasseurs"), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       gap: 5
@@ -20472,7 +20753,6 @@ function App() {
       fontSize: 9,
       padding: '2px 8px',
       borderRadius: 4,
-      fontFamily: FM,
       fontWeight: 700,
       letterSpacing: 0.5
     }
@@ -20483,7 +20763,6 @@ function App() {
       fontSize: 9,
       padding: '2px 8px',
       borderRadius: 4,
-      fontFamily: FM,
       fontWeight: 700
     }
   }, "\u2697\uFE0F ", actifs))), sousMods.length > 1 && /*#__PURE__*/React.createElement("div", {
@@ -20527,7 +20806,12 @@ function App() {
         fontWeight: 900
       }
     }, m.badge));
-  }))), /*#__PURE__*/React.createElement("main", null, module === 'dashboard' && /*#__PURE__*/React.createElement(ModuleDashboard, {
+  }))), /*#__PURE__*/React.createElement("main", {
+    style: {
+      flex: 1,
+      paddingBottom: isMobile ? 'calc(56px + env(safe-area-inset-bottom,0px))' : 24
+    }
+  }, module === 'dashboard' && /*#__PURE__*/React.createElement(ModuleDashboard, {
     stock: stock,
     brassins: brassins,
     fournisseurs: fournisseurs,
@@ -20624,13 +20908,12 @@ function App() {
     stock: stock,
     stockPF: stockPF,
     condSessions: condSessions
-  })), /*#__PURE__*/React.createElement("nav", {
+  }))), isMobile && /*#__PURE__*/React.createElement("nav", {
     style: {
       position: 'fixed',
       bottom: 0,
       left: 0,
       right: 0,
-      width: '100%',
       background: C.bgDark,
       borderTop: `1px solid ${C.border}`,
       zIndex: 200,
