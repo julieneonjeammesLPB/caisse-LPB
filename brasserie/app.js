@@ -3218,12 +3218,12 @@ const COND_SESSIONS_INIT = [{
     type: "Bouteille 33cl",
     volume: 556,
     contenants: 1685,
-    lot: "2520409011-A"
+    lot: "2520409011"
   }, {
     type: "Bouteille 75cl",
     volume: 493,
     contenants: 658,
-    lot: "2520409011-B"
+    lot: "2520409011"
   }],
   notes: "pH = 4,31",
   operateur: "Équipe A"
@@ -3236,12 +3236,12 @@ const COND_SESSIONS_INIT = [{
     type: "Bouteille 33cl",
     volume: 1106,
     contenants: 3352,
-    lot: "26-323-A"
+    lot: "323-FV-02-03-26"
   }, {
     type: "Bouteille 75cl",
     volume: 568,
     contenants: 758,
-    lot: "26-323-B"
+    lot: "323-FV-02-03-26"
   }],
   notes: "Lot: 26-323/25-276",
   operateur: "Équipe B"
@@ -9204,6 +9204,7 @@ function ModuleConditionnement({
     date: today,
     operateur: '',
     notes: '',
+    lotBK: '',
     lots: [{
       type: 'Bouteille 33cl',
       volume: '',
@@ -9222,19 +9223,24 @@ function ModuleConditionnement({
   const brassinsEnCours = brassinsActifs.filter(b => b.statut !== 'garde' && b.statut !== 'planifié');
   const brassinsPlanif = brassinsActifs.filter(b => b.statut === 'planifié');
   const selBrassin = condForm.brassinId ? brassins.find(x => x.id === parseInt(condForm.brassinId)) : null;
-  const genLotNum = (brassinId, date, lotIndex) => {
+
+  // Nouveau format : {lotBK}-{cuve}-{mm}-{yy}  ex: 63-C1-03-26
+  const genLotNum = (lotBK, fermenteur, date) => {
+    if (!lotBK) return '';
     const d = date || today;
-    const yy = d.slice(2, 4);
     const mm = d.slice(5, 7);
-    const dd = d.slice(8, 10);
-    const num = String(brassinId).padStart(3, '0');
-    const lettre = String.fromCharCode(65 + lotIndex); // A, B, C...
-    return `${yy}${mm}${dd}-${num}-${lettre}`;
+    const yy = d.slice(2, 4);
+    return `${lotBK}-${fermenteur || '?'}-${mm}-${yy}`;
   };
-  const rebuildLotNums = (lots, brassinId, date) => lots.map((l, i) => ({
-    ...l,
-    lot: genLotNum(brassinId, date, i)
-  }));
+
+  // Tous les lots d'une même session partagent le même n° de lot
+  const rebuildLotNums = (lots, lotBK, fermenteur, date) => {
+    const lot = genLotNum(lotBK, fermenteur, date);
+    return lots.map(l => ({
+      ...l,
+      lot
+    }));
+  };
   const addLot = () => {
     const next = [...condForm.lots, {
       type: 'Bouteille 33cl',
@@ -9243,7 +9249,8 @@ function ModuleConditionnement({
       lot: '',
       capacite: 0.33
     }];
-    const rebuilt = condForm.brassinId ? rebuildLotNums(next, condForm.brassinId, condForm.date) : next;
+    const b = condForm.brassinId ? brassins.find(x => x.id === parseInt(condForm.brassinId)) : null;
+    const rebuilt = condForm.brassinId && b && condForm.lotBK ? rebuildLotNums(next, condForm.lotBK, b.fermenteur, condForm.date) : next;
     setCondForm({
       ...condForm,
       lots: rebuilt
@@ -9274,7 +9281,8 @@ function ModuleConditionnement({
     const idStr = String(id);
     setCondForm(f => {
       const newId = f.brassinId === idStr ? '' : idStr;
-      const lots = newId ? rebuildLotNums(f.lots, newId, f.date) : f.lots;
+      const b = newId ? brassins.find(x => x.id === parseInt(newId)) : null;
+      const lots = newId && b && f.lotBK ? rebuildLotNums(f.lots, f.lotBK, b.fermenteur, f.date) : f.lots;
       return {
         ...f,
         brassinId: newId,
@@ -9950,7 +9958,7 @@ function ModuleConditionnement({
   }, b.recette, " \u2014 ", b.fermenteur, " (", fmtDate(b.dateCond || b.dateDebut), ")")))))), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
+      gridTemplateColumns: 'repeat(3,1fr)',
       gap: 10,
       marginBottom: 14
     }
@@ -9961,14 +9969,44 @@ function ModuleConditionnement({
     value: condForm.date,
     onChange: e => {
       const d = e.target.value;
-      setCondForm(f => ({
-        ...f,
-        date: d,
-        lots: f.brassinId ? rebuildLotNums(f.lots, f.brassinId, d) : f.lots
-      }));
+      setCondForm(f => {
+        const b = f.brassinId ? brassins.find(x => x.id === parseInt(f.brassinId)) : null;
+        const lots = f.brassinId && b && f.lotBK ? rebuildLotNums(f.lots, f.lotBK, b.fermenteur, d) : f.lots;
+        return {
+          ...f,
+          date: d,
+          lots
+        };
+      });
     },
     style: iSt
   })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Label, {
+    t: "N\xB0 lot BK *"
+  }), /*#__PURE__*/React.createElement("input", {
+    value: condForm.lotBK,
+    placeholder: "ex: 63",
+    onChange: e => {
+      const bk = e.target.value.trim();
+      setCondForm(f => {
+        const b = f.brassinId ? brassins.find(x => x.id === parseInt(f.brassinId)) : null;
+        const lots = f.brassinId && b && bk ? rebuildLotNums(f.lots, bk, b.fermenteur, f.date) : f.lots;
+        return {
+          ...f,
+          lotBK: bk,
+          lots
+        };
+      });
+    },
+    style: iSt
+  }), condForm.lotBK && selBrassin && /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      marginTop: 3,
+      fontFamily: FM,
+      fontWeight: 700,
+      color: C.amber
+    }
+  }, "Lot : ", genLotNum(condForm.lotBK, selBrassin.fermenteur, condForm.date))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Label, {
     t: "Op\xE9rateur"
   }), /*#__PURE__*/React.createElement("input", {
     value: condForm.operateur,
