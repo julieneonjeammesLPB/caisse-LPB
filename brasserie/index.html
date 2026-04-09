@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Les Papas Brasseurs — Gestion Brassicole</title>
+
+  <!-- React 18 + Babel Standalone -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- XLSX pour exports -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <!-- Firebase 10 compat -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <!-- ════════════════════════════════════════════════════════════════════
+       CONFIGURATION FIREBASE — À REMPLIR AVEC VOS PROPRES IDENTIFIANTS
+       1. Allez sur https://console.firebase.google.com/
+       2. Créez un projet (ex: "papas-brasseurs-gestion")
+       3. Dans Paramètres > Vos applications > </> (web), copiez firebaseConfig
+       4. Remplacez les valeurs ci-dessous par les vôtres
+       ════════════════════════════════════════════════════════════════════ -->
+  <script>
+    const _FB_CFG = {
+      apiKey:            "AIzaSyD9KYULfZ49z2CI7ozPityiXxtqTkxtET4",
+      authDomain:        "gestion-les-papas-brasseurs.firebaseapp.com",
+      projectId:         "gestion-les-papas-brasseurs",
+      storageBucket:     "gestion-les-papas-brasseurs.firebasestorage.app",
+      messagingSenderId: "899284537505",
+      appId:             "1:899284537505:web:7433fec86f48ebde4d20e0"
+    };
+
+    // N'initialise Firebase que si les identifiants ont été renseignés
+    if (_FB_CFG.apiKey !== "VOTRE_API_KEY") {
+      firebase.initializeApp(_FB_CFG);
+      window._db = firebase.firestore();
+      // Persistance hors-ligne (fonctionne sans réseau — brasserie, cave, extérieur)
+      window._db.enablePersistence({ synchronizeTabs: true }).catch(e => {
+        if (e.code === 'failed-precondition')
+          console.warn('Multi-onglets : persistance désactivée');
+        else if (e.code === 'unimplemented')
+          console.warn('Navigateur sans support offline');
+      });
+    } else {
+      window._db = null;
+      console.warn('Firebase non configuré — fonctionnement en mode local uniquement');
+    }
+  </script>
+
+  <style>
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      background: #e8e8e4;
+      font-family: 'Outfit', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    #root { display: none; height: 100%; }
+
+    /* ── Splash screen ── */
+    #splash {
+      position: fixed; inset: 0;
+      background: #1a1a1e;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      z-index: 9999;
+    }
+    #splash-logo {
+      font-size: 64px;
+      animation: splash-bounce 1.2s ease-in-out infinite;
+    }
+    @keyframes splash-bounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-12px); }
+    }
+    #splash-title {
+      font-family: 'Outfit', system-ui, sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.02em;
+    }
+    #splash-sub {
+      font-family: 'Outfit', system-ui, sans-serif;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.45);
+    }
+    #splash-bar-wrap {
+      width: 220px;
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    #splash-bar {
+      height: 100%;
+      width: 40%;
+      background: #c17d14;
+      border-radius: 4px;
+      animation: splash-slide 1.4s ease-in-out infinite;
+    }
+    @keyframes splash-slide {
+      0%   { transform: translateX(-100%); }
+      50%  { transform: translateX(150%); }
+      100% { transform: translateX(350%); }
+    }
+  </style>
+
+  <!-- Google Fonts (chargé tôt pour éviter le FOUT) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Splash affiché pendant le chargement Firebase -->
+  <div id="splash">
+    <div id="splash-logo">🍺</div>
+    <div id="splash-title">Les Papas Brasseurs</div>
+    <div id="splash-sub">Chargement des données…</div>
+    <div id="splash-bar-wrap">
+      <div id="splash-bar"></div>
+    </div>
+  </div>
+
+  <!-- Racine React — masquée jusqu'à ce que Firebase réponde -->
+  <div id="root"></div>
+
+  <!-- Application JSX (chargée et transpilée par Babel Standalone) -->
+  <script type="text/babel" src="app.jsx" data-presets="react"></script>
+
+</body>
+</html>
