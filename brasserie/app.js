@@ -3218,12 +3218,12 @@ const COND_SESSIONS_INIT = [{
     type: "Bouteille 33cl",
     volume: 556,
     contenants: 1685,
-    lot: "2520409011"
+    lot: "B69-FV-01-10-25"
   }, {
     type: "Bouteille 75cl",
     volume: 493,
     contenants: 658,
-    lot: "2520409011"
+    lot: "B69-FV-01-10-25"
   }],
   notes: "pH = 4,31",
   operateur: "Équipe A"
