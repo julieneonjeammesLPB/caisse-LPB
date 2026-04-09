@@ -3332,6 +3332,8 @@ const LOCATIONS_INIT = [{
   client: "Mairie de Clisson",
   contact: "mairie@clisson.fr",
   tel: "02 40 54 02 14",
+  lieuEvenement: "Mairie de Clisson",
+  nbPersonnes: 0,
   dateDebut: "2026-03-08",
   dateFin: "2026-03-10",
   tireuses: [1],
@@ -3350,6 +3352,8 @@ const LOCATIONS_INIT = [{
   client: "Association Festiv'Clisson",
   contact: "festiv@gmail.com",
   tel: "06 12 34 56 78",
+  lieuEvenement: "Clisson",
+  nbPersonnes: 0,
   dateDebut: "2026-03-21",
   dateFin: "2026-03-24",
   tireuses: [2, 3],
@@ -3374,6 +3378,8 @@ const LOCATIONS_INIT = [{
   client: "ESAT Les Papillons",
   contact: "direction@esat44.fr",
   tel: "02 40 36 88 00",
+  lieuEvenement: "ESAT Les Papillons",
+  nbPersonnes: 0,
   dateDebut: "2026-04-05",
   dateFin: "2026-04-06",
   tireuses: [4],
@@ -3387,6 +3393,34 @@ const LOCATIONS_INIT = [{
   tarif: 45,
   statut: "confirmée",
   notes: "Repas de printemps"
+}, {
+  id: 4,
+  client: "Papas au Zinor",
+  contact: "",
+  tel: "",
+  lieuEvenement: "Le Zinor",
+  nbPersonnes: 0,
+  dateDebut: "2026-04-11",
+  dateFin: "2026-04-12",
+  tireuses: [4],
+  futs: [],
+  tarif: 0,
+  statut: "confirmée",
+  notes: "Tireuse 2 bec"
+}, {
+  id: 5,
+  client: "Association St Antoine",
+  contact: "",
+  tel: "",
+  lieuEvenement: "Saint-Antoine",
+  nbPersonnes: 0,
+  dateDebut: "2026-04-25",
+  dateFin: "2026-04-26",
+  tireuses: [4],
+  futs: [],
+  tarif: 0,
+  statut: "confirmée",
+  notes: "Tireuse 2 bec"
 }];
 const TARIFS_LOC = {
   tireuse1j: 30,
@@ -9580,12 +9614,19 @@ function ModuleConditionnement({
       key: `k${i}`,
       style: {
         display: 'flex',
-        alignItems: 'center',
-        gap: 5,
+        flexDirection: 'column',
+        gap: 2,
         background: C.bg,
         borderRadius: 8,
-        padding: '5px 10px',
-        border: `1px solid ${C.border}`
+        padding: '6px 10px',
+        border: `1px solid ${C.border}`,
+        minWidth: 80
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 5
       }
     }, /*#__PURE__*/React.createElement("span", {
       style: {
@@ -9603,7 +9644,18 @@ function ModuleConditionnement({
         fontSize: 11,
         color: C.textLight
       }
-    }, l.type))))), open && /*#__PURE__*/React.createElement("div", {
+    }, l.type)), l.lot && /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontFamily: FM,
+        fontSize: 10,
+        fontWeight: 700,
+        color: C.amber,
+        letterSpacing: 0.5,
+        marginTop: 1,
+        borderTop: `1px solid ${C.border}`,
+        paddingTop: 2
+      }
+    }, l.lot))))), open && /*#__PURE__*/React.createElement("div", {
       style: {
         padding: '0 16px 14px',
         borderTop: `1px solid ${C.border}`
@@ -10294,7 +10346,7 @@ function ModuleConditionnement({
         color: C.textMid,
         minHeight: 34
       }
-    }, "Modifier"), /*#__PURE__*/React.createElement("button", {
+    }, "\u270F Modifier"), /*#__PURE__*/React.createElement("button", {
       onClick: () => {
         const v = prompt(`Ajuster ${s.nom} (actuel: ${s.qte})`);
         if (v !== null) {
@@ -10315,7 +10367,20 @@ function ModuleConditionnement({
         fontWeight: 600,
         minHeight: 34
       }
-    }, "Ajuster qt\xE9")));
+    }, "Ajuster qt\xE9"), /*#__PURE__*/React.createElement("button", {
+      onClick: () => {
+        if (confirm(`Supprimer "${s.nom}" ?`)) setStockCond(stockCond.filter(x => x.id !== s.id));
+      },
+      style: {
+        background: C.brickPale,
+        border: `1px solid ${C.border}`,
+        borderRadius: 8,
+        padding: '6px 12px',
+        fontSize: 12,
+        color: C.alert,
+        minHeight: 34
+      }
+    }, "\u2715")));
   }))), showStock && /*#__PURE__*/React.createElement(Modal, {
     onClose: () => {
       setShowStock(false);
@@ -11336,6 +11401,8 @@ const FORM_VIDE_T = {
   client: "",
   contact: "",
   tel: "",
+  lieuEvenement: "",
+  nbPersonnes: 0,
   dateDebut: "",
   dateFin: "",
   tireuses: [],
@@ -11586,6 +11653,29 @@ function FormLocationT({
     value: form.tel,
     onChange: e => set("tel", e.target.value),
     placeholder: "06\u2026",
+    style: IST
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(LblT, {
+    t: "Lieu de l'\xE9v\xE9nement"
+  }), /*#__PURE__*/React.createElement("input", {
+    value: form.lieuEvenement || "",
+    onChange: e => set("lieuEvenement", e.target.value),
+    placeholder: "Salle, parc, adresse\u2026",
+    style: IST
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(LblT, {
+    t: "Nb personnes estim\xE9"
+  }), /*#__PURE__*/React.createElement("input", {
+    type: "number",
+    min: "0",
+    step: "10",
+    value: form.nbPersonnes || "",
+    placeholder: "0",
+    onChange: e => set("nbPersonnes", parseInt(e.target.value) || 0),
     style: IST
   }))))), /*#__PURE__*/React.createElement("div", {
     style: sec
@@ -12134,6 +12224,7 @@ function VuePlanning({
     retournée: T.creamDim,
     annulée: T.red
   };
+  const COL = `52px repeat(7,1fr)`;
   const PlanSemaine = () => /*#__PURE__*/React.createElement("div", {
     style: {
       overflowX: 'auto',
@@ -12141,19 +12232,32 @@ function VuePlanning({
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      minWidth: 360
+      minWidth: 380,
+      display: 'grid',
+      gridTemplateColumns: COL,
+      gap: 2
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      display: 'grid',
-      gridTemplateColumns: '52px repeat(7,1fr)',
-      gap: 2,
-      marginBottom: 3
+      padding: '4px 2px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
     }
-  }, /*#__PURE__*/React.createElement("div", null), days.map((d, i) => {
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 8,
+      color: T.creamDim,
+      fontFamily: FM,
+      textTransform: 'uppercase',
+      letterSpacing: 0.5,
+      textAlign: 'center',
+      lineHeight: 1.2
+    }
+  }, "TIREUSE")), days.map((d, i) => {
     const nb = locDay(d).length;
     return /*#__PURE__*/React.createElement("div", {
-      key: `k${i}`,
+      key: `h${i}`,
       style: {
         background: isTod(d) ? T.amber : T.bgMid,
         borderRadius: 7,
@@ -12185,16 +12289,18 @@ function VuePlanning({
         fontFamily: FM
       }
     }, nb, " loc."));
-  })), tireuses.map(t => {
-    return /*#__PURE__*/React.createElement("div", {
-      key: t.id,
-      style: {
-        display: 'grid',
-        gridTemplateColumns: '52px repeat(7,1fr)',
-        gap: 2,
-        marginBottom: 2
-      }
-    }, /*#__PURE__*/React.createElement("div", {
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      gridColumn: '1 / -1',
+      height: 4
+    }
+  }), tireuses.map(t => {
+    const hasSomething = days.some(d => locDay(d).filter(l => l.tireuses?.includes(t.id)).length > 0);
+    return [
+    /*#__PURE__*/
+    /* Label tireuse */
+    React.createElement("div", {
+      key: `lbl${t.id}`,
       style: {
         background: T.bgMid,
         borderRadius: 7,
@@ -12203,7 +12309,8 @@ function VuePlanning({
         flexDirection: 'column',
         justifyContent: 'center',
         borderLeft: `3px solid ${t.couleur}`,
-        minHeight: 44
+        minHeight: 44,
+        opacity: hasSomething ? 1 : 0.7
       }
     }, /*#__PURE__*/React.createElement("div", {
       style: {
@@ -12221,11 +12328,12 @@ function VuePlanning({
         marginTop: 1,
         lineHeight: 1
       }
-    }, t.label)), days.map((d, di) => {
+    }, t.label)), /* Cellules par jour */
+    ...days.map((d, di) => {
       const locs = locDay(d).filter(l => l.tireuses?.includes(t.id));
       const is = isTod(d);
       return /*#__PURE__*/React.createElement("div", {
-        key: di,
+        key: `cell${t.id}_${di}`,
         style: {
           background: locs.length ? (SCOL[locs[0].statut] || T.green) + '1A' : is ? T.amberPale + '30' : T.bgCard,
           border: `1px solid ${is ? T.amber + '50' : locs.length ? SCOL[locs[0].statut] + '40' : T.border}`,
@@ -12234,7 +12342,8 @@ function VuePlanning({
           padding: 2,
           display: 'flex',
           flexDirection: 'column',
-          gap: 1
+          gap: 1,
+          alignItems: 'stretch'
         }
       }, locs.map((l, li) => /*#__PURE__*/React.createElement("div", {
         key: li,
@@ -12242,16 +12351,15 @@ function VuePlanning({
         style: {
           flex: 1,
           borderRadius: 4,
-          padding: '3px 5px',
+          padding: '3px 4px',
           cursor: 'pointer',
           background: (SCOL[l.statut] || T.green) + '28',
           borderLeft: `2px solid ${SCOL[l.statut] || T.green}`,
-          overflow: 'hidden',
-          minHeight: 18
+          overflow: 'hidden'
         }
       }, /*#__PURE__*/React.createElement("div", {
         style: {
-          fontSize: 10,
+          fontSize: 9,
           fontWeight: 700,
           color: SCOL[l.statut] || T.green,
           lineHeight: 1.2,
@@ -12260,8 +12368,18 @@ function VuePlanning({
           whiteSpace: 'nowrap',
           fontFamily: FB
         }
-      }, l.client))));
-    }));
+      }, l.client), l.lieuEvenement && /*#__PURE__*/React.createElement("div", {
+        style: {
+          fontSize: 8,
+          color: T.creamDim,
+          fontFamily: FM,
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          marginTop: 1
+        }
+      }, l.lieuEvenement))));
+    })];
   })));
   const PlanMois = () => {
     const WDS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];

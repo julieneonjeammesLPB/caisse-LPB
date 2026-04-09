@@ -316,17 +316,28 @@ const TIREUSES_INIT=[
 ];
 const LOCATIONS_INIT=[
  {id:1,client:"Mairie de Clisson",contact:"mairie@clisson.fr",tel:"02 40 54 02 14",
+ lieuEvenement:"Mairie de Clisson",nbPersonnes:0,
  dateDebut:"2026-03-08",dateFin:"2026-03-10",tireuses:[1],
  futs:[{tieuseId:1,biere:"L'Impèrtinente",typeFut:"20L",nbFuts:2,volTotal:40}],
  tarif:50,statut:"retournée",notes:"Fête des vins"},
  {id:2,client:"Association Festiv'Clisson",contact:"festiv@gmail.com",tel:"06 12 34 56 78",
+ lieuEvenement:"Clisson",nbPersonnes:0,
  dateDebut:"2026-03-21",dateFin:"2026-03-24",tireuses:[2,3],
  futs:[{tieuseId:2,biere:"La Pèrlimpinpin",typeFut:"20L",nbFuts:3,volTotal:60},{tieuseId:3,biere:"La Blonde des Papas",typeFut:"30L",nbFuts:2,volTotal:60}],
  tarif:90,statut:"confirmée",notes:"Printemps festif"},
  {id:3,client:"ESAT Les Papillons",contact:"direction@esat44.fr",tel:"02 40 36 88 00",
+ lieuEvenement:"ESAT Les Papillons",nbPersonnes:0,
  dateDebut:"2026-04-05",dateFin:"2026-04-06",tireuses:[4],
  futs:[{tieuseId:4,biere:"La Pèrchée",typeFut:"20L",nbFuts:1,volTotal:20}],
  tarif:45,statut:"confirmée",notes:"Repas de printemps"},
+ {id:4,client:"Papas au Zinor",contact:"",tel:"",
+ lieuEvenement:"Le Zinor",nbPersonnes:0,
+ dateDebut:"2026-04-11",dateFin:"2026-04-12",tireuses:[4],
+ futs:[],tarif:0,statut:"confirmée",notes:"Tireuse 2 bec"},
+ {id:5,client:"Association St Antoine",contact:"",tel:"",
+ lieuEvenement:"Saint-Antoine",nbPersonnes:0,
+ dateDebut:"2026-04-25",dateFin:"2026-04-26",tireuses:[4],
+ futs:[],tarif:0,statut:"confirmée",notes:"Tireuse 2 bec"},
 ];
 const TARIFS_LOC={tireuse1j:30,tireuse2j:50,tireuseWE:65,tireuseS:110,};
 
@@ -3215,10 +3226,15 @@ function ModuleConditionnement({brassins,setBrassins,stockCond,setStockCond,cond
          </div>
          <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
           {cs.lots.map((l,i)=>(
-           <div key={`k${i}`} style={{display:'flex',alignItems:'center',gap:5,background:C.bg,borderRadius:8,padding:'5px 10px',border:`1px solid ${C.border}`}}>
-            <span style={{fontSize:15}}>{TYPE_ICONS[l.type]||'📦'}</span>
-            <span style={{fontFamily:FM,fontWeight:700,fontSize:14,color:TYPE_COLORS[l.type]||C.text}}>{l.contenants}</span>
-            <span style={{fontSize:11,color:C.textLight}}>{l.type}</span>
+           <div key={`k${i}`} style={{display:'flex',flexDirection:'column',gap:2,background:C.bg,borderRadius:8,padding:'6px 10px',border:`1px solid ${C.border}`,minWidth:80}}>
+            <div style={{display:'flex',alignItems:'center',gap:5}}>
+             <span style={{fontSize:15}}>{TYPE_ICONS[l.type]||'📦'}</span>
+             <span style={{fontFamily:FM,fontWeight:700,fontSize:14,color:TYPE_COLORS[l.type]||C.text}}>{l.contenants}</span>
+             <span style={{fontSize:11,color:C.textLight}}>{l.type}</span>
+            </div>
+            {l.lot&&<div style={{fontFamily:FM,fontSize:10,fontWeight:700,color:C.amber,letterSpacing:0.5,marginTop:1,borderTop:`1px solid ${C.border}`,paddingTop:2}}>
+             {l.lot}
+            </div>}
            </div>
           ))}
          </div>
@@ -3423,8 +3439,9 @@ function ModuleConditionnement({brassins,setBrassins,stockCond,setStockCond,cond
          {s.four&&s.four!=='—'&&<span style={{color:C.textLight}}>{s.four}</span>}
         </div>
         <div style={{display:'flex',gap:8}}>
-         <button onClick={()=>{setEditStock(s);setSf({...s,qte:String(s.qte),seuil:String(s.seuil),prix:String(s.prix)});setShowStock(true);}} style={{background:'none',border:`1px solid ${C.border}`,borderRadius:8,padding:'6px 12px',fontSize:12,color:C.textMid,minHeight:34}}>Modifier</button>
+         <button onClick={()=>{setEditStock(s);setSf({...s,qte:String(s.qte),seuil:String(s.seuil),prix:String(s.prix)});setShowStock(true);}} style={{background:'none',border:`1px solid ${C.border}`,borderRadius:8,padding:'6px 12px',fontSize:12,color:C.textMid,minHeight:34}}>✏ Modifier</button>
          <button onClick={()=>{const v=prompt(`Ajuster ${s.nom} (actuel: ${s.qte})`);if(v!==null){const n=parseInt(v);if(!isNaN(n))setStockCond(stockCond.map(x=>x.id===s.id?{...x,qte:n}:x));}}} style={{background:C.amberPale,border:`1px solid ${C.amber}40`,borderRadius:8,padding:'6px 12px',fontSize:12,color:C.amber,fontWeight:600,minHeight:34}}>Ajuster qté</button>
+         <button onClick={()=>{if(confirm(`Supprimer "${s.nom}" ?`))setStockCond(stockCond.filter(x=>x.id!==s.id));}} style={{background:C.brickPale,border:`1px solid ${C.border}`,borderRadius:8,padding:'6px 12px',fontSize:12,color:C.alert,minHeight:34}}>✕</button>
         </div>
        </div>
       );})}
@@ -3737,6 +3754,7 @@ function ModalT({onClose,children,title}) {
 
 const FORM_VIDE_T = {
  client:"",contact:"",tel:"",
+ lieuEvenement:"",nbPersonnes:0,
  dateDebut:"",dateFin:"",
  tireuses:[],futs:[],
  gobelets25:0,gobelets50:0,
@@ -3884,6 +3902,18 @@ function FormLocationT({editLoc,tireuses,recettes,onSave,onCancel}) {
        <LblT t="Téléphone"/>
        <input value={form.tel} onChange={e=>set("tel",e.target.value)}
         placeholder="06…" style={IST}/>
+      </div>
+     </div>
+     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+      <div>
+       <LblT t="Lieu de l'événement"/>
+       <input value={form.lieuEvenement||""} onChange={e=>set("lieuEvenement",e.target.value)}
+        placeholder="Salle, parc, adresse…" style={IST}/>
+      </div>
+      <div>
+       <LblT t="Nb personnes estimé"/>
+       <input type="number" min="0" step="10" value={form.nbPersonnes||""} placeholder="0"
+        onChange={e=>set("nbPersonnes",parseInt(e.target.value)||0)} style={IST}/>
       </div>
      </div>
     </div>
@@ -4177,84 +4207,99 @@ function VuePlanning({tireuses,locations,onClickLoc}){
 
  const SCOL = {confirmée:T.green,demande:T.amber,retournée:T.creamDim,annulée:T.red};
 
+ const COL = `52px repeat(7,1fr)`;
+
  const PlanSemaine = () => (
   <div style={{overflowX:'auto',WebkitOverflowScrolling:'touch'}}>
-   <div style={{minWidth:360}}>
-    <div style={{display:'grid',gridTemplateColumns:'52px repeat(7,1fr)',gap:2,marginBottom:3}}>
-     <div/>
-     {days.map((d,i)=>{
-      const nb = locDay(d).length;
-      return(
-       <div key={`k${i}`} style={{
-        background:isTod(d)?T.amber:T.bgMid,
-        borderRadius:7,padding:'6px 2px',textAlign:'center',
-        border:`1px solid ${isTod(d)?T.amber:T.border}`}}>
-        <div style={{fontSize:10,fontWeight:700,
-         color:isTod(d)?T.bgCard:T.creamDim,
-         fontFamily:FM,
-         textTransform:'uppercase',letterSpacing:0.3}}>
-         {fmtWD(d)}
-        </div>
-        <div style={{fontSize:16,fontWeight:900,
-         color:isTod(d)?T.bgCard:T.cream,lineHeight:1.1}}>
-         {fmtDay(d)}
-        </div>
-        {nb>0&&<div style={{fontSize:8,marginTop:1,
-         color:isTod(d)?T.bgCard:T.amber,fontFamily:FM}}>
-         {nb} loc.
-        </div>}
-       </div>
-      );
-     })}
+   <div style={{minWidth:380,display:'grid',gridTemplateColumns:COL,gap:2}}>
+
+    {/* Ligne header */}
+    <div style={{padding:'4px 2px',display:'flex',alignItems:'center',justifyContent:'center'}}>
+     <div style={{fontSize:8,color:T.creamDim,fontFamily:FM,textTransform:'uppercase',letterSpacing:0.5,textAlign:'center',lineHeight:1.2}}>
+      TIREUSE
+     </div>
     </div>
-
-    {tireuses.map(t=>{
+    {days.map((d,i)=>{
+     const nb = locDay(d).length;
      return(
-      <div key={t.id} style={{display:'grid',
-       gridTemplateColumns:'52px repeat(7,1fr)',gap:2,marginBottom:2}}>
-       <div style={{background:T.bgMid,borderRadius:7,padding:'4px 5px',
-        display:'flex',flexDirection:'column',justifyContent:'center',
-        borderLeft:`3px solid ${t.couleur}`,minHeight:44}}>
-        <div style={{fontSize:11,fontWeight:900,color:t.couleur,
-         fontFamily:FB,lineHeight:1}}>
-         {t.nom}
-        </div>
-        <div style={{fontSize:8,color:T.creamDim,
-         fontFamily:FM,marginTop:1,lineHeight:1}}>
-         {t.label}
-        </div>
+      <div key={`h${i}`} style={{
+       background:isTod(d)?T.amber:T.bgMid,
+       borderRadius:7,padding:'6px 2px',textAlign:'center',
+       border:`1px solid ${isTod(d)?T.amber:T.border}`}}>
+       <div style={{fontSize:10,fontWeight:700,
+        color:isTod(d)?T.bgCard:T.creamDim,
+        fontFamily:FM,textTransform:'uppercase',letterSpacing:0.3}}>
+        {fmtWD(d)}
        </div>
-
-       {days.map((d,di)=>{
-        const locs = locDay(d).filter(l=>l.tireuses?.includes(t.id));
-        const is = isTod(d);
-        return(
-         <div key={di} style={{
-          background: locs.length
-           ? (SCOL[locs[0].statut]||T.green)+'1A'
-           : is ? T.amberPale+'30' : T.bgCard,
-          border:`1px solid ${is?T.amber+'50':locs.length?(SCOL[locs[0].statut]+'40'):T.border}`,
-          borderRadius:6,minHeight:44,padding:2,
-          display:'flex',flexDirection:'column',gap:1}}>
-          {locs.map((l,li)=>(
-           <div key={li} onClick={()=>onClickLoc(l)}
-            style={{flex:1,borderRadius:4,padding:'3px 5px',cursor:'pointer',
-             background:(SCOL[l.statut]||T.green)+'28',
-             borderLeft:`2px solid ${SCOL[l.statut]||T.green}`,
-             overflow:'hidden',minHeight:18}}>
-            <div style={{fontSize:10,fontWeight:700,
-             color:SCOL[l.statut]||T.green,lineHeight:1.2,
-             overflow:'hidden',textOverflow:'ellipsis',
-             whiteSpace:'nowrap',fontFamily:FB}}>
-             {l.client}
-            </div>
-           </div>
-          ))}
-         </div>
-        );
-       })}
+       <div style={{fontSize:16,fontWeight:900,
+        color:isTod(d)?T.bgCard:T.cream,lineHeight:1.1}}>
+        {fmtDay(d)}
+       </div>
+       {nb>0&&<div style={{fontSize:8,marginTop:1,
+        color:isTod(d)?T.bgCard:T.amber,fontFamily:FM}}>
+        {nb} loc.
+       </div>}
       </div>
      );
+    })}
+
+    {/* Ligne séparateur */}
+    <div style={{gridColumn:'1 / -1',height:4}}/>
+
+    {/* Lignes tireuses — dans le même grid */}
+    {tireuses.map(t=>{
+     const hasSomething = days.some(d=>locDay(d).filter(l=>l.tireuses?.includes(t.id)).length>0);
+     return [
+      /* Label tireuse */
+      <div key={`lbl${t.id}`} style={{
+       background:T.bgMid,borderRadius:7,padding:'4px 5px',
+       display:'flex',flexDirection:'column',justifyContent:'center',
+       borderLeft:`3px solid ${t.couleur}`,minHeight:44,
+       opacity:hasSomething?1:0.7}}>
+       <div style={{fontSize:11,fontWeight:900,color:t.couleur,
+        fontFamily:FB,lineHeight:1}}>
+        {t.nom}
+       </div>
+       <div style={{fontSize:8,color:T.creamDim,
+        fontFamily:FM,marginTop:1,lineHeight:1}}>
+        {t.label}
+       </div>
+      </div>,
+      /* Cellules par jour */
+      ...days.map((d,di)=>{
+       const locs = locDay(d).filter(l=>l.tireuses?.includes(t.id));
+       const is = isTod(d);
+       return(
+        <div key={`cell${t.id}_${di}`} style={{
+         background: locs.length
+          ? (SCOL[locs[0].statut]||T.green)+'1A'
+          : is ? T.amberPale+'30' : T.bgCard,
+         border:`1px solid ${is?T.amber+'50':locs.length?(SCOL[locs[0].statut]+'40'):T.border}`,
+         borderRadius:6,minHeight:44,padding:2,
+         display:'flex',flexDirection:'column',gap:1,alignItems:'stretch'}}>
+         {locs.map((l,li)=>(
+          <div key={li} onClick={()=>onClickLoc(l)}
+           style={{flex:1,borderRadius:4,padding:'3px 4px',cursor:'pointer',
+            background:(SCOL[l.statut]||T.green)+'28',
+            borderLeft:`2px solid ${SCOL[l.statut]||T.green}`,
+            overflow:'hidden'}}>
+           <div style={{fontSize:9,fontWeight:700,
+            color:SCOL[l.statut]||T.green,lineHeight:1.2,
+            overflow:'hidden',textOverflow:'ellipsis',
+            whiteSpace:'nowrap',fontFamily:FB}}>
+            {l.client}
+           </div>
+           {l.lieuEvenement&&<div style={{fontSize:8,color:T.creamDim,
+            fontFamily:FM,overflow:'hidden',textOverflow:'ellipsis',
+            whiteSpace:'nowrap',marginTop:1}}>
+            {l.lieuEvenement}
+           </div>}
+          </div>
+         ))}
+        </div>
+       );
+      }),
+     ];
     })}
    </div>
   </div>
