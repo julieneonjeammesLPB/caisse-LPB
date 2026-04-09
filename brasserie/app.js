@@ -21,11 +21,18 @@ const FONTS = `
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{font-family:'Inter',sans-serif;-webkit-text-size-adjust:100%}
+*{box-sizing:border-box;margin:0;padding:0;max-width:100%}
+html{overflow-x:hidden;width:100%;font-size:16px}
+body{overflow-x:hidden;width:100%;max-width:100vw;font-family:'Inter',sans-serif;-webkit-text-size-adjust:100%}
+img,video,canvas,svg{max-width:100%;height:auto}
+table{width:100%;border-collapse:collapse}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#FFBF00;border-radius:3px}
-input,textarea,select{font-family:'Inter',sans-serif;font-size:16px!important;border-radius:8px}
-button{-webkit-tap-highlight-color:transparent;cursor:pointer}
+input,textarea,select{font-family:'Inter',sans-serif;font-size:16px!important;border-radius:8px;max-width:100%}
+button{-webkit-tap-highlight-color:transparent;cursor:pointer;max-width:100%}
+@media(max-width:767px){
+ #root>div{flex-direction:column!important}
+ .ppb-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%}
+}
 `;
 const C = {
   // Fonds (neutral #121212 + secondary #2E3333)
@@ -2838,87 +2845,227 @@ const PRODUCTION_INIT = [{
 }, {
   id: 30,
   recette: "L'Impèrtinente",
-  volume: 0,
-  statut: "brassage",
+  volume: 1851,
+  statut: "terminé",
   dateDebut: "2026-02-13",
-  dateCond: null,
-  fermenteur: "FV-02",
-  og: 1.049,
-  fg: null,
+  dateCond: "2026-03-06",
+  fermenteur: "C2",
+  og: 1.055,
+  fg: 1.008,
   abv: 6,
-  notes: "DI 1049",
+  notes: "pH=4,45. Lot 72",
   mesures: [{
     date: "2026-02-13",
-    valeur: 1.049,
+    valeur: 1.055,
     temp: 20,
     note: "DI"
+  }, {
+    date: "2026-03-06",
+    valeur: 1.008,
+    temp: 5,
+    note: "DF"
   }]
 }, {
   id: 31,
   recette: "Comère",
-  volume: 0,
-  statut: "fermentation",
+  volume: 947,
+  statut: "terminé",
   dateDebut: "2026-02-19",
-  dateCond: null,
-  fermenteur: "FV-03",
-  og: 1.043,
-  fg: null,
+  dateCond: "2026-03-12",
+  fermenteur: "C3",
+  og: 1.049,
+  fg: 1.007,
   abv: 5,
-  notes: "Azacca + Centennial",
+  notes: "pH=4,37. Azacca + Centennial",
   mesures: [{
     date: "2026-02-19",
-    valeur: 1.043,
+    valeur: 1.049,
     temp: 20,
     note: "DI"
+  }, {
+    date: "2026-03-12",
+    valeur: 1.007,
+    temp: 5,
+    note: "DF"
   }]
 }, {
   id: 32,
   recette: "La Supère",
   volume: 0,
-  statut: "fermentation",
+  statut: "terminé",
   dateDebut: "2026-02-26",
-  dateCond: null,
-  fermenteur: "FV-04",
+  dateCond: "2026-03-19",
+  fermenteur: "C4",
   og: 1.069,
-  fg: null,
+  fg: 1.009,
   abv: 8.5,
-  notes: "Coriandre 0.8kg",
+  notes: "pH=4,4. Coriandre 0.8kg",
   mesures: [{
     date: "2026-02-26",
     valeur: 1.069,
     temp: 20,
     note: "DI"
+  }, {
+    date: "2026-03-19",
+    valeur: 1.009,
+    temp: 5,
+    note: "DF"
   }]
 }, {
   id: 33,
   recette: "La Pèrilleuse",
-  volume: 0,
-  statut: "fermentation",
+  volume: 470,
+  statut: "terminé",
   dateDebut: "2026-02-27",
-  dateCond: null,
-  fermenteur: "FV-05",
+  dateCond: "2026-03-20",
+  fermenteur: "C5",
   og: 1.060,
-  fg: null,
+  fg: 1.020,
   abv: 6,
-  notes: "",
+  notes: "pH=4,41",
   mesures: [{
     date: "2026-02-27",
     valeur: 1.060,
     temp: 20,
     note: "DI"
+  }, {
+    date: "2026-03-20",
+    valeur: 1.020,
+    temp: 5,
+    note: "DF"
   }]
 }, {
   id: 34,
   recette: "La Blonde des Papas",
-  volume: 0,
-  statut: "brassage",
+  volume: 2000,
+  statut: "terminé",
   dateDebut: "2026-03-06",
+  dateCond: "2026-03-27",
+  fermenteur: "C1",
+  og: 1.043,
+  fg: 1.007,
+  abv: 5,
+  notes: "pH=4,4",
+  mesures: [{
+    date: "2026-03-06",
+    valeur: 1.043,
+    temp: 20,
+    note: "DI"
+  }, {
+    date: "2026-03-27",
+    valeur: 1.007,
+    temp: 5,
+    note: "DF"
+  }]
+}, {
+  id: 35,
+  recette: "L'Impèrtinente",
+  volume: 1724,
+  statut: "terminé",
+  dateDebut: "2026-03-13",
+  dateCond: "2026-04-03",
+  fermenteur: "C2",
+  og: 1.046,
+  fg: 1.013,
+  abv: 6,
+  notes: "pH=4,36. Lot 73",
+  mesures: [{
+    date: "2026-03-13",
+    valeur: 1.046,
+    temp: 20,
+    note: "DI"
+  }, {
+    date: "2026-04-03",
+    valeur: 1.013,
+    temp: 5,
+    note: "DF"
+  }]
+},
+// ── 5 brassins en cours (cuves C1–C5) ──
+{
+  id: 36,
+  recette: "Chromamatik",
+  volume: 0,
+  statut: "garde",
+  dateDebut: "2026-03-17",
   dateCond: null,
-  fermenteur: "FV-01",
-  og: null,
+  fermenteur: "C4",
+  og: 1.079,
+  fg: null,
+  abv: 8,
+  notes: "Malts: Pilsen 200kg, Pale 125kg, Blé 50kg. Cascade 2kg",
+  mesures: [{
+    date: "2026-03-17",
+    valeur: 1.079,
+    temp: 20,
+    note: "DI"
+  }]
+}, {
+  id: 37,
+  recette: "BCDC",
+  volume: 0,
+  statut: "fermentation",
+  dateDebut: "2026-03-25",
+  dateCond: null,
+  fermenteur: "C5",
+  og: 1.043,
   fg: null,
   abv: 5,
-  notes: "Brassage en cours",
+  notes: "Malts: Pilsen 50kg, Pale 50kg",
+  mesures: [{
+    date: "2026-03-25",
+    valeur: 1.043,
+    temp: 20,
+    note: "DI"
+  }]
+}, {
+  id: 38,
+  recette: "La Mèrveilleuse",
+  volume: 0,
+  statut: "fermentation",
+  dateDebut: "2026-03-27",
+  dateCond: null,
+  fermenteur: "C3",
+  og: 1.054,
+  fg: null,
+  abv: 6,
+  notes: "Malts: Pilsen 75kg, Pale 50kg, Blé 50kg. Verdant",
+  mesures: [{
+    date: "2026-03-27",
+    valeur: 1.054,
+    temp: 20,
+    note: "DI"
+  }]
+}, {
+  id: 39,
+  recette: "La Pèrlimpinpin",
+  volume: 0,
+  statut: "brassage",
+  dateDebut: "2026-04-02",
+  dateCond: null,
+  fermenteur: "C1",
+  og: 1.052,
+  fg: null,
+  abv: 6.5,
+  notes: "Malts: Pilsen 262.5kg, Pale 150kg, Cara240 12kg",
+  mesures: [{
+    date: "2026-04-02",
+    valeur: 1.052,
+    temp: 20,
+    note: "DI"
+  }]
+}, {
+  id: 40,
+  recette: "Foot Montaigu",
+  volume: 0,
+  statut: "planifié",
+  dateDebut: "2026-04-10",
+  dateCond: null,
+  fermenteur: "C2",
+  og: null,
+  fg: null,
+  abv: 5.5,
+  notes: "Malts: Pilsen 262.5kg. Brassage prévu 10/04",
   mesures: []
 }];
 const STOCK_COND_INIT = [{
@@ -20530,7 +20677,9 @@ function App() {
       background: C.bg,
       fontFamily: "'Inter',sans-serif",
       color: C.text,
-      display: 'flex'
+      display: 'flex',
+      flexDirection: 'row',
+      overflowX: 'hidden'
     }
   }, /*#__PURE__*/React.createElement("style", null, FONTS), !isMobile && /*#__PURE__*/React.createElement("aside", {
     style: {
