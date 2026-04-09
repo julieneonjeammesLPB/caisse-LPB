@@ -8857,8 +8857,8 @@ function App() {
     {module==='agenda'          &&<ModuleAgendaImport locations={locations} setLocations={setLocations} brassins={brassins} setBrassins={setBrassins} recettes={recettes}/>}
     {module==='anticipation'   &&<ModuleAnticipation brassins={brassins} setBrassins={setBrassins} recettes={recettes} locations={locations} stock={stock} stockPF={stockPF} condSessions={condSessions}/>}
    </main>
-   <nav style={{position:'fixed',bottom:0,left:'50%',
-    transform:'translateX(-50%)',width:'100%',maxWidth:640,
+   <nav style={{position:'fixed',bottom:0,left:0,right:0,
+    width:'100%',
     background:C.bgDark,borderTop:`1px solid ${C.border}`,
     zIndex:200,paddingBottom:'env(safe-area-inset-bottom,0px)'}}>
     <div style={{display:'flex',height:56}}>

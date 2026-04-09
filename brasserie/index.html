@@ -2,14 +2,17 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Les Papas Brasseurs — Gestion Brassicole</title>
 
-  <!-- React 18 (pas besoin de Babel — JS déjà transpilé) -->
+  <!-- React 18 -->
   <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
 
-  <!-- XLSX pour exports -->
+  <!-- XLSX -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <!-- Firebase 10 compat -->
@@ -37,19 +40,54 @@
     }
   </script>
 
+  <!-- Google Fonts : Manrope (headlines) + Inter (body) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
+    /* ── Reset ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
-    body { background: #1a1612; font-family: 'Outfit', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
-    #root { display: none; height: 100%; }
+    html { height: 100%; height: -webkit-fill-available; }
+    body {
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      background: #121212;
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overscroll-behavior: none;
+    }
 
+    /* ── Root masqué jusqu'à chargement Firebase ── */
+    #root { display: none; min-height: 100vh; }
+
+    /* ── Responsive global ── */
+    main { padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px)); }
+
+    /* Textes lisibles sur petits écrans */
+    @media (max-width: 480px) {
+      html { font-size: 14px; }
+    }
+
+    /* Scroll horizontal sur tableaux */
+    table { width: 100%; }
+    .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    /* Cibles tactiles min 44px */
+    button, a, select, input[type="checkbox"], input[type="radio"] {
+      min-height: 44px;
+    }
+    input[type="text"], input[type="number"], input[type="date"],
+    input[type="email"], textarea, select {
+      font-size: 16px !important; /* empêche le zoom iOS */
+      min-height: 44px;
+      border-radius: 8px;
+    }
+
+    /* ── Splash ── */
     #splash {
       position: fixed; inset: 0;
-      background: #1a1612;
+      background: #121212;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       gap: 24px; z-index: 9999;
@@ -59,11 +97,18 @@
       0%, 100% { transform: translateY(0); }
       50%       { transform: translateY(-12px); }
     }
-    #splash-title { font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 700; color: #F2E8D5; }
-    #splash-sub   { font-size: 0.9rem; color: rgba(242,232,213,0.45); }
-    #splash-bar-wrap { width: 220px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+    #splash-title {
+      font-family: 'Manrope', sans-serif;
+      font-size: 1.5rem; font-weight: 700; color: #F5F0E8;
+    }
+    #splash-sub { font-size: 0.9rem; color: rgba(245,240,232,0.45); }
+    #splash-bar-wrap {
+      width: 220px; height: 4px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px; overflow: hidden;
+    }
     #splash-bar {
-      height: 100%; width: 40%; background: #E8A020; border-radius: 4px;
+      height: 100%; width: 40%; background: #FFBF00; border-radius: 4px;
       animation: splash-slide 1.4s ease-in-out infinite;
     }
     @keyframes splash-slide {
@@ -82,7 +127,7 @@
   </div>
   <div id="root"></div>
 
-  <!-- Application pré-transpilée (pas de Babel dans le navigateur) -->
-  <script src="app.js"></script>
+  <!-- app.js : JS pré-transpilé, versionné pour forcer le rechargement cache -->
+  <script src="app.js?v=20260409b"></script>
 </body>
 </html>

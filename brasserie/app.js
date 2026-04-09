@@ -20628,10 +20628,9 @@ function App() {
     style: {
       position: 'fixed',
       bottom: 0,
-      left: '50%',
-      transform: 'translateX(-50%)',
+      left: 0,
+      right: 0,
       width: '100%',
-      maxWidth: 640,
       background: C.bgDark,
       borderTop: `1px solid ${C.border}`,
       zIndex: 200,
