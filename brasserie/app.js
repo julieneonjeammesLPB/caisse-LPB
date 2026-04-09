@@ -59,6 +59,55 @@ const C = {
   ok: "#4E6B4E",
   warn: "#FFBF00"
 };
+// Palettes dark / light
+const C_DARK = {
+  bg: "#121212",
+  bgCard: "#1E1E1E",
+  bgDark: "#0A0A0A",
+  cream: "#F5F0E8",
+  text: "#F5F0E8",
+  textMid: "#A8A090",
+  textLight: "#6A6460",
+  border: "#2E3333",
+  amber: "#FFBF00",
+  amberL: "#FFD033",
+  amberPale: "#2A2500",
+  green: "#4E6B4E",
+  greenL: "#6A8F6A",
+  greenPale: "#1A251A",
+  bgDark2: "#2E3333",
+  brick: "#B04030",
+  brickPale: "#2A1008",
+  hop: "#5A7040",
+  hopPale: "#1A2010",
+  alert: "#E04040",
+  ok: "#4E6B4E",
+  warn: "#FFBF00"
+};
+const C_LIGHT = {
+  bg: "#F5F0E8",
+  bgCard: "#FFFFFF",
+  bgDark: "#EDE8E0",
+  cream: "#1A1612",
+  text: "#1A1612",
+  textMid: "#4A4540",
+  textLight: "#7A7570",
+  border: "#D8D0C5",
+  amber: "#C49A00",
+  amberL: "#FFBF00",
+  amberPale: "#FFF5CC",
+  green: "#3A5A3A",
+  greenL: "#4E6B4E",
+  greenPale: "#D0E8D0",
+  bgDark2: "#E0D8CC",
+  brick: "#B04030",
+  brickPale: "#F5E0DC",
+  hop: "#5A7040",
+  hopPale: "#DDE8CC",
+  alert: "#D03030",
+  ok: "#3A5A3A",
+  warn: "#C49A00"
+};
 const CAT_COLORS = {
   Malt: "#C8820A",
   Houblon: "#4A6741",
@@ -18676,21 +18725,31 @@ function ModulePrediction({
 function detectEventType(evt) {
   const txt = ((evt.summary || '') + (evt.description || '')).toLowerCase();
   if (/tireuse|location |réservation|reservation|évén|fête|fete|fest|mariage|soirée|anniversaire|repas/i.test(txt)) return 'location';
-  if (/brassin|brassage|brew|ferment|cuvée|cuve|mash|empatage|conditionnement|mise en bouteille|enfutage/i.test(txt)) return 'brassin';
+  if (/brassin|brassage|brew|ferment|cuvée|cuve|mash|empatage|conditionnement|mise en bouteille|enfutage|embouteillage|transfert|lavage|cip/i.test(txt)) return 'brassin';
   if (/livraison|commande|order|achat|fournisseur|delivery|malts?|houblons?/i.test(txt)) return 'achat';
-  return 'location'; // calendar group → probablement des locations
+  return 'brassin'; // calendrier brasserie → probablement des brassins
 }
 function mapICSBrassin(evt, recettes, i) {
   const sum = evt.summary || '';
-  const rec = recettes.find(r => sum.toLowerCase().includes(r.nom.toLowerCase().replace(/^la |^l'/, '')));
+  // Extraire le volume depuis le titre : "10hl" → 1000 L, "100L" → 100 L
+  const volHl = sum.match(/(\d+(?:[.,]\d+)?)\s*hl/i);
+  const volL = sum.match(/(\d+(?:[.,]\d+)?)\s*[lL](?!\w)/);
+  const volume = volHl ? parseFloat(volHl[1].replace(',', '.')) * 100 : volL ? parseFloat(volL[1].replace(',', '.')) : null;
+  // Extraire la cuve : C1–C5
+  const cuveM = sum.match(/\bC([1-5])\b/i);
+  const fermenteur = cuveM ? `C${cuveM[1]}` : '';
+  // Associer une recette par nom
+  const rec = recettes.find(r => sum.toLowerCase().includes(r.nom.toLowerCase().replace(/^la |^l['']/, '')));
+  // Nettoyer le titre pour obtenir le nom de recette
+  const cleanSum = sum.replace(/brassage|brassin|embouteillage|enfutage|transfert|lavage|cip|\bC[1-5]\b|\d+\s*hl|\d+\s*[lL](?!\w)/gi, '').replace(/[-–→:]/g, ' ').replace(/\s+/g, ' ').trim();
   return {
     id: Date.now() + i,
-    recette: rec?.nom || sum.replace(/brassin|brassage/gi, '').trim() || `Import ${i + 1}`,
-    volume: rec?.volume || 0,
+    recette: rec?.nom || cleanSum || `Import ${i + 1}`,
+    volume: volume ?? rec?.volume ?? 0,
     statut: 'planifié',
     dateDebut: evt.dateDebut,
     dateCond: null,
-    fermenteur: '',
+    fermenteur: fermenteur,
     og: rec?.og || null,
     fg: null,
     abv: rec?.abv || null,
@@ -18711,6 +18770,7 @@ function ModuleAgendaImport({
     brasserie: 'ical_url_brasserie'
   };
   const DEFAULT_URL_TIREUSES = 'https://calendar.google.com/calendar/ical/4sviprsls3nolk69j6rinf9si4%40group.calendar.google.com/public/basic.ics';
+  const DEFAULT_URL_BRASSERIE = 'https://calendar.google.com/calendar/ical/mpgr7arg8dmepjrsegpjob1m7g%40group.calendar.google.com/public/basic.ics';
   const [activeKey, setActiveKey] = useState('tireuses');
   const [urls, setUrls] = useState({
     tireuses: '',
@@ -18739,7 +18799,7 @@ function ModuleAgendaImport({
       };
       const ls = {};
       Object.entries(KEYS).forEach(([k, sk]) => {
-        u[k] = localStorage.getItem(sk) || (k === 'tireuses' ? DEFAULT_URL_TIREUSES : '');
+        u[k] = localStorage.getItem(sk) || (k === 'tireuses' ? DEFAULT_URL_TIREUSES : k === 'brasserie' ? DEFAULT_URL_BRASSERIE : '');
         const d = localStorage.getItem(sk + '_sync');
         if (d) ls[k] = new Date(d);
       });
@@ -20437,6 +20497,24 @@ function App() {
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
+
+  // ── Thème sombre / clair ────────────────────────────────────────────
+  const [theme, setTheme] = useState(() => {
+    try {
+      return localStorage.getItem('ppb_theme') || 'dark';
+    } catch (e) {
+      return 'dark';
+    }
+  });
+  // Applique la palette avant chaque rendu (tous les composants enfants relisent C)
+  Object.assign(C, theme === 'dark' ? C_DARK : C_LIGHT);
+  const toggleTheme = () => {
+    const next = theme === 'dark' ? 'light' : 'dark';
+    try {
+      localStorage.setItem('ppb_theme', next);
+    } catch (e) {}
+    setTheme(next);
+  };
   const SIDEBAR_W = 220;
 
   // Module courant label + icone pour le header desktop
@@ -20641,7 +20719,29 @@ function App() {
       color: C.green,
       marginTop: 4
     }
-  }, "\uD83C\uDF3F Certifi\xE9e bio FR-BIO-09")))), /*#__PURE__*/React.createElement("div", {
+  }, "\uD83C\uDF3F Certifi\xE9e bio FR-BIO-09")), /*#__PURE__*/React.createElement("button", {
+    onClick: toggleTheme,
+    style: {
+      marginTop: 10,
+      width: '100%',
+      padding: '7px 12px',
+      background: C.bgDark2,
+      border: `1px solid ${C.border}`,
+      borderRadius: 8,
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center',
+      gap: 8,
+      fontSize: 11,
+      color: C.textMid,
+      fontFamily: FM,
+      transition: 'all 0.15s'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 13
+    }
+  }, theme === 'dark' ? '☀️' : '🌙'), /*#__PURE__*/React.createElement("span", null, theme === 'dark' ? 'Mode clair' : 'Mode sombre')))), /*#__PURE__*/React.createElement("div", {
     style: {
       flex: 1,
       marginLeft: isMobile ? 0 : SIDEBAR_W,
@@ -20685,7 +20785,13 @@ function App() {
       fontSize: 13,
       fontWeight: 600
     }
-  }, currentMod.icon, " ", currentMod.label))), sousMods.length > 1 && /*#__PURE__*/React.createElement("div", {
+  }, currentMod.icon, " ", currentMod.label))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 8
+    }
+  }, sousMods.length > 1 && /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       gap: 2
@@ -20719,7 +20825,28 @@ function App() {
         fontWeight: 900
       }
     }, m.badge));
-  }))), isMobile && /*#__PURE__*/React.createElement("header", {
+  })), /*#__PURE__*/React.createElement("button", {
+    onClick: toggleTheme,
+    style: {
+      background: C.bgDark2,
+      border: `1px solid ${C.border}`,
+      borderRadius: 8,
+      padding: '5px 12px',
+      cursor: 'pointer',
+      fontSize: 12,
+      color: C.textMid,
+      fontFamily: FM,
+      display: 'flex',
+      alignItems: 'center',
+      gap: 6,
+      flexShrink: 0,
+      transition: 'all 0.15s'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 14
+    }
+  }, theme === 'dark' ? '☀️' : '🌙'), /*#__PURE__*/React.createElement("span", null, theme === 'dark' ? 'Clair' : 'Sombre')))), isMobile && /*#__PURE__*/React.createElement("header", {
     style: {
       position: 'sticky',
       top: 0,
@@ -20744,7 +20871,8 @@ function App() {
   }, "Les Papas Brasseurs"), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
-      gap: 5
+      gap: 5,
+      alignItems: 'center'
     }
   }, /*#__PURE__*/React.createElement("span", {
     style: {
@@ -20765,7 +20893,20 @@ function App() {
       borderRadius: 4,
       fontWeight: 700
     }
-  }, "\u2697\uFE0F ", actifs))), sousMods.length > 1 && /*#__PURE__*/React.createElement("div", {
+  }, "\u2697\uFE0F ", actifs), /*#__PURE__*/React.createElement("button", {
+    onClick: toggleTheme,
+    style: {
+      background: C.bgCard,
+      border: `1px solid ${C.border}`,
+      borderRadius: 6,
+      padding: '2px 7px',
+      cursor: 'pointer',
+      fontSize: 13,
+      lineHeight: 1,
+      minHeight: 28,
+      color: C.textMid
+    }
+  }, theme === 'dark' ? '☀️' : '🌙'))), sousMods.length > 1 && /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       overflowX: 'auto',
