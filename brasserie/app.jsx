@@ -4,22 +4,44 @@
 
 const { useState, useEffect, useRef, useMemo, useCallback } = React;
 
-const FM="'DM Mono',monospace";
-const FB="'Barlow Condensed',sans-serif";
-const FA="'Abril Fatface',serif";
+// ── Design System Stitch ──────────────────────────────────────────────────
+// Primary #FFBF00 | Secondary #2E3333 | Tertiary #4E6B4E | Neutral #121212
+// Headlines: Manrope | Body/Labels: Inter | Roundedness: moderate
+// ─────────────────────────────────────────────────────────────────────────
+const FM="'Inter',sans-serif";
+const FB="'Manrope',sans-serif";
+const FA="'Manrope',sans-serif";
 
 const FONTS = `
-@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{font-family:'DM Sans',sans-serif;-webkit-text-size-adjust:100%}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#C8820A;border-radius:3px}
-input,textarea,select{font-family:'DM Sans',sans-serif;font-size:16px!important;border-radius:8px}
+html,body{font-family:'Inter',sans-serif;-webkit-text-size-adjust:100%}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#FFBF00;border-radius:3px}
+input,textarea,select{font-family:'Inter',sans-serif;font-size:16px!important;border-radius:8px}
 button{-webkit-tap-highlight-color:transparent;cursor:pointer}
 `;
 
-const C={bg:"#1A1612",bgCard:"#252018",bgDark:"#120F0C",cream:"#F2E8D5",border:"#3D3228",amber:"#E8A020",amberL:"#FFBB44",amberPale:"#2E2410",green:"#4A8040",greenL:"#66A858",greenPale:"#182414",brick:"#A03828",brickPale:"#281208",hop:"#6A7E30",hopPale:"#1A2008",text:"#F2E8D5",textMid:"#C0A880",textLight:"#8A7458",alert:"#E04040",ok:"#4A8040",warn:"#E8A020"};
+const C={
+  // Fonds (neutral #121212 + secondary #2E3333)
+  bg:"#121212", bgCard:"#1E1E1E", bgDark:"#0A0A0A",
+  // Textes
+  cream:"#F5F0E8", text:"#F5F0E8", textMid:"#A8A090", textLight:"#6A6460",
+  // Bordures
+  border:"#2E3333",
+  // Primary : or vif #FFBF00
+  amber:"#FFBF00", amberL:"#FFD033", amberPale:"#2A2500",
+  // Tertiary : vert #4E6B4E
+  green:"#4E6B4E", greenL:"#6A8F6A", greenPale:"#1A251A",
+  // Panneaux secondaires #2E3333
+  bgDark2:"#2E3333",
+  // Accents complémentaires
+  brick:"#B04030", brickPale:"#2A1008",
+  hop:"#5A7040",  hopPale:"#1A2010",
+  // États
+  alert:"#E04040", ok:"#4E6B4E", warn:"#FFBF00",
+};
 const CAT_COLORS={Malt:"#C8820A",Houblon:"#4A6741",Levure:"#8B3A2A",Épice:"#7A8B3C",Sucre:"#9B8B6E"};
 const CAT_COND_COLORS={Bouteille:"#2A6080",Capsule:"#6B5A3E",Étiquette:"#7A8B3C",Fût:"#8B3A2A",Emballage:"#4A6741",Gaz:"#5A4A7A",Nettoyage:"#9B8B6E"};
 const STATUTS={planifié:{label:"Planifié",color:C.textMid,bg:C.cream,dot:"⬜"},brassage:{label:"Brassage",color:C.amber,bg:C.amberPale,dot:"🟡"},fermentation:{label:"Fermentation",color:C.green,bg:C.greenPale,dot:"🟢"},garde:{label:"Garde froide",color:"#2A6080",bg:"#E8F4F8",dot:"🔵"},conditionnement:{label:"Conditionnement",color:C.hop,bg:C.hopPale,dot:"🟣"},terminé:{label:"Terminé",color:C.textLight,bg:C.border,dot:"⚪"}};
