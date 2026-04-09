@@ -1,6 +1,6 @@
-// Les Papas Brasseurs — Application de Gestion Brassicole
+// Les Papas Brasseurs  Application de Gestion Brassicole
 // React 18 + Babel Standalone + Firebase Firestore
-// Généré automatiquement — ne pas modifier les sections Firebase
+// G�n�r� automatiquement  ne pas modifier les sections Firebase
 
 const { useState, useEffect, useRef, useMemo, useCallback } = React;
 
@@ -20,11 +20,11 @@ button{-webkit-tap-highlight-color:transparent;cursor:pointer}
 `;
 
 const C={bg:"#1A1612",bgCard:"#252018",bgDark:"#120F0C",cream:"#F2E8D5",border:"#3D3228",amber:"#E8A020",amberL:"#FFBB44",amberPale:"#2E2410",green:"#4A8040",greenL:"#66A858",greenPale:"#182414",brick:"#A03828",brickPale:"#281208",hop:"#6A7E30",hopPale:"#1A2008",text:"#F2E8D5",textMid:"#C0A880",textLight:"#8A7458",alert:"#E04040",ok:"#4A8040",warn:"#E8A020"};
-const CAT_COLORS={Malt:"#C8820A",Houblon:"#4A6741",Levure:"#8B3A2A",Ãpice:"#7A8B3C",Sucre:"#9B8B6E"};
-const CAT_COND_COLORS={Bouteille:"#2A6080",Capsule:"#6B5A3E",Ãtiquette:"#7A8B3C",FÃ»t:"#8B3A2A",Emballage:"#4A6741",Gaz:"#5A4A7A",Nettoyage:"#9B8B6E"};
-const STATUTS={planifiÃ©:{label:"PlanifiÃ©",color:C.textMid,bg:C.cream,dot:"â¬"},brassage:{label:"Brassage",color:C.amber,bg:C.amberPale,dot:"ð¡"},fermentation:{label:"Fermentation",color:C.green,bg:C.greenPale,dot:"ð¢"},garde:{label:"Garde froide",color:"#2A6080",bg:"#E8F4F8",dot:"ðµ"},conditionnement:{label:"Conditionnement",color:C.hop,bg:C.hopPale,dot:"ð£"},terminÃ©:{label:"TerminÃ©",color:C.textLight,bg:C.border,dot:"âª"}};
-const fmt=n=>typeof n==='number'?(n<1?n.toFixed(3):n%1===0?n:n.toFixed(1)):'â';
-const fmtDate=d=>d?new Date(d).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'2-digit'}):'â';
+const CAT_COLORS={Malt:"#C8820A",Houblon:"#4A6741",Levure:"#8B3A2A",Épice:"#7A8B3C",Sucre:"#9B8B6E"};
+const CAT_COND_COLORS={Bouteille:"#2A6080",Capsule:"#6B5A3E",Étiquette:"#7A8B3C",Fût:"#8B3A2A",Emballage:"#4A6741",Gaz:"#5A4A7A",Nettoyage:"#9B8B6E"};
+const STATUTS={planifié:{label:"Planifié",color:C.textMid,bg:C.cream,dot:"⬜"},brassage:{label:"Brassage",color:C.amber,bg:C.amberPale,dot:"🟡"},fermentation:{label:"Fermentation",color:C.green,bg:C.greenPale,dot:"🟢"},garde:{label:"Garde froide",color:"#2A6080",bg:"#E8F4F8",dot:"🔵"},conditionnement:{label:"Conditionnement",color:C.hop,bg:C.hopPale,dot:"🟣"},terminé:{label:"Terminé",color:C.textLight,bg:C.border,dot:"⚪"}};
+const fmt=n=>typeof n==='number'?(n<1?n.toFixed(3):n%1===0?n:n.toFixed(1)):'—';
+const fmtDate=d=>d?new Date(d).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'2-digit'}):'—';
 const alertLvl=(q,s)=>q<0?'error':q<=s*0.5?'critical':q<=s?'warn':'ok';
 const alertCol=l=>({error:C.alert,critical:C.alert,warn:C.amber,ok:C.ok}[l]);
 const findStock=(stock,nom)=>{
@@ -36,12 +36,12 @@ const findStock=(stock,nom)=>{
 };
 const calcPrixCond=(sc)=>{
  const f=n=>(sc||[]).find(x=>x.nom===n)?.prix||0;
- const ce=f('Contre-Ã©tiquette');
+ const ce=f('Contre-étiquette');
  return {
-  'Bouteille 33cl': f('Bouteille 33cl')+f('Capsule couronne 26mm')+f('Ãtiquette avant 33cl')+ce,
-  'Bouteille 75cl': f('Bouteille 75cl')+f('Bouchon liÃ¨ge 75cl')+f('Ãtiquette avant 75cl')+ce,
-  b33: f('Bouteille 33cl')+f('Capsule couronne 26mm')+f('Ãtiquette avant 33cl')+ce,
-  b75: f('Bouteille 75cl')+f('Bouchon liÃ¨ge 75cl')+f('Ãtiquette avant 75cl')+ce,
+  'Bouteille 33cl': f('Bouteille 33cl')+f('Capsule couronne 26mm')+f('Étiquette avant 33cl')+ce,
+  'Bouteille 75cl': f('Bouteille 75cl')+f('Bouchon liège 75cl')+f('Étiquette avant 75cl')+ce,
+  b33: f('Bouteille 33cl')+f('Capsule couronne 26mm')+f('Étiquette avant 33cl')+ce,
+  b75: f('Bouteille 75cl')+f('Bouchon liège 75cl')+f('Étiquette avant 75cl')+ce,
   f20:0, f30:0,
  };
 };
@@ -49,7 +49,7 @@ const iSt={width:'100%',background:C.bgCard,border:`1px solid ${C.border}`,borde
 const Btn=({p,children,onClick,style={}})=><button onClick={onClick} style={{padding:'10px 18px',borderRadius:8,border:'none',fontWeight:700,fontSize:14,background:p?C.amber:C.cream,color:p?'#fff':C.text,minHeight:44,...style}}>{children}</button>;
 const Label=({t})=><label style={{display:'block',fontSize:11,fontWeight:700,color:C.textMid,marginBottom:5,textTransform:'uppercase',letterSpacing:0.8}}>{t}</label>;
 function Tag({text,color=C.amber,bg=C.amberPale}){return <span style={{display:'inline-block',padding:'2px 9px',borderRadius:20,background:bg,color,fontSize:11,fontWeight:600,fontFamily:FM,border:`1px solid ${color}30`}}>{text}</span>;}
-function Badge({statut}){const s=STATUTS[statut]||STATUTS.planifiÃ©;return <span style={{display:'inline-flex',alignItems:'center',gap:4,padding:'3px 9px',borderRadius:20,background:s.bg,color:s.color,fontSize:11,fontWeight:700,fontFamily:FM}}>{s.dot} {s.label}</span>;}
+function Badge({statut}){const s=STATUTS[statut]||STATUTS.planifié;return <span style={{display:'inline-flex',alignItems:'center',gap:4,padding:'3px 9px',borderRadius:20,background:s.bg,color:s.color,fontSize:11,fontWeight:700,fontFamily:FM}}>{s.dot} {s.label}</span>;}
 function StatCard({label,value,sub,color=C.amber,icon,onClick}){return(<div onClick={onClick} style={{background:C.bgCard,border:`1px solid ${C.border}`,borderRadius:12,padding:'14px 16px',position:'relative',overflow:'hidden',cursor:onClick?'pointer':'default'}}><div style={{position:'absolute',top:0,left:0,right:0,height:3,background:color}}/><div style={{fontSize:20,marginBottom:4}}>{icon}</div><div style={{fontSize:'clamp(18px,4vw,26px)',fontFamily:FA,color,lineHeight:1}}>{value}</div><div style={{fontSize:10,color:C.textLight,textTransform:'uppercase',letterSpacing:1.2,marginTop:3}}>{label}</div>{sub&&<div style={{fontSize:11,color:C.textMid,marginTop:2}}>{sub}</div>}</div>);}
 
 const Section = ({label,title,color=C.amber,children}) => (
@@ -70,15 +70,15 @@ const Row = ({label,value,mono}) => (
   <span style={{fontFamily:mono?"'DM Mono',monospace":undefined,
    fontSize:12,fontWeight:600,color:C.cream,textAlign:'right',
    maxWidth:'55%',overflow:'hidden',textOverflow:'ellipsis',
-   whiteSpace:'nowrap'}}>{value||'â'}</span>
+   whiteSpace:'nowrap'}}>{value||'—'}</span>
  </div>
 );
 
-function SearchBar({value,onChange,placeholder='Rechercherâ¦'}){
+function SearchBar({value,onChange,placeholder='Rechercher…'}){
  return (
   <div style={{position:'relative',marginBottom:14}}>
    <span style={{position:'absolute',left:14,top:'50%',transform:'translateY(-50%)',
-    fontSize:14,color:C.textLight,pointerEvents:'none'}}>ð</span>
+    fontSize:14,color:C.textLight,pointerEvents:'none'}}>🔍</span>
    <input
     value={value}
     onChange={e=>onChange(e.target.value)}
@@ -91,31 +91,31 @@ function SearchBar({value,onChange,placeholder='Rechercherâ¦'}){
     <button onClick={()=>onChange('')}
      style={{position:'absolute',right:12,top:'50%',transform:'translateY(-50%)',
       background:C.bgCard,border:`1px solid ${C.border}`,borderRadius:6,
-      fontSize:12,color:C.textMid,lineHeight:1,padding:'2px 6px',cursor:'pointer'}}>â</button>
+      fontSize:12,color:C.textMid,lineHeight:1,padding:'2px 6px',cursor:'pointer'}}>✕</button>
    )}
   </div>
  );
 }
 
 const FOURNISSEURS_INIT=[
- {id:1,nom:"Malteries Franco-Belges",type:"Malt",contact:"commercial@mfb.fr",tel:"03 21 60 90 90",ville:"Isbergues (62)",delai:7,remise:0,notes:"Pilsen, Pale, Tourambre, BlÃ©"},
- {id:2,nom:"Weyermann",type:"Malt",contact:"france@weyermann.de",tel:"â",ville:"Allemagne",delai:14,remise:0,notes:"Cara 240, Cara Vienne, Seigle, Viene10, Chocolat, Black, Flocons"},
- {id:3,nom:"Crisp Malt",type:"Malt",contact:"info@crispmalt.com",tel:"â",ville:"Royaume-Uni",delai:21,remise:0,notes:"Pale, Cara Pils"},
- {id:4,nom:"Hopsteiner",type:"Houblon",contact:"info@hopsteiner.com",tel:"â",ville:"International",delai:10,remise:5,notes:"Cascade, Nugget, Mistral, Centennial, Motueka, Barbe rouge"},
- {id:5,nom:"YCH Hops",type:"Houblon",contact:"sales@ychhops.com",tel:"â",ville:"USA",delai:21,remise:0,notes:"Amarillo, Simcoe, Citra, Azacca, Idaho7, Ekuanot, Mosaic"},
- {id:6,nom:"Barth-Haas",type:"Houblon",contact:"info@barthhaas.com",tel:"â",ville:"International",delai:14,remise:0,notes:"Chinook, Elixir, Sabro, Nectaron, Nelson Sauvin"},
- {id:7,nom:"Lallemand",type:"Levure",contact:"france@lallemand.com",tel:"â",ville:"MontrÃ©al (CA)",delai:7,remise:0,notes:"Nottingham, Windsor, NEIPA, Belle Saison, Phily sour, Kveik, Verdant"},
- {id:8,nom:"Fermentis",type:"Levure",contact:"contact@fermentis.com",tel:"03 20 81 05 05",ville:"Marcq-en-BarÅul",delai:5,remise:0,notes:"BE256, S-04, WB-06"},
- {id:9,nom:"Brew Lab",type:"Ãpice",contact:"contact@brewlab.fr",tel:"â",ville:"France",delai:5,remise:0,notes:"Coriandre, Poivre, Ãcorces agrumes"},
- {id:10,nom:"Grossiste local",type:"Sucre",contact:"â",tel:"â",ville:"Nantes (44)",delai:2,remise:2,notes:"Sucre blanc"},
- {id:11,nom:"Certipaq",type:"Certification",contact:"certipaq@certipaq.fr",tel:"02 41 18 45 00",ville:"Angers (49)",delai:0,remise:0,notes:"Organisme de certification Agriculture Biologique â FR-BIO-09"},
+ {id:1,nom:"Malteries Franco-Belges",type:"Malt",contact:"commercial@mfb.fr",tel:"03 21 60 90 90",ville:"Isbergues (62)",delai:7,remise:0,notes:"Pilsen, Pale, Tourambre, Blé"},
+ {id:2,nom:"Weyermann",type:"Malt",contact:"france@weyermann.de",tel:"—",ville:"Allemagne",delai:14,remise:0,notes:"Cara 240, Cara Vienne, Seigle, Viene10, Chocolat, Black, Flocons"},
+ {id:3,nom:"Crisp Malt",type:"Malt",contact:"info@crispmalt.com",tel:"—",ville:"Royaume-Uni",delai:21,remise:0,notes:"Pale, Cara Pils"},
+ {id:4,nom:"Hopsteiner",type:"Houblon",contact:"info@hopsteiner.com",tel:"—",ville:"International",delai:10,remise:5,notes:"Cascade, Nugget, Mistral, Centennial, Motueka, Barbe rouge"},
+ {id:5,nom:"YCH Hops",type:"Houblon",contact:"sales@ychhops.com",tel:"—",ville:"USA",delai:21,remise:0,notes:"Amarillo, Simcoe, Citra, Azacca, Idaho7, Ekuanot, Mosaic"},
+ {id:6,nom:"Barth-Haas",type:"Houblon",contact:"info@barthhaas.com",tel:"—",ville:"International",delai:14,remise:0,notes:"Chinook, Elixir, Sabro, Nectaron, Nelson Sauvin"},
+ {id:7,nom:"Lallemand",type:"Levure",contact:"france@lallemand.com",tel:"—",ville:"Montréal (CA)",delai:7,remise:0,notes:"Nottingham, Windsor, NEIPA, Belle Saison, Phily sour, Kveik, Verdant"},
+ {id:8,nom:"Fermentis",type:"Levure",contact:"contact@fermentis.com",tel:"03 20 81 05 05",ville:"Marcq-en-Barœul",delai:5,remise:0,notes:"BE256, S-04, WB-06"},
+ {id:9,nom:"Brew Lab",type:"Épice",contact:"contact@brewlab.fr",tel:"—",ville:"France",delai:5,remise:0,notes:"Coriandre, Poivre, Écorces agrumes"},
+ {id:10,nom:"Grossiste local",type:"Sucre",contact:"—",tel:"—",ville:"Nantes (44)",delai:2,remise:2,notes:"Sucre blanc"},
+ {id:11,nom:"Certipaq",type:"Certification",contact:"certipaq@certipaq.fr",tel:"02 41 18 45 00",ville:"Angers (49)",delai:0,remise:0,notes:"Organisme de certification Agriculture Biologique — FR-BIO-09"},
 ];
 const STOCK_INIT=[
  {id:1, nom:"Pilsen",          cat:"Malt",    qte:-177.5, u:"kg",   seuil:80,  prix:1.00, four:"Malteries Franco-Belges", dateAjout:"2026-03-17"},
  {id:2, nom:"Pale",            cat:"Malt",    qte:1362.5, u:"kg",   seuil:100, prix:0.95, four:"Crisp Malt",              dateAjout:"2026-03-17"},
  {id:3, nom:"Cara 240",        cat:"Malt",    qte:151.5,  u:"kg",   seuil:20,  prix:1.32, four:"Weyermann",               dateAjout:"2026-03-17"},
  {id:4, nom:"Cara Vienne 55",  cat:"Malt",    qte:62.5,   u:"kg",   seuil:20,  prix:1.30, four:"Weyermann",               dateAjout:"2026-03-17"},
- {id:5, nom:"BlÃ©",             cat:"Malt",    qte:-150.0, u:"kg",   seuil:50,  prix:0.90, four:"Malteries Franco-Belges", dateAjout:"2026-03-17"},
+ {id:5, nom:"Blé",             cat:"Malt",    qte:-150.0, u:"kg",   seuil:50,  prix:0.90, four:"Malteries Franco-Belges", dateAjout:"2026-03-17"},
  {id:6, nom:"Seigle",          cat:"Malt",    qte:20.0,   u:"kg",   seuil:10,  prix:1.10, four:"Weyermann",               dateAjout:"2026-03-17"},
  {id:7, nom:"Viene10",         cat:"Malt",    qte:625.0,  u:"kg",   seuil:50,  prix:1.02, four:"Weyermann",               dateAjout:"2026-03-17"},
  {id:8, nom:"Cara Pils",       cat:"Malt",    qte:63.3,   u:"kg",   seuil:20,  prix:1.20, four:"Crisp Malt",              dateAjout:"2026-03-17"},
@@ -123,7 +123,7 @@ const STOCK_INIT=[
  {id:10,nom:"Black",           cat:"Malt",    qte:19.6,   u:"kg",   seuil:10,  prix:2.00, four:"Weyermann",               dateAjout:"2026-03-17"},
  {id:11,nom:"Tourambre",       cat:"Malt",    qte:150.0,  u:"kg",   seuil:30,  prix:1.00, four:"Malteries Franco-Belges", dateAjout:"2026-03-17"},
  {id:12,nom:"Flocon Seigle",   cat:"Malt",    qte:62.5,   u:"kg",   seuil:20,  prix:1.05, four:"Weyermann",               dateAjout:"2026-03-17"},
- {id:13,nom:"Flocon MaÃ¯s",     cat:"Malt",    qte:60.0,   u:"kg",   seuil:20,  prix:1.00, four:"Weyermann",               dateAjout:"2026-03-17"},
+ {id:13,nom:"Flocon Maïs",     cat:"Malt",    qte:60.0,   u:"kg",   seuil:20,  prix:1.00, four:"Weyermann",               dateAjout:"2026-03-17"},
  {id:14,nom:"Flocon Avoine",   cat:"Malt",    qte:187.5,  u:"kg",   seuil:30,  prix:1.00, four:"Weyermann",               dateAjout:"2026-03-17"},
  {id:15,nom:"Cascade",         cat:"Houblon", qte:30.9,   u:"kg",   seuil:5,   prix:32.0,  four:"Hopsteiner",  dateAjout:"2026-03-17"},
  {id:16,nom:"Amarillo",        cat:"Houblon", qte:2.4,    u:"kg",   seuil:2,   prix:28.0,  four:"YCH Hops",    dateAjout:"2026-03-17"},
@@ -159,120 +159,120 @@ const STOCK_INIT=[
  {id:46,nom:"Nova Lager",      cat:"Levure",  qte:0.5,    u:"sach", seuil:1,   prix:3.50, four:"Fermentis",    dateAjout:"2026-03-17"},
  {id:47,nom:"BRY 97",          cat:"Levure",  qte:0.5,    u:"sach", seuil:1,   prix:3.50, four:"Fermentis",    dateAjout:"2026-03-17"},
  {id:48,nom:"Kveik",           cat:"Levure",  qte:0.5,    u:"sach", seuil:1,   prix:6.00, four:"Lallemand",    dateAjout:"2026-03-17"},
- {id:49,nom:"Coriandre",       cat:"Ãpice",   qte:2.8,    u:"kg",   seuil:0.5, prix:17.15,four:"Brew Lab",     dateAjout:"2026-03-17"},
- {id:50,nom:"Poivre",          cat:"Ãpice",   qte:3.75,   u:"kg",   seuil:0.5, prix:15.00,four:"Brew Lab",     dateAjout:"2026-03-17"},
- {id:51,nom:"Ãcorce de citron",cat:"Ãpice",   qte:4.0,    u:"kg",   seuil:0.5, prix:18.00,four:"Brew Lab",     dateAjout:"2026-03-17"},
- {id:52,nom:"Ãcorce d'orange", cat:"Ãpice",   qte:2.8,    u:"kg",   seuil:0.5, prix:14.30,four:"Brew Lab",     dateAjout:"2026-03-17"},
+ {id:49,nom:"Coriandre",       cat:"Épice",   qte:2.8,    u:"kg",   seuil:0.5, prix:17.15,four:"Brew Lab",     dateAjout:"2026-03-17"},
+ {id:50,nom:"Poivre",          cat:"Épice",   qte:3.75,   u:"kg",   seuil:0.5, prix:15.00,four:"Brew Lab",     dateAjout:"2026-03-17"},
+ {id:51,nom:"Écorce de citron",cat:"Épice",   qte:4.0,    u:"kg",   seuil:0.5, prix:18.00,four:"Brew Lab",     dateAjout:"2026-03-17"},
+ {id:52,nom:"Écorce d'orange", cat:"Épice",   qte:2.8,    u:"kg",   seuil:0.5, prix:14.30,four:"Brew Lab",     dateAjout:"2026-03-17"},
  {id:53,nom:"Sucre",           cat:"Sucre",   qte:411.07, u:"kg",   seuil:20,  prix:1.79, four:"Grossiste local",dateAjout:"2026-03-17"},
 ];
 
 const RECETTES_INIT=[
- {id:1,nom:"L'ImpÃ¨rtinente",style:"APA",abv:6.0,ibu:35,srm:5,og:1.049,fg:1.006,volume:300,permanent:true,prix:{b33:2.80,b75:6.50,f20:85,f30:125},description:"Notre rockstar ! Blonde houblonnÃ©e, amertume lÃ©gÃ¨re et envoutante.",houblons:["Cascade","Mosaic"],levure:"Nottingham",ingredients:[{nom:"Pale",qte:300,u:"kg"},{nom:"Pilsen",qte:150,u:"kg"},{nom:"Cascade",qte:6,u:"kg"},{nom:"Mosaic",qte:6,u:"kg"},{nom:"Nottingham",qte:0.5,u:"sach"}]},
- {id:2,nom:"La PÃ¨rchÃ©e",style:"Blanche",abv:4.5,ibu:15,srm:3,og:1.037,fg:1.004,volume:300,permanent:true,prix:{b33:2.60,b75:6.00,f20:75,f30:110},description:"BrassÃ©e sur Terre, notre blanche est dans la Lune.",houblons:["Cascade","Mosaic"],levure:"WB-06",ingredients:[{nom:"BlÃ©",qte:62.5,u:"kg"},{nom:"Pilsen",qte:37.5,u:"kg"},{nom:"Cascade",qte:1,u:"kg"},{nom:"Mosaic",qte:2,u:"kg"},{nom:"WB-06",qte:0.25,u:"sach"}]},
- {id:3,nom:"La PÃ¨rilleuse",style:"AmbrÃ©e",abv:6.0,ibu:28,srm:18,og:1.061,fg:1.020,volume:300,permanent:true,prix:{b33:2.80,b75:6.50,f20:85,f30:125},description:"Pleine de rebondissements, parfum caramel et douce amertume.",houblons:["Chinook"],levure:"S-04",ingredients:[{nom:"Pale",qte:275,u:"kg"},{nom:"Cara 240",qte:20,u:"kg"},{nom:"Chinook",qte:4,u:"kg"},{nom:"S-04",qte:0.5,u:"sach"}]},
- {id:4,nom:"La PÃ¨rlimpinpin",style:"IPA",abv:6.5,ibu:60,srm:7,og:1.056,fg:1.008,volume:300,permanent:true,prix:{b33:3.20,b75:7.50,f20:95,f30:140},description:"Laisse-toi ensorceler. Blonde dorÃ©e Ã  l'alchimie parfaite.",houblons:["Cascade","Mosaic","Chinook"],levure:"Nottingham",ingredients:[{nom:"Pale",qte:325,u:"kg"},{nom:"Pilsen",qte:87.5,u:"kg"},{nom:"Cascade",qte:9.6,u:"kg"},{nom:"Mosaic",qte:6,u:"kg"},{nom:"Nottingham",qte:0.5,u:"sach"}]},
- {id:5,nom:"La SupÃ¨re",style:"Triple",abv:8.5,ibu:22,srm:6,og:1.069,fg:1.009,volume:200,permanent:true,prix:{b33:4.00,b75:9.00,f20:110,f30:160},description:"Avec force et courage, cette blonde musclÃ©e, Ã©pices et puissante rondeur.",houblons:["Cascade"],levure:"BE256",ingredients:[{nom:"Pale",qte:185,u:"kg"},{nom:"Pilsen",qte:50,u:"kg"},{nom:"Flocon Avoine",qte:25,u:"kg"},{nom:"Coriandre",qte:1,u:"kg"},{nom:"BE256",qte:0.25,u:"sach"}]},
- {id:6,nom:"La Blonde des Papas",style:"Blonde",abv:5.0,ibu:25,srm:7,og:1.047,fg:1.011,volume:300,permanent:true,prix:{b33:2.60,b75:6.00,f20:75,f30:110},description:"Notre blonde lÃ©gÃ¨re et limpide, douce, maltÃ©e, sans amertume.",houblons:["Nugget","Cascade"],levure:"S-04",ingredients:[{nom:"Pilsen",qte:350,u:"kg"},{nom:"Viene10",qte:75,u:"kg"},{nom:"Nugget",qte:0.5,u:"kg"},{nom:"Cascade",qte:2.4,u:"kg"},{nom:"S-04",qte:0.5,u:"sach"}]},
- {id:7,nom:"La MÃ¨rveilleuse",style:"NEIPA",abv:6.0,ibu:45,srm:5,og:1.059,fg:1.018,volume:200,permanent:false,prix:{b33:3.50,b75:8.00,f20:100,f30:150},description:"ÃphÃ©mÃ¨re juteuse et trouble, arÃ´mes intenses de fruits tropicaux.",houblons:["Mosaic","Citra","Amarillo"],levure:"NEIPA",ingredients:[{nom:"Pale",qte:155,u:"kg"},{nom:"BlÃ©",qte:75,u:"kg"},{nom:"Flocon Avoine",qte:75,u:"kg"},{nom:"Mosaic",qte:7.2,u:"kg"},{nom:"Citra",qte:9.2,u:"kg"},{nom:"NEIPA",qte:0.5,u:"sach"}]},
- {id:8,nom:"La MÃ¨rlimpinpin",style:"DIPA",abv:8.0,ibu:70,srm:6,og:1.073,fg:1.015,volume:200,permanent:false,prix:{b33:4.50,b75:10.00,f20:120,f30:175},description:"Double IPA puissante.",houblons:["Citra","Sabro","Azacca"],levure:"Nottingham",ingredients:[{nom:"Pale",qte:200,u:"kg"},{nom:"Citra",qte:9.75,u:"kg"},{nom:"Sabro",qte:1.4,u:"kg"},{nom:"Nottingham",qte:0.75,u:"sach"}]},
- {id:9,nom:"La Mary'Stout",style:"Brune",abv:6.0,ibu:45,srm:45,og:1.062,fg:1.020,volume:500,permanent:false,prix:{b33:3.00,b75:7.00,f20:90,f30:130},description:"Brune robuste aux notes de cafÃ© et chocolat â Chinook aromatique, corps dense et torrÃ©fiÃ©.",houblons:["Chinook"],levure:"Windsor",ingredients:[{nom:"Viene10",qte:75,u:"kg"},{nom:"Pale",qte:12.5,u:"kg"},{nom:"Cara Vienne 55",qte:12.5,u:"kg"},{nom:"Tourambre",qte:12.5,u:"kg"},{nom:"Flocon Avoine",qte:12.5,u:"kg",note:"non concassÃ©"},{nom:"Cara 240",qte:12,u:"kg"},{nom:"Chocolat",qte:6,u:"kg"},{nom:"Black",qte:5,u:"kg"},{nom:"AmÃ¨risant",qte:0.8,u:"kg",note:"60min"},{nom:"Chinook",qte:1.0,u:"kg",note:"aroma 80Â°C"},{nom:"Windsor",qte:0.25,u:"kg"}]},
- {id:10,nom:"La Mamagascar",style:"AmbrÃ©e Ã©picÃ©e",abv:7.0,ibu:21,srm:13,og:1.069,fg:1.020,volume:500,permanent:false,prix:{b33:3.20,b75:7.50,f20:95,f30:140},description:"AmbrÃ©e au poivre de Madagascar â maltÃ©e, caramel, Ã©pices chaudes. Version originale 5HL.",houblons:["Nugget","Chinook","Simcoe"],levure:"Windsor",ingredients:[{nom:"Pale",qte:112.5,u:"kg"},{nom:"Cara Vienne 55",qte:12.5,u:"kg"},{nom:"Tourambre",qte:12.5,u:"kg"},{nom:"Cara 240",qte:4.7,u:"kg"},{nom:"Nugget",qte:0.27,u:"kg",note:"60min"},{nom:"Sucre",qte:20,u:"kg",note:"10min"},{nom:"Chinook",qte:0.5,u:"kg",note:"aroma 80Â°C"},{nom:"Simcoe",qte:0.5,u:"kg",note:"aroma 80Â°C"},{nom:"Poivre",qte:0.5,u:"kg",note:"aroma 100Â°C"},{nom:"Windsor",qte:0.25,u:"kg"},{nom:"Poivre",qte:0.3,u:"kg",note:"DH J+5"}]},
- {id:11,nom:"La Chromamatik",style:"NEIPA",abv:8.0,ibu:20,srm:6,og:1.083,fg:1.028,volume:1200,permanent:false,prix:{b33:3.5,b75:8.0,f20:100,f30:150},description:"NEIPA puissante Ã  8% â double empatage, dry hop massif Citra + Sabro.",houblons:["Citra","Mistral","Sabro"],levure:"Best coast hazy",ingredients:[{nom:"Pale",qte:112.5,"u":"kg",note:"soir"},{nom:"Flocon Avoine",qte:25,"u":"kg",note:"soir"},{nom:"Pale",qte:12.5,"u":"kg",note:"matin"},{nom:"Pilsen",qte:62.5,"u":"kg",note:"matin"},{nom:"BlÃ©",qte:25,"u":"kg",note:"matin"},{nom:"Sucre",qte:15,"u":"kg",note:"15min"},{nom:"Citra",qte:1.0,"u":"kg",note:"aroma 80Â°C"},{nom:"Mistral",qte:1.0,"u":"kg",note:"aroma 80Â°C"},{nom:"Best coast hazy",qte:0.5,"u":"kg"},{nom:"Citra",qte:6.0,"u":"kg",note:"DH J+2"},{nom:"Sabro",qte:6.0,"u":"kg",note:"DH J+5"}]},
- {id:12,nom:"La Cold IPA",style:"Cold IPA",abv:5.0,ibu:38,srm:4,og:1.043,fg:1.005,volume:1200,permanent:false,prix:{b33:2.8,b75:6.5,f20:85,f30:125},description:"Cold IPA fermentation froide â dry hop massif Centennial 5kg.",houblons:["Nugget","Centennial"],levure:"Nova Lager",ingredients:[{nom:"Pilsen",qte:87.5,"u":"kg"},{nom:"Flocon MaÃ¯s",qte:30,"u":"kg"},{nom:"Nugget",qte:0.5,"u":"kg",note:"60min"},{nom:"Centennial",qte:0.2,"u":"kg",note:"10min"},{nom:"Centennial",qte:1.5,"u":"kg",note:"aroma 80Â°C"},{nom:"Nova Lager",qte:0.5,"u":"kg"},{nom:"Centennial",qte:5.0,"u":"kg",note:"DH J+4"}]},
- {id:13,nom:"La DaarÃ¸nn",style:"Kveik IPA",abv:7.0,ibu:74,srm:6,og:1.062,fg:1.011,volume:1200,permanent:false,prix:{b33:3.0,b75:7.0,f20:90,f30:135},description:"Kveik IPA fermentÃ©e Ã  35Â°C â amertume franche, Centennial + Azacca en dry hop.",houblons:["Simcoe","Centennial","Azacca"],levure:"Kveik",ingredients:[{nom:"Pale",qte:75,"u":"kg"},{nom:"Viene10",qte:25,"u":"kg"},{nom:"BlÃ©",qte:12.5,"u":"kg"},{nom:"Flocon Avoine",qte:25,"u":"kg",note:"non concassÃ©"},{nom:"Simcoe",qte:1.0,"u":"kg",note:"60min"},{nom:"Centennial",qte:0.4,"u":"kg",note:"20min"},{nom:"Simcoe",qte:0.7,"u":"kg",note:"aroma 80Â°C"},{nom:"Centennial",qte:0.6,"u":"kg",note:"aroma 80Â°C"},{nom:"Sucre",qte:15,"u":"kg",note:"10min"},{nom:"Kveik",qte:0.5,"u":"kg"},{nom:"Centennial",qte:1.5,"u":"kg",note:"DH"},{nom:"Azacca",qte:2.5,"u":"kg",note:"DH"}]},
- {id:14,nom:"La Daddy Cool Gose",style:"Gose fruitÃ©e",abv:4.0,ibu:10,srm:4,og:1.045,fg:1.012,volume:500,permanent:false,prix:{b33:2.8,b75:6.5,f20:85,f30:125},description:"Gose Ananas Kiwi â sour lÃ©gÃ¨re, sel et coriandre, 80kg de fruits en dry hop.",houblons:["Nugget","Elixir"],levure:"Phily sour",ingredients:[{nom:"Pilsen",qte:50,"u":"kg"},{nom:"BlÃ©",qte:50,"u":"kg"},{nom:"Nugget",qte:0.1,"u":"kg",note:"60min"},{nom:"Coriandre",qte:0.7,"u":"kg",note:"15min"},{nom:"Elixir",qte:0.1,"u":"kg",note:"10min"},{nom:"Elixir",qte:0.4,"u":"kg",note:"aroma 80Â°C"},{nom:"Phily sour",qte:0.5,"u":"kg"},{nom:"Ananas purÃ©e",qte:40,"u":"kg",note:"DH J+0"},{nom:"Kiwi purÃ©e",qte:40,"u":"kg",note:"DH J+0"}]},
- {id:15,nom:"La Habemouss Papa",style:"West Coast IPA",abv:7.0,ibu:50,srm:7,og:1.051,fg:1.0,volume:1200,permanent:false,prix:{b33:3.0,b75:7.0,f20:90,f30:135},description:"West Coast IPA sÃ¨che et amÃ¨re â Mosaic + Idaho7 en dry hop, haute attÃ©nuation.",houblons:["Nugget","Simcoe","Mosaic","Idaho7"],levure:"BRY 97",ingredients:[{nom:"Pale",qte:100,"u":"kg"},{nom:"Cara Pils",qte:25,"u":"kg"},{nom:"Flocon Seigle",qte:12.5,"u":"kg",note:"non concassÃ©"},{nom:"Nugget",qte:0.6,"u":"kg",note:"60min"},{nom:"Simcoe",qte:1.5,"u":"kg",note:"aroma 80Â°C"},{nom:"Mosaic",qte:1.5,"u":"kg",note:"aroma 80Â°C"},{nom:"BRY 97",qte:0.5,"u":"kg"},{nom:"Mosaic",qte:1.0,"u":"kg",note:"DH"},{nom:"Idaho7",qte:2.0,"u":"kg",note:"DH"}]},
- {id:16,nom:"La Mamagascard",style:"AmbrÃ©e Ã©picÃ©e",abv:7.0,ibu:21,srm:13,og:1.069,fg:1.02,volume:500,permanent:false,prix:{b33:3.0,b75:7.0,f20:90,f30:135},description:"AmbrÃ©e au poivre de Madagascar â maltÃ©e, caramel, Ã©pices chaudes. Poivre en dry hop J+5.",houblons:["Nugget","Chinook","Simcoe"],levure:"Windsor",ingredients:[{nom:"Pale",qte:112.5,"u":"kg"},{nom:"Cara Vienne 55",qte:12.5,"u":"kg"},{nom:"Tourambre",qte:12.5,"u":"kg"},{nom:"Cara 240",qte:4.7,"u":"kg"},{nom:"Nugget",qte:0.27,"u":"kg",note:"60min"},{nom:"Sucre",qte:20,"u":"kg",note:"10min"},{nom:"Chinook",qte:0.5,"u":"kg",note:"aroma 80Â°C"},{nom:"Simcoe",qte:0.5,"u":"kg",note:"aroma 80Â°C"},{nom:"Poivre",qte:0.5,"u":"kg",note:"aroma 100Â°C"},{nom:"Windsor",qte:0.25,"u":"kg"},{nom:"Poivre",qte:0.3,"u":"kg",note:"DH J+5"}]},
- {id:17,nom:"La MÃ¨rcure",style:"Session IPA",abv:4.0,ibu:25,srm:4,og:1.034,fg:1.006,volume:500,permanent:false,prix:{b33:2.6,b75:6.0,f20:75,f30:115},description:"Session IPA lÃ©gÃ¨re â Verdant, dry hop Mistral + Cascade pour finir en douceur.",houblons:["Mistral","Elixir","Cascade"],levure:"Verdant",ingredients:[{nom:"Pale",qte:50,"u":"kg"},{nom:"BlÃ©",qte:25,"u":"kg"},{nom:"Flocon Avoine",qte:12.5,"u":"kg"},{nom:"Mistral",qte:0.65,"u":"kg",note:"60min"},{nom:"Elixir",qte:1.0,"u":"kg",note:"aroma 80Â°C"},{nom:"Verdant",qte:0.5,"u":"kg"},{nom:"Mistral",qte:2.0,"u":"kg",note:"DH"},{nom:"Cascade",qte:1.0,"u":"kg",note:"DH"}]},
- {id:18,nom:"La Papa Poule",style:"Sour fruitÃ©e",abv:3.5,ibu:12,srm:4,og:1.041,fg:1.009,volume:500,permanent:false,prix:{b33:2.8,b75:6.5,f20:85,f30:125},description:"Sour framboise / fruit de la passion â acidulÃ©e, lÃ©gÃ¨re, 60kg de purÃ©e de fruits.",houblons:["Nugget","Mistral"],levure:"Phily sour",ingredients:[{nom:"Pilsen",qte:87.5,"u":"kg"},{nom:"Flocon Avoine",qte:12.5,"u":"kg"},{nom:"Nugget",qte:0.13,"u":"kg",note:"60min"},{nom:"Framboise purÃ©e",qte:20,"u":"kg",note:"0min"},{nom:"Mistral",qte:0.5,"u":"kg",note:"aroma 80Â°C"},{nom:"Phily sour",qte:0.5,"u":"kg"},{nom:"Framboise purÃ©e",qte:10,"u":"kg",note:"DH J+0"},{nom:"Passion purÃ©e",qte:30,"u":"kg",note:"DH J+0"}]},
- {id:19,nom:"La Queen Bee",style:"Mead-beer",abv:5.5,ibu:30,srm:8,og:1.054,fg:1.013,volume:500,permanent:false,prix:{b33:3.2,b75:7.5,f20:95,f30:140},description:"BiÃ¨re au miel â maltÃ©e douce, 60kg de miel, Sabro aromatique, levure CBC1 en conditionnement.",houblons:["Nugget","Sabro"],levure:"Windsor",ingredients:[{nom:"Pale",qte:37.5,"u":"kg"},{nom:"Cara Pils",qte:25,"u":"kg"},{nom:"Flocon Seigle",qte:12.5,"u":"kg"},{nom:"Nugget",qte:0.25,"u":"kg",note:"60min"},{nom:"Miel",qte:20,"u":"kg",note:"5min"},{nom:"Miel",qte:40,"u":"kg",note:"0min"},{nom:"Sabro",qte:0.6,"u":"kg",note:"aroma 80Â°C"},{nom:"Windsor",qte:0.25,"u":"kg"}]},
- {id:20,nom:"La TÃ©mÃ¨raire",style:"Black IPA",abv:5.0,ibu:53,srm:40,og:1.048,fg:1.01,volume:500,permanent:false,prix:{b33:2.8,b75:6.5,f20:85,f30:125},description:"Black IPA â robe noire, amertume tranchante, Sabro + Simcoe en dry hop.",houblons:["Sabro","Simcoe"],levure:"Nottingham",ingredients:[{nom:"Pale",qte:62.5,"u":"kg"},{nom:"Cara Vienne 55",qte:25,"u":"kg"},{nom:"Cara 240",qte:7,"u":"kg"},{nom:"Chocolat",qte:6,"u":"kg"},{nom:"Black",qte:6,"u":"kg"},{nom:"Flocon Avoine",qte:12.5,"u":"kg",note:"non concassÃ©"},{nom:"AmÃ¨risant",qte:0.8,"u":"kg",note:"60min"},{nom:"Sabro",qte:1.0,"u":"kg",note:"aroma 80Â°C"},{nom:"Nottingham",qte:0.25,"u":"kg"},{nom:"Sabro",qte:1.5,"u":"kg",note:"DH"},{nom:"Simcoe",qte:0.5,"u":"kg",note:"DH"}]},
+ {id:1,nom:"L'Impèrtinente",style:"APA",abv:6.0,ibu:35,srm:5,og:1.049,fg:1.006,volume:300,permanent:true,prix:{b33:2.80,b75:6.50,f20:85,f30:125},description:"Notre rockstar ! Blonde houblonnée, amertume légère et envoutante.",houblons:["Cascade","Mosaic"],levure:"Nottingham",ingredients:[{nom:"Pale",qte:300,u:"kg"},{nom:"Pilsen",qte:150,u:"kg"},{nom:"Cascade",qte:6,u:"kg"},{nom:"Mosaic",qte:6,u:"kg"},{nom:"Nottingham",qte:0.5,u:"sach"}]},
+ {id:2,nom:"La Pèrchée",style:"Blanche",abv:4.5,ibu:15,srm:3,og:1.037,fg:1.004,volume:300,permanent:true,prix:{b33:2.60,b75:6.00,f20:75,f30:110},description:"Brassée sur Terre, notre blanche est dans la Lune.",houblons:["Cascade","Mosaic"],levure:"WB-06",ingredients:[{nom:"Blé",qte:62.5,u:"kg"},{nom:"Pilsen",qte:37.5,u:"kg"},{nom:"Cascade",qte:1,u:"kg"},{nom:"Mosaic",qte:2,u:"kg"},{nom:"WB-06",qte:0.25,u:"sach"}]},
+ {id:3,nom:"La Pèrilleuse",style:"Ambrée",abv:6.0,ibu:28,srm:18,og:1.061,fg:1.020,volume:300,permanent:true,prix:{b33:2.80,b75:6.50,f20:85,f30:125},description:"Pleine de rebondissements, parfum caramel et douce amertume.",houblons:["Chinook"],levure:"S-04",ingredients:[{nom:"Pale",qte:275,u:"kg"},{nom:"Cara 240",qte:20,u:"kg"},{nom:"Chinook",qte:4,u:"kg"},{nom:"S-04",qte:0.5,u:"sach"}]},
+ {id:4,nom:"La Pèrlimpinpin",style:"IPA",abv:6.5,ibu:60,srm:7,og:1.056,fg:1.008,volume:300,permanent:true,prix:{b33:3.20,b75:7.50,f20:95,f30:140},description:"Laisse-toi ensorceler. Blonde dorée à l'alchimie parfaite.",houblons:["Cascade","Mosaic","Chinook"],levure:"Nottingham",ingredients:[{nom:"Pale",qte:325,u:"kg"},{nom:"Pilsen",qte:87.5,u:"kg"},{nom:"Cascade",qte:9.6,u:"kg"},{nom:"Mosaic",qte:6,u:"kg"},{nom:"Nottingham",qte:0.5,u:"sach"}]},
+ {id:5,nom:"La Supère",style:"Triple",abv:8.5,ibu:22,srm:6,og:1.069,fg:1.009,volume:200,permanent:true,prix:{b33:4.00,b75:9.00,f20:110,f30:160},description:"Avec force et courage, cette blonde musclée, épices et puissante rondeur.",houblons:["Cascade"],levure:"BE256",ingredients:[{nom:"Pale",qte:185,u:"kg"},{nom:"Pilsen",qte:50,u:"kg"},{nom:"Flocon Avoine",qte:25,u:"kg"},{nom:"Coriandre",qte:1,u:"kg"},{nom:"BE256",qte:0.25,u:"sach"}]},
+ {id:6,nom:"La Blonde des Papas",style:"Blonde",abv:5.0,ibu:25,srm:7,og:1.047,fg:1.011,volume:300,permanent:true,prix:{b33:2.60,b75:6.00,f20:75,f30:110},description:"Notre blonde légère et limpide, douce, maltée, sans amertume.",houblons:["Nugget","Cascade"],levure:"S-04",ingredients:[{nom:"Pilsen",qte:350,u:"kg"},{nom:"Viene10",qte:75,u:"kg"},{nom:"Nugget",qte:0.5,u:"kg"},{nom:"Cascade",qte:2.4,u:"kg"},{nom:"S-04",qte:0.5,u:"sach"}]},
+ {id:7,nom:"La Mèrveilleuse",style:"NEIPA",abv:6.0,ibu:45,srm:5,og:1.059,fg:1.018,volume:200,permanent:false,prix:{b33:3.50,b75:8.00,f20:100,f30:150},description:"Éphémère juteuse et trouble, arômes intenses de fruits tropicaux.",houblons:["Mosaic","Citra","Amarillo"],levure:"NEIPA",ingredients:[{nom:"Pale",qte:155,u:"kg"},{nom:"Blé",qte:75,u:"kg"},{nom:"Flocon Avoine",qte:75,u:"kg"},{nom:"Mosaic",qte:7.2,u:"kg"},{nom:"Citra",qte:9.2,u:"kg"},{nom:"NEIPA",qte:0.5,u:"sach"}]},
+ {id:8,nom:"La Mèrlimpinpin",style:"DIPA",abv:8.0,ibu:70,srm:6,og:1.073,fg:1.015,volume:200,permanent:false,prix:{b33:4.50,b75:10.00,f20:120,f30:175},description:"Double IPA puissante.",houblons:["Citra","Sabro","Azacca"],levure:"Nottingham",ingredients:[{nom:"Pale",qte:200,u:"kg"},{nom:"Citra",qte:9.75,u:"kg"},{nom:"Sabro",qte:1.4,u:"kg"},{nom:"Nottingham",qte:0.75,u:"sach"}]},
+ {id:9,nom:"La Mary'Stout",style:"Brune",abv:6.0,ibu:45,srm:45,og:1.062,fg:1.020,volume:500,permanent:false,prix:{b33:3.00,b75:7.00,f20:90,f30:130},description:"Brune robuste aux notes de café et chocolat — Chinook aromatique, corps dense et torréfié.",houblons:["Chinook"],levure:"Windsor",ingredients:[{nom:"Viene10",qte:75,u:"kg"},{nom:"Pale",qte:12.5,u:"kg"},{nom:"Cara Vienne 55",qte:12.5,u:"kg"},{nom:"Tourambre",qte:12.5,u:"kg"},{nom:"Flocon Avoine",qte:12.5,u:"kg",note:"non concassé"},{nom:"Cara 240",qte:12,u:"kg"},{nom:"Chocolat",qte:6,u:"kg"},{nom:"Black",qte:5,u:"kg"},{nom:"Amèrisant",qte:0.8,u:"kg",note:"60min"},{nom:"Chinook",qte:1.0,u:"kg",note:"aroma 80°C"},{nom:"Windsor",qte:0.25,u:"kg"}]},
+ {id:10,nom:"La Mamagascar",style:"Ambrée épicée",abv:7.0,ibu:21,srm:13,og:1.069,fg:1.020,volume:500,permanent:false,prix:{b33:3.20,b75:7.50,f20:95,f30:140},description:"Ambrée au poivre de Madagascar — maltée, caramel, épices chaudes. Version originale 5HL.",houblons:["Nugget","Chinook","Simcoe"],levure:"Windsor",ingredients:[{nom:"Pale",qte:112.5,u:"kg"},{nom:"Cara Vienne 55",qte:12.5,u:"kg"},{nom:"Tourambre",qte:12.5,u:"kg"},{nom:"Cara 240",qte:4.7,u:"kg"},{nom:"Nugget",qte:0.27,u:"kg",note:"60min"},{nom:"Sucre",qte:20,u:"kg",note:"10min"},{nom:"Chinook",qte:0.5,u:"kg",note:"aroma 80°C"},{nom:"Simcoe",qte:0.5,u:"kg",note:"aroma 80°C"},{nom:"Poivre",qte:0.5,u:"kg",note:"aroma 100°C"},{nom:"Windsor",qte:0.25,u:"kg"},{nom:"Poivre",qte:0.3,u:"kg",note:"DH J+5"}]},
+ {id:11,nom:"La Chromamatik",style:"NEIPA",abv:8.0,ibu:20,srm:6,og:1.083,fg:1.028,volume:1200,permanent:false,prix:{b33:3.5,b75:8.0,f20:100,f30:150},description:"NEIPA puissante à 8% — double empatage, dry hop massif Citra + Sabro.",houblons:["Citra","Mistral","Sabro"],levure:"Best coast hazy",ingredients:[{nom:"Pale",qte:112.5,"u":"kg",note:"soir"},{nom:"Flocon Avoine",qte:25,"u":"kg",note:"soir"},{nom:"Pale",qte:12.5,"u":"kg",note:"matin"},{nom:"Pilsen",qte:62.5,"u":"kg",note:"matin"},{nom:"Blé",qte:25,"u":"kg",note:"matin"},{nom:"Sucre",qte:15,"u":"kg",note:"15min"},{nom:"Citra",qte:1.0,"u":"kg",note:"aroma 80°C"},{nom:"Mistral",qte:1.0,"u":"kg",note:"aroma 80°C"},{nom:"Best coast hazy",qte:0.5,"u":"kg"},{nom:"Citra",qte:6.0,"u":"kg",note:"DH J+2"},{nom:"Sabro",qte:6.0,"u":"kg",note:"DH J+5"}]},
+ {id:12,nom:"La Cold IPA",style:"Cold IPA",abv:5.0,ibu:38,srm:4,og:1.043,fg:1.005,volume:1200,permanent:false,prix:{b33:2.8,b75:6.5,f20:85,f30:125},description:"Cold IPA fermentation froide — dry hop massif Centennial 5kg.",houblons:["Nugget","Centennial"],levure:"Nova Lager",ingredients:[{nom:"Pilsen",qte:87.5,"u":"kg"},{nom:"Flocon Maïs",qte:30,"u":"kg"},{nom:"Nugget",qte:0.5,"u":"kg",note:"60min"},{nom:"Centennial",qte:0.2,"u":"kg",note:"10min"},{nom:"Centennial",qte:1.5,"u":"kg",note:"aroma 80°C"},{nom:"Nova Lager",qte:0.5,"u":"kg"},{nom:"Centennial",qte:5.0,"u":"kg",note:"DH J+4"}]},
+ {id:13,nom:"La Daarønn",style:"Kveik IPA",abv:7.0,ibu:74,srm:6,og:1.062,fg:1.011,volume:1200,permanent:false,prix:{b33:3.0,b75:7.0,f20:90,f30:135},description:"Kveik IPA fermentée à 35°C — amertume franche, Centennial + Azacca en dry hop.",houblons:["Simcoe","Centennial","Azacca"],levure:"Kveik",ingredients:[{nom:"Pale",qte:75,"u":"kg"},{nom:"Viene10",qte:25,"u":"kg"},{nom:"Blé",qte:12.5,"u":"kg"},{nom:"Flocon Avoine",qte:25,"u":"kg",note:"non concassé"},{nom:"Simcoe",qte:1.0,"u":"kg",note:"60min"},{nom:"Centennial",qte:0.4,"u":"kg",note:"20min"},{nom:"Simcoe",qte:0.7,"u":"kg",note:"aroma 80°C"},{nom:"Centennial",qte:0.6,"u":"kg",note:"aroma 80°C"},{nom:"Sucre",qte:15,"u":"kg",note:"10min"},{nom:"Kveik",qte:0.5,"u":"kg"},{nom:"Centennial",qte:1.5,"u":"kg",note:"DH"},{nom:"Azacca",qte:2.5,"u":"kg",note:"DH"}]},
+ {id:14,nom:"La Daddy Cool Gose",style:"Gose fruitée",abv:4.0,ibu:10,srm:4,og:1.045,fg:1.012,volume:500,permanent:false,prix:{b33:2.8,b75:6.5,f20:85,f30:125},description:"Gose Ananas Kiwi — sour légère, sel et coriandre, 80kg de fruits en dry hop.",houblons:["Nugget","Elixir"],levure:"Phily sour",ingredients:[{nom:"Pilsen",qte:50,"u":"kg"},{nom:"Blé",qte:50,"u":"kg"},{nom:"Nugget",qte:0.1,"u":"kg",note:"60min"},{nom:"Coriandre",qte:0.7,"u":"kg",note:"15min"},{nom:"Elixir",qte:0.1,"u":"kg",note:"10min"},{nom:"Elixir",qte:0.4,"u":"kg",note:"aroma 80°C"},{nom:"Phily sour",qte:0.5,"u":"kg"},{nom:"Ananas purée",qte:40,"u":"kg",note:"DH J+0"},{nom:"Kiwi purée",qte:40,"u":"kg",note:"DH J+0"}]},
+ {id:15,nom:"La Habemouss Papa",style:"West Coast IPA",abv:7.0,ibu:50,srm:7,og:1.051,fg:1.0,volume:1200,permanent:false,prix:{b33:3.0,b75:7.0,f20:90,f30:135},description:"West Coast IPA sèche et amère — Mosaic + Idaho7 en dry hop, haute atténuation.",houblons:["Nugget","Simcoe","Mosaic","Idaho7"],levure:"BRY 97",ingredients:[{nom:"Pale",qte:100,"u":"kg"},{nom:"Cara Pils",qte:25,"u":"kg"},{nom:"Flocon Seigle",qte:12.5,"u":"kg",note:"non concassé"},{nom:"Nugget",qte:0.6,"u":"kg",note:"60min"},{nom:"Simcoe",qte:1.5,"u":"kg",note:"aroma 80°C"},{nom:"Mosaic",qte:1.5,"u":"kg",note:"aroma 80°C"},{nom:"BRY 97",qte:0.5,"u":"kg"},{nom:"Mosaic",qte:1.0,"u":"kg",note:"DH"},{nom:"Idaho7",qte:2.0,"u":"kg",note:"DH"}]},
+ {id:16,nom:"La Mamagascard",style:"Ambrée épicée",abv:7.0,ibu:21,srm:13,og:1.069,fg:1.02,volume:500,permanent:false,prix:{b33:3.0,b75:7.0,f20:90,f30:135},description:"Ambrée au poivre de Madagascar — maltée, caramel, épices chaudes. Poivre en dry hop J+5.",houblons:["Nugget","Chinook","Simcoe"],levure:"Windsor",ingredients:[{nom:"Pale",qte:112.5,"u":"kg"},{nom:"Cara Vienne 55",qte:12.5,"u":"kg"},{nom:"Tourambre",qte:12.5,"u":"kg"},{nom:"Cara 240",qte:4.7,"u":"kg"},{nom:"Nugget",qte:0.27,"u":"kg",note:"60min"},{nom:"Sucre",qte:20,"u":"kg",note:"10min"},{nom:"Chinook",qte:0.5,"u":"kg",note:"aroma 80°C"},{nom:"Simcoe",qte:0.5,"u":"kg",note:"aroma 80°C"},{nom:"Poivre",qte:0.5,"u":"kg",note:"aroma 100°C"},{nom:"Windsor",qte:0.25,"u":"kg"},{nom:"Poivre",qte:0.3,"u":"kg",note:"DH J+5"}]},
+ {id:17,nom:"La Mèrcure",style:"Session IPA",abv:4.0,ibu:25,srm:4,og:1.034,fg:1.006,volume:500,permanent:false,prix:{b33:2.6,b75:6.0,f20:75,f30:115},description:"Session IPA légère — Verdant, dry hop Mistral + Cascade pour finir en douceur.",houblons:["Mistral","Elixir","Cascade"],levure:"Verdant",ingredients:[{nom:"Pale",qte:50,"u":"kg"},{nom:"Blé",qte:25,"u":"kg"},{nom:"Flocon Avoine",qte:12.5,"u":"kg"},{nom:"Mistral",qte:0.65,"u":"kg",note:"60min"},{nom:"Elixir",qte:1.0,"u":"kg",note:"aroma 80°C"},{nom:"Verdant",qte:0.5,"u":"kg"},{nom:"Mistral",qte:2.0,"u":"kg",note:"DH"},{nom:"Cascade",qte:1.0,"u":"kg",note:"DH"}]},
+ {id:18,nom:"La Papa Poule",style:"Sour fruitée",abv:3.5,ibu:12,srm:4,og:1.041,fg:1.009,volume:500,permanent:false,prix:{b33:2.8,b75:6.5,f20:85,f30:125},description:"Sour framboise / fruit de la passion — acidulée, légère, 60kg de purée de fruits.",houblons:["Nugget","Mistral"],levure:"Phily sour",ingredients:[{nom:"Pilsen",qte:87.5,"u":"kg"},{nom:"Flocon Avoine",qte:12.5,"u":"kg"},{nom:"Nugget",qte:0.13,"u":"kg",note:"60min"},{nom:"Framboise purée",qte:20,"u":"kg",note:"0min"},{nom:"Mistral",qte:0.5,"u":"kg",note:"aroma 80°C"},{nom:"Phily sour",qte:0.5,"u":"kg"},{nom:"Framboise purée",qte:10,"u":"kg",note:"DH J+0"},{nom:"Passion purée",qte:30,"u":"kg",note:"DH J+0"}]},
+ {id:19,nom:"La Queen Bee",style:"Mead-beer",abv:5.5,ibu:30,srm:8,og:1.054,fg:1.013,volume:500,permanent:false,prix:{b33:3.2,b75:7.5,f20:95,f30:140},description:"Bière au miel — maltée douce, 60kg de miel, Sabro aromatique, levure CBC1 en conditionnement.",houblons:["Nugget","Sabro"],levure:"Windsor",ingredients:[{nom:"Pale",qte:37.5,"u":"kg"},{nom:"Cara Pils",qte:25,"u":"kg"},{nom:"Flocon Seigle",qte:12.5,"u":"kg"},{nom:"Nugget",qte:0.25,"u":"kg",note:"60min"},{nom:"Miel",qte:20,"u":"kg",note:"5min"},{nom:"Miel",qte:40,"u":"kg",note:"0min"},{nom:"Sabro",qte:0.6,"u":"kg",note:"aroma 80°C"},{nom:"Windsor",qte:0.25,"u":"kg"}]},
+ {id:20,nom:"La Témèraire",style:"Black IPA",abv:5.0,ibu:53,srm:40,og:1.048,fg:1.01,volume:500,permanent:false,prix:{b33:2.8,b75:6.5,f20:85,f30:125},description:"Black IPA — robe noire, amertume tranchante, Sabro + Simcoe en dry hop.",houblons:["Sabro","Simcoe"],levure:"Nottingham",ingredients:[{nom:"Pale",qte:62.5,"u":"kg"},{nom:"Cara Vienne 55",qte:25,"u":"kg"},{nom:"Cara 240",qte:7,"u":"kg"},{nom:"Chocolat",qte:6,"u":"kg"},{nom:"Black",qte:6,"u":"kg"},{nom:"Flocon Avoine",qte:12.5,"u":"kg",note:"non concassé"},{nom:"Amèrisant",qte:0.8,"u":"kg",note:"60min"},{nom:"Sabro",qte:1.0,"u":"kg",note:"aroma 80°C"},{nom:"Nottingham",qte:0.25,"u":"kg"},{nom:"Sabro",qte:1.5,"u":"kg",note:"DH"},{nom:"Simcoe",qte:0.5,"u":"kg",note:"DH"}]},
 ];
 const PRODUCTION_INIT=[
- {id:1,recette:"La PÃ¨rilleuse",volume:460,statut:"terminÃ©",dateDebut:"2025-09-19",dateCond:"2025-10-07",fermenteur:"FV-05",og:1.061,fg:1.020,abv:6,notes:"pH=4,37",mesures:[{date:"2025-09-19",valeur:1.061,temp:20,note:"DI"},{date:"2025-10-07",valeur:1.020,temp:5,note:"DF"}]},
- {id:2,recette:"L'ImpÃ¨rtinente",volume:1629,statut:"terminÃ©",dateDebut:"2025-09-16",dateCond:"2025-10-09",fermenteur:"FV-01",og:1.049,fg:1.006,abv:6,notes:"pH=4,31",mesures:[{date:"2025-09-16",valeur:1.049,temp:20,note:"DI"},{date:"2025-10-09",valeur:1.006,temp:5,note:"DF"}]},
- {id:3,recette:"La Blonde des Papas",volume:1840,statut:"terminÃ©",dateDebut:"2025-09-25",dateCond:"2025-10-16",fermenteur:"FV-02",og:1.047,fg:1.011,abv:5,notes:"",mesures:[{date:"2025-09-25",valeur:1.047,temp:20,note:"DI"},{date:"2025-10-16",valeur:1.011,temp:5,note:"DF"}]},
- {id:4,recette:"La SupÃ¨re",volume:915,statut:"terminÃ©",dateDebut:"2025-09-30",dateCond:"2025-10-23",fermenteur:"FV-03",og:1.070,fg:1.007,abv:8.5,notes:"",mesures:[{date:"2025-09-30",valeur:1.070,temp:20,note:"DI"},{date:"2025-10-23",valeur:1.007,temp:5,note:"DF"}]},
- {id:5,recette:"La Mamagascar",volume:1108,statut:"terminÃ©",dateDebut:"2025-10-03",dateCond:"2025-10-28",fermenteur:"FV-04",og:1.069,fg:1.018,abv:7,notes:"",mesures:[{date:"2025-10-03",valeur:1.069,temp:20,note:"DI"},{date:"2025-10-28",valeur:1.018,temp:5,note:"DF"}]},
- {id:6,recette:"La PÃ¨rchÃ©e",volume:593,statut:"terminÃ©",dateDebut:"2025-10-07",dateCond:"2025-10-30",fermenteur:"FV-05",og:1.036,fg:1.004,abv:4.5,notes:"",mesures:[{date:"2025-10-07",valeur:1.036,temp:20,note:"DI"},{date:"2025-10-30",valeur:1.004,temp:5,note:"DF"}]},
- {id:7,recette:"La Mary'Stout",volume:475,statut:"terminÃ©",dateDebut:"2025-10-07",dateCond:"2025-11-04",fermenteur:"FV-01",og:1.071,fg:1.027,abv:6,notes:"",mesures:[{date:"2025-10-07",valeur:1.071,temp:20,note:"DI"},{date:"2025-11-04",valeur:1.027,temp:5,note:"DF"}]},
- {id:8,recette:"La PÃ¨rlimpinpin",volume:1624,statut:"terminÃ©",dateDebut:"2025-10-17",dateCond:"2025-11-06",fermenteur:"FV-01",og:1.056,fg:1.008,abv:6.5,notes:"",mesures:[{date:"2025-10-17",valeur:1.056,temp:20,note:"DI"},{date:"2025-11-06",valeur:1.008,temp:5,note:"DF"}]},
- {id:9,recette:"Papa NoÃ«l",volume:1503,statut:"terminÃ©",dateDebut:"2025-10-21",dateCond:"2025-11-13",fermenteur:"FV-02",og:1.053,fg:1.003,abv:7.2,notes:"Coriandre 0.5kg",mesures:[{date:"2025-10-21",valeur:1.053,temp:20,note:"DI"},{date:"2025-11-13",valeur:1.003,temp:5,note:"DF"}]},
- {id:10,recette:"La PÃ¨rilleuse",volume:974,statut:"terminÃ©",dateDebut:"2025-10-28",dateCond:"2025-11-18",fermenteur:"FV-03",og:1.061,fg:1.021,abv:6,notes:"",mesures:[{date:"2025-10-28",valeur:1.061,temp:20,note:"DI"},{date:"2025-11-18",valeur:1.021,temp:5,note:"DF"}]},
- {id:11,recette:"La PÃ¨rchÃ©e",volume:1261,statut:"terminÃ©",dateDebut:"2025-10-30",dateCond:"2025-11-25",fermenteur:"FV-04",og:1.037,fg:1.006,abv:4.5,notes:"",mesures:[{date:"2025-10-30",valeur:1.037,temp:20,note:"DI"},{date:"2025-11-25",valeur:1.006,temp:5,note:"DF"}]},
- {id:12,recette:"La MÃ¨rveilleuse",volume:475,statut:"terminÃ©",dateDebut:"2025-11-03",dateCond:"2025-11-27",fermenteur:"FV-05",og:1.059,fg:1.015,abv:6,notes:"",mesures:[{date:"2025-11-03",valeur:1.059,temp:20,note:"DI"},{date:"2025-11-27",valeur:1.015,temp:5,note:"DF"}]},
- {id:13,recette:"L'ImpÃ¨rtinente",volume:1810,statut:"terminÃ©",dateDebut:"2025-11-13",dateCond:"2025-12-02",fermenteur:"FV-01",og:1.049,fg:1.006,abv:6,notes:"",mesures:[{date:"2025-11-13",valeur:1.049,temp:20,note:"DI"},{date:"2025-12-02",valeur:1.006,temp:5,note:"DF"}]},
- {id:14,recette:"La PÃ¨rlimpinpin",volume:1789,statut:"terminÃ©",dateDebut:"2025-11-20",dateCond:"2025-12-09",fermenteur:"FV-02",og:1.052,fg:1.006,abv:6.5,notes:"",mesures:[{date:"2025-11-20",valeur:1.052,temp:20,note:"DI"},{date:"2025-12-09",valeur:1.006,temp:5,note:"DF"}]},
- {id:15,recette:"La MÃ¨rlimpinpin",volume:468,statut:"terminÃ©",dateDebut:"2025-11-25",dateCond:"2025-12-11",fermenteur:"FV-03",og:1.070,fg:1.015,abv:8,notes:"",mesures:[{date:"2025-11-25",valeur:1.070,temp:20,note:"DI"},{date:"2025-12-11",valeur:1.015,temp:5,note:"DF"}]},
- {id:16,recette:"La PÃ¨rilleuse",volume:1008,statut:"terminÃ©",dateDebut:"2025-12-02",dateCond:"2025-12-16",fermenteur:"FV-04",og:1.059,fg:1.020,abv:6,notes:"",mesures:[{date:"2025-12-02",valeur:1.059,temp:20,note:"DI"},{date:"2025-12-16",valeur:1.020,temp:5,note:"DF"}]},
- {id:17,recette:"La Blonde des Papas",volume:1320,statut:"terminÃ©",dateDebut:"2025-12-04",dateCond:"2025-12-23",fermenteur:"FV-01",og:1.040,fg:1.011,abv:5,notes:"",mesures:[{date:"2025-12-04",valeur:1.040,temp:20,note:"DI"},{date:"2025-12-23",valeur:1.011,temp:5,note:"DF"}]},
- {id:18,recette:"Single Hop Idaho7",volume:570,statut:"terminÃ©",dateDebut:"2025-12-09",dateCond:"2025-12-29",fermenteur:"FV-05",og:1.046,fg:1.006,abv:5,notes:"",mesures:[{date:"2025-12-09",valeur:1.046,temp:20,note:"DI"},{date:"2025-12-29",valeur:1.006,temp:5,note:"DF"}]},
- {id:19,recette:"La SupÃ¨re",volume:975,statut:"terminÃ©",dateDebut:"2025-12-17",dateCond:"2026-01-15",fermenteur:"FV-03",og:1.069,fg:1.009,abv:8.5,notes:"",mesures:[{date:"2025-12-17",valeur:1.069,temp:20,note:"DI"},{date:"2026-01-15",valeur:1.009,temp:5,note:"DF"}]},
- {id:20,recette:"La MÃ¨rveilleuse",volume:1453,statut:"terminÃ©",dateDebut:"2025-12-12",dateCond:"2026-01-16",fermenteur:"FV-02",og:1.054,fg:1.018,abv:6,notes:"",mesures:[{date:"2025-12-12",valeur:1.054,temp:20,note:"DI"},{date:"2026-01-16",valeur:1.018,temp:5,note:"DF"}]},
- {id:21,recette:"La Papa Poule",volume:534,statut:"terminÃ©",dateDebut:"2025-11-21",dateCond:"2026-01-19",fermenteur:"Eau",og:1.045,fg:null,abv:4.5,notes:"Sour",mesures:[{date:"2025-11-21",valeur:1.045,temp:20,note:"DI"}]},
- {id:22,recette:"FarmÃ¨re",volume:1279,statut:"terminÃ©",dateDebut:"2025-12-19",dateCond:"2026-01-23",fermenteur:"FV-04",og:1.048,fg:1.012,abv:5,notes:"",mesures:[{date:"2025-12-19",valeur:1.048,temp:20,note:"DI"},{date:"2026-01-23",valeur:1.012,temp:5,note:"DF"}]},
- {id:23,recette:"La Mamagascar",volume:554,statut:"terminÃ©",dateDebut:"2025-12-30",dateCond:"2026-01-26",fermenteur:"FV-05",og:1.069,fg:null,abv:7,notes:"Poivre 0.75kg",mesures:[{date:"2025-12-30",valeur:1.069,temp:20,note:"DI"}]},
- {id:24,recette:"L'ImpÃ¨rtinente",volume:1735,statut:"terminÃ©",dateDebut:"2026-01-09",dateCond:"2026-02-03",fermenteur:"FV-01",og:1.049,fg:1.006,abv:6,notes:"",mesures:[{date:"2026-01-09",valeur:1.049,temp:20,note:"DI"},{date:"2026-02-03",valeur:1.006,temp:5,note:"DF"}]},
- {id:25,recette:"La PÃ¨rlimpinpin",volume:1740,statut:"terminÃ©",dateDebut:"2026-01-19",dateCond:"2026-02-10",fermenteur:"FV-02",og:1.052,fg:1.008,abv:6.5,notes:"",mesures:[{date:"2026-01-19",valeur:1.052,temp:20,note:"DI"},{date:"2026-02-10",valeur:1.008,temp:5,note:"DF"}]},
- {id:26,recette:"La MÃ¨rlimpinpin",volume:879,statut:"terminÃ©",dateDebut:"2026-01-14",dateCond:"2026-02-12",fermenteur:"FV-03",og:1.073,fg:1.016,abv:8,notes:"",mesures:[{date:"2026-01-14",valeur:1.073,temp:20,note:"DI"},{date:"2026-02-12",valeur:1.016,temp:5,note:"DF"}]},
- {id:27,recette:"La MÃ¨rcure",volume:1159,statut:"terminÃ©",dateDebut:"2026-01-26",dateCond:"2026-02-19",fermenteur:"FV-04",og:1.034,fg:null,abv:4,notes:"Session IPA",mesures:[{date:"2026-01-26",valeur:1.034,temp:20,note:"DI"}]},
- {id:28,recette:"La PÃ¨rchÃ©e",volume:600,statut:"terminÃ©",dateDebut:"2026-01-29",dateCond:"2026-02-24",fermenteur:"FV-05",og:1.037,fg:1.005,abv:4.5,notes:"",mesures:[{date:"2026-01-29",valeur:1.037,temp:20,note:"DI"},{date:"2026-02-24",valeur:1.005,temp:5,note:"DF"}]},
- {id:29,recette:"La PÃ¨rlimpinpin",volume:1675,statut:"terminÃ©",dateDebut:"2026-02-06",dateCond:"2026-03-03",fermenteur:"FV-01",og:1.055,fg:1.008,abv:6.5,notes:"",mesures:[{date:"2026-02-06",valeur:1.055,temp:20,note:"DI"},{date:"2026-03-03",valeur:1.008,temp:5,note:"DF"}]},
- {id:30,recette:"L'ImpÃ¨rtinente",volume:0,statut:"brassage",dateDebut:"2026-02-13",dateCond:null,fermenteur:"FV-02",og:1.049,fg:null,abv:6,notes:"DI 1049",mesures:[{date:"2026-02-13",valeur:1.049,temp:20,note:"DI"}]},
- {id:31,recette:"ComÃ¨re",volume:0,statut:"fermentation",dateDebut:"2026-02-19",dateCond:null,fermenteur:"FV-03",og:1.043,fg:null,abv:5,notes:"Azacca + Centennial",mesures:[{date:"2026-02-19",valeur:1.043,temp:20,note:"DI"}]},
- {id:32,recette:"La SupÃ¨re",volume:0,statut:"fermentation",dateDebut:"2026-02-26",dateCond:null,fermenteur:"FV-04",og:1.069,fg:null,abv:8.5,notes:"Coriandre 0.8kg",mesures:[{date:"2026-02-26",valeur:1.069,temp:20,note:"DI"}]},
- {id:33,recette:"La PÃ¨rilleuse",volume:0,statut:"fermentation",dateDebut:"2026-02-27",dateCond:null,fermenteur:"FV-05",og:1.060,fg:null,abv:6,notes:"",mesures:[{date:"2026-02-27",valeur:1.060,temp:20,note:"DI"}]},
+ {id:1,recette:"La Pèrilleuse",volume:460,statut:"terminé",dateDebut:"2025-09-19",dateCond:"2025-10-07",fermenteur:"FV-05",og:1.061,fg:1.020,abv:6,notes:"pH=4,37",mesures:[{date:"2025-09-19",valeur:1.061,temp:20,note:"DI"},{date:"2025-10-07",valeur:1.020,temp:5,note:"DF"}]},
+ {id:2,recette:"L'Impèrtinente",volume:1629,statut:"terminé",dateDebut:"2025-09-16",dateCond:"2025-10-09",fermenteur:"FV-01",og:1.049,fg:1.006,abv:6,notes:"pH=4,31",mesures:[{date:"2025-09-16",valeur:1.049,temp:20,note:"DI"},{date:"2025-10-09",valeur:1.006,temp:5,note:"DF"}]},
+ {id:3,recette:"La Blonde des Papas",volume:1840,statut:"terminé",dateDebut:"2025-09-25",dateCond:"2025-10-16",fermenteur:"FV-02",og:1.047,fg:1.011,abv:5,notes:"",mesures:[{date:"2025-09-25",valeur:1.047,temp:20,note:"DI"},{date:"2025-10-16",valeur:1.011,temp:5,note:"DF"}]},
+ {id:4,recette:"La Supère",volume:915,statut:"terminé",dateDebut:"2025-09-30",dateCond:"2025-10-23",fermenteur:"FV-03",og:1.070,fg:1.007,abv:8.5,notes:"",mesures:[{date:"2025-09-30",valeur:1.070,temp:20,note:"DI"},{date:"2025-10-23",valeur:1.007,temp:5,note:"DF"}]},
+ {id:5,recette:"La Mamagascar",volume:1108,statut:"terminé",dateDebut:"2025-10-03",dateCond:"2025-10-28",fermenteur:"FV-04",og:1.069,fg:1.018,abv:7,notes:"",mesures:[{date:"2025-10-03",valeur:1.069,temp:20,note:"DI"},{date:"2025-10-28",valeur:1.018,temp:5,note:"DF"}]},
+ {id:6,recette:"La Pèrchée",volume:593,statut:"terminé",dateDebut:"2025-10-07",dateCond:"2025-10-30",fermenteur:"FV-05",og:1.036,fg:1.004,abv:4.5,notes:"",mesures:[{date:"2025-10-07",valeur:1.036,temp:20,note:"DI"},{date:"2025-10-30",valeur:1.004,temp:5,note:"DF"}]},
+ {id:7,recette:"La Mary'Stout",volume:475,statut:"terminé",dateDebut:"2025-10-07",dateCond:"2025-11-04",fermenteur:"FV-01",og:1.071,fg:1.027,abv:6,notes:"",mesures:[{date:"2025-10-07",valeur:1.071,temp:20,note:"DI"},{date:"2025-11-04",valeur:1.027,temp:5,note:"DF"}]},
+ {id:8,recette:"La Pèrlimpinpin",volume:1624,statut:"terminé",dateDebut:"2025-10-17",dateCond:"2025-11-06",fermenteur:"FV-01",og:1.056,fg:1.008,abv:6.5,notes:"",mesures:[{date:"2025-10-17",valeur:1.056,temp:20,note:"DI"},{date:"2025-11-06",valeur:1.008,temp:5,note:"DF"}]},
+ {id:9,recette:"Papa Noël",volume:1503,statut:"terminé",dateDebut:"2025-10-21",dateCond:"2025-11-13",fermenteur:"FV-02",og:1.053,fg:1.003,abv:7.2,notes:"Coriandre 0.5kg",mesures:[{date:"2025-10-21",valeur:1.053,temp:20,note:"DI"},{date:"2025-11-13",valeur:1.003,temp:5,note:"DF"}]},
+ {id:10,recette:"La Pèrilleuse",volume:974,statut:"terminé",dateDebut:"2025-10-28",dateCond:"2025-11-18",fermenteur:"FV-03",og:1.061,fg:1.021,abv:6,notes:"",mesures:[{date:"2025-10-28",valeur:1.061,temp:20,note:"DI"},{date:"2025-11-18",valeur:1.021,temp:5,note:"DF"}]},
+ {id:11,recette:"La Pèrchée",volume:1261,statut:"terminé",dateDebut:"2025-10-30",dateCond:"2025-11-25",fermenteur:"FV-04",og:1.037,fg:1.006,abv:4.5,notes:"",mesures:[{date:"2025-10-30",valeur:1.037,temp:20,note:"DI"},{date:"2025-11-25",valeur:1.006,temp:5,note:"DF"}]},
+ {id:12,recette:"La Mèrveilleuse",volume:475,statut:"terminé",dateDebut:"2025-11-03",dateCond:"2025-11-27",fermenteur:"FV-05",og:1.059,fg:1.015,abv:6,notes:"",mesures:[{date:"2025-11-03",valeur:1.059,temp:20,note:"DI"},{date:"2025-11-27",valeur:1.015,temp:5,note:"DF"}]},
+ {id:13,recette:"L'Impèrtinente",volume:1810,statut:"terminé",dateDebut:"2025-11-13",dateCond:"2025-12-02",fermenteur:"FV-01",og:1.049,fg:1.006,abv:6,notes:"",mesures:[{date:"2025-11-13",valeur:1.049,temp:20,note:"DI"},{date:"2025-12-02",valeur:1.006,temp:5,note:"DF"}]},
+ {id:14,recette:"La Pèrlimpinpin",volume:1789,statut:"terminé",dateDebut:"2025-11-20",dateCond:"2025-12-09",fermenteur:"FV-02",og:1.052,fg:1.006,abv:6.5,notes:"",mesures:[{date:"2025-11-20",valeur:1.052,temp:20,note:"DI"},{date:"2025-12-09",valeur:1.006,temp:5,note:"DF"}]},
+ {id:15,recette:"La Mèrlimpinpin",volume:468,statut:"terminé",dateDebut:"2025-11-25",dateCond:"2025-12-11",fermenteur:"FV-03",og:1.070,fg:1.015,abv:8,notes:"",mesures:[{date:"2025-11-25",valeur:1.070,temp:20,note:"DI"},{date:"2025-12-11",valeur:1.015,temp:5,note:"DF"}]},
+ {id:16,recette:"La Pèrilleuse",volume:1008,statut:"terminé",dateDebut:"2025-12-02",dateCond:"2025-12-16",fermenteur:"FV-04",og:1.059,fg:1.020,abv:6,notes:"",mesures:[{date:"2025-12-02",valeur:1.059,temp:20,note:"DI"},{date:"2025-12-16",valeur:1.020,temp:5,note:"DF"}]},
+ {id:17,recette:"La Blonde des Papas",volume:1320,statut:"terminé",dateDebut:"2025-12-04",dateCond:"2025-12-23",fermenteur:"FV-01",og:1.040,fg:1.011,abv:5,notes:"",mesures:[{date:"2025-12-04",valeur:1.040,temp:20,note:"DI"},{date:"2025-12-23",valeur:1.011,temp:5,note:"DF"}]},
+ {id:18,recette:"Single Hop Idaho7",volume:570,statut:"terminé",dateDebut:"2025-12-09",dateCond:"2025-12-29",fermenteur:"FV-05",og:1.046,fg:1.006,abv:5,notes:"",mesures:[{date:"2025-12-09",valeur:1.046,temp:20,note:"DI"},{date:"2025-12-29",valeur:1.006,temp:5,note:"DF"}]},
+ {id:19,recette:"La Supère",volume:975,statut:"terminé",dateDebut:"2025-12-17",dateCond:"2026-01-15",fermenteur:"FV-03",og:1.069,fg:1.009,abv:8.5,notes:"",mesures:[{date:"2025-12-17",valeur:1.069,temp:20,note:"DI"},{date:"2026-01-15",valeur:1.009,temp:5,note:"DF"}]},
+ {id:20,recette:"La Mèrveilleuse",volume:1453,statut:"terminé",dateDebut:"2025-12-12",dateCond:"2026-01-16",fermenteur:"FV-02",og:1.054,fg:1.018,abv:6,notes:"",mesures:[{date:"2025-12-12",valeur:1.054,temp:20,note:"DI"},{date:"2026-01-16",valeur:1.018,temp:5,note:"DF"}]},
+ {id:21,recette:"La Papa Poule",volume:534,statut:"terminé",dateDebut:"2025-11-21",dateCond:"2026-01-19",fermenteur:"Eau",og:1.045,fg:null,abv:4.5,notes:"Sour",mesures:[{date:"2025-11-21",valeur:1.045,temp:20,note:"DI"}]},
+ {id:22,recette:"Farmère",volume:1279,statut:"terminé",dateDebut:"2025-12-19",dateCond:"2026-01-23",fermenteur:"FV-04",og:1.048,fg:1.012,abv:5,notes:"",mesures:[{date:"2025-12-19",valeur:1.048,temp:20,note:"DI"},{date:"2026-01-23",valeur:1.012,temp:5,note:"DF"}]},
+ {id:23,recette:"La Mamagascar",volume:554,statut:"terminé",dateDebut:"2025-12-30",dateCond:"2026-01-26",fermenteur:"FV-05",og:1.069,fg:null,abv:7,notes:"Poivre 0.75kg",mesures:[{date:"2025-12-30",valeur:1.069,temp:20,note:"DI"}]},
+ {id:24,recette:"L'Impèrtinente",volume:1735,statut:"terminé",dateDebut:"2026-01-09",dateCond:"2026-02-03",fermenteur:"FV-01",og:1.049,fg:1.006,abv:6,notes:"",mesures:[{date:"2026-01-09",valeur:1.049,temp:20,note:"DI"},{date:"2026-02-03",valeur:1.006,temp:5,note:"DF"}]},
+ {id:25,recette:"La Pèrlimpinpin",volume:1740,statut:"terminé",dateDebut:"2026-01-19",dateCond:"2026-02-10",fermenteur:"FV-02",og:1.052,fg:1.008,abv:6.5,notes:"",mesures:[{date:"2026-01-19",valeur:1.052,temp:20,note:"DI"},{date:"2026-02-10",valeur:1.008,temp:5,note:"DF"}]},
+ {id:26,recette:"La Mèrlimpinpin",volume:879,statut:"terminé",dateDebut:"2026-01-14",dateCond:"2026-02-12",fermenteur:"FV-03",og:1.073,fg:1.016,abv:8,notes:"",mesures:[{date:"2026-01-14",valeur:1.073,temp:20,note:"DI"},{date:"2026-02-12",valeur:1.016,temp:5,note:"DF"}]},
+ {id:27,recette:"La Mèrcure",volume:1159,statut:"terminé",dateDebut:"2026-01-26",dateCond:"2026-02-19",fermenteur:"FV-04",og:1.034,fg:null,abv:4,notes:"Session IPA",mesures:[{date:"2026-01-26",valeur:1.034,temp:20,note:"DI"}]},
+ {id:28,recette:"La Pèrchée",volume:600,statut:"terminé",dateDebut:"2026-01-29",dateCond:"2026-02-24",fermenteur:"FV-05",og:1.037,fg:1.005,abv:4.5,notes:"",mesures:[{date:"2026-01-29",valeur:1.037,temp:20,note:"DI"},{date:"2026-02-24",valeur:1.005,temp:5,note:"DF"}]},
+ {id:29,recette:"La Pèrlimpinpin",volume:1675,statut:"terminé",dateDebut:"2026-02-06",dateCond:"2026-03-03",fermenteur:"FV-01",og:1.055,fg:1.008,abv:6.5,notes:"",mesures:[{date:"2026-02-06",valeur:1.055,temp:20,note:"DI"},{date:"2026-03-03",valeur:1.008,temp:5,note:"DF"}]},
+ {id:30,recette:"L'Impèrtinente",volume:0,statut:"brassage",dateDebut:"2026-02-13",dateCond:null,fermenteur:"FV-02",og:1.049,fg:null,abv:6,notes:"DI 1049",mesures:[{date:"2026-02-13",valeur:1.049,temp:20,note:"DI"}]},
+ {id:31,recette:"Comère",volume:0,statut:"fermentation",dateDebut:"2026-02-19",dateCond:null,fermenteur:"FV-03",og:1.043,fg:null,abv:5,notes:"Azacca + Centennial",mesures:[{date:"2026-02-19",valeur:1.043,temp:20,note:"DI"}]},
+ {id:32,recette:"La Supère",volume:0,statut:"fermentation",dateDebut:"2026-02-26",dateCond:null,fermenteur:"FV-04",og:1.069,fg:null,abv:8.5,notes:"Coriandre 0.8kg",mesures:[{date:"2026-02-26",valeur:1.069,temp:20,note:"DI"}]},
+ {id:33,recette:"La Pèrilleuse",volume:0,statut:"fermentation",dateDebut:"2026-02-27",dateCond:null,fermenteur:"FV-05",og:1.060,fg:null,abv:6,notes:"",mesures:[{date:"2026-02-27",valeur:1.060,temp:20,note:"DI"}]},
  {id:34,recette:"La Blonde des Papas",volume:0,statut:"brassage",dateDebut:"2026-03-06",dateCond:null,fermenteur:"FV-01",og:null,fg:null,abv:5,notes:"Brassage en cours",mesures:[]},
 ];
 const STOCK_COND_INIT=[
- {id:1,nom:"Bouteille 33cl",cat:"Bouteille",qte:4800,u:"unitÃ©s",seuil:500,prix:0.28,four:"Verallia",dateAjout:"2026-01-15"},
- {id:2,nom:"Bouteille 75cl",cat:"Bouteille",qte:2400,u:"unitÃ©s",seuil:300,prix:0.55,four:"Verallia",dateAjout:"2026-01-15"},
- {id:3,nom:"Capsule couronne 26mm",cat:"Capsule",qte:8500,u:"unitÃ©s",seuil:1000,prix:0.04,four:"Brasserie+",dateAjout:"2026-02-01"},
- {id:4,nom:"Bouchon liÃ¨ge 75cl",cat:"Capsule",qte:800,u:"unitÃ©s",seuil:200,prix:0.18,four:"Brasserie+",dateAjout:"2026-01-20"},
- {id:5,nom:"Ãtiquette avant 33cl",cat:"Ãtiquette",qte:4200,u:"unitÃ©s",seuil:500,prix:0.12,four:"Imprimerie Loir",dateAjout:"2026-02-10"},
- {id:6,nom:"Ãtiquette avant 75cl",cat:"Ãtiquette",qte:1800,u:"unitÃ©s",seuil:300,prix:0.15,four:"Imprimerie Loir",dateAjout:"2026-02-10"},
- {id:7,nom:"Contre-Ã©tiquette",cat:"Ãtiquette",qte:3200,u:"unitÃ©s",seuil:400,prix:0.08,four:"Imprimerie Loir",dateAjout:"2026-02-10"},
- {id:8,nom:"FÃ»t 20L Inox",cat:"FÃ»t",qte:42,u:"fÃ»ts",seuil:5,prix:85.0,four:"KegLand",dateAjout:"2025-10-01"},
- {id:9,nom:"FÃ»t 30L Inox",cat:"FÃ»t",qte:68,u:"fÃ»ts",seuil:8,prix:110.0,four:"KegLand",dateAjout:"2025-10-01"},
- {id:10,nom:"Caisse 12Ã33cl",cat:"Emballage",qte:320,u:"caisses",seuil:50,prix:1.20,four:"Raja",dateAjout:"2026-01-15"},
- {id:11,nom:"Caisse 6Ã75cl",cat:"Emballage",qte:180,u:"caisses",seuil:30,prix:1.40,four:"Raja",dateAjout:"2026-01-15"},
- {id:12,nom:"Film rÃ©tractable",cat:"Emballage",qte:15,u:"rouleaux",seuil:3,prix:28.0,four:"Raja",dateAjout:"2026-02-01"},
- {id:13,nom:"COâ alimentaire",cat:"Gaz",qte:3,u:"bouteilles",seuil:1,prix:45.0,four:"Air Liquide",dateAjout:"2026-02-15"},
- {id:14,nom:"BiÃ¨re de rinÃ§age",cat:"Nettoyage",qte:120,u:"litres",seuil:20,prix:0.50,four:"Interne",dateAjout:"2026-03-01"},
+ {id:1,nom:"Bouteille 33cl",cat:"Bouteille",qte:4800,u:"unités",seuil:500,prix:0.28,four:"Verallia",dateAjout:"2026-01-15"},
+ {id:2,nom:"Bouteille 75cl",cat:"Bouteille",qte:2400,u:"unités",seuil:300,prix:0.55,four:"Verallia",dateAjout:"2026-01-15"},
+ {id:3,nom:"Capsule couronne 26mm",cat:"Capsule",qte:8500,u:"unités",seuil:1000,prix:0.04,four:"Brasserie+",dateAjout:"2026-02-01"},
+ {id:4,nom:"Bouchon liège 75cl",cat:"Capsule",qte:800,u:"unités",seuil:200,prix:0.18,four:"Brasserie+",dateAjout:"2026-01-20"},
+ {id:5,nom:"Étiquette avant 33cl",cat:"Étiquette",qte:4200,u:"unités",seuil:500,prix:0.12,four:"Imprimerie Loir",dateAjout:"2026-02-10"},
+ {id:6,nom:"Étiquette avant 75cl",cat:"Étiquette",qte:1800,u:"unités",seuil:300,prix:0.15,four:"Imprimerie Loir",dateAjout:"2026-02-10"},
+ {id:7,nom:"Contre-étiquette",cat:"Étiquette",qte:3200,u:"unités",seuil:400,prix:0.08,four:"Imprimerie Loir",dateAjout:"2026-02-10"},
+ {id:8,nom:"Fût 20L Inox",cat:"Fût",qte:42,u:"fûts",seuil:5,prix:85.0,four:"KegLand",dateAjout:"2025-10-01"},
+ {id:9,nom:"Fût 30L Inox",cat:"Fût",qte:68,u:"fûts",seuil:8,prix:110.0,four:"KegLand",dateAjout:"2025-10-01"},
+ {id:10,nom:"Caisse 12×33cl",cat:"Emballage",qte:320,u:"caisses",seuil:50,prix:1.20,four:"Raja",dateAjout:"2026-01-15"},
+ {id:11,nom:"Caisse 6×75cl",cat:"Emballage",qte:180,u:"caisses",seuil:30,prix:1.40,four:"Raja",dateAjout:"2026-01-15"},
+ {id:12,nom:"Film rétractable",cat:"Emballage",qte:15,u:"rouleaux",seuil:3,prix:28.0,four:"Raja",dateAjout:"2026-02-01"},
+ {id:13,nom:"CO₂ alimentaire",cat:"Gaz",qte:3,u:"bouteilles",seuil:1,prix:45.0,four:"Air Liquide",dateAjout:"2026-02-15"},
+ {id:14,nom:"Bière de rinçage",cat:"Nettoyage",qte:120,u:"litres",seuil:20,prix:0.50,four:"Interne",dateAjout:"2026-03-01"},
 ];
 const COND_SESSIONS_INIT=[
- {id:1,brassinId:2,brassinNom:"L'ImpÃ¨rtinente",date:"2025-10-09",lots:[{type:"Bouteille 33cl",volume:556,contenants:1685,lot:"2520409011-A"},{type:"Bouteille 75cl",volume:493,contenants:658,lot:"2520409011-B"}],notes:"pH = 4,31",operateur:"Ãquipe A"},
- {id:2,brassinId:29,brassinNom:"La PÃ¨rlimpinpin",date:"2026-03-03",lots:[{type:"Bouteille 33cl",volume:1106,contenants:3352,lot:"26-323-A"},{type:"Bouteille 75cl",volume:568,contenants:758,lot:"26-323-B"}],notes:"Lot: 26-323/25-276",operateur:"Ãquipe B"},
+ {id:1,brassinId:2,brassinNom:"L'Impèrtinente",date:"2025-10-09",lots:[{type:"Bouteille 33cl",volume:556,contenants:1685,lot:"2520409011-A"},{type:"Bouteille 75cl",volume:493,contenants:658,lot:"2520409011-B"}],notes:"pH = 4,31",operateur:"Équipe A"},
+ {id:2,brassinId:29,brassinNom:"La Pèrlimpinpin",date:"2026-03-03",lots:[{type:"Bouteille 33cl",volume:1106,contenants:3352,lot:"26-323-A"},{type:"Bouteille 75cl",volume:568,contenants:758,lot:"26-323-B"}],notes:"Lot: 26-323/25-276",operateur:"Équipe B"},
 ];
 
 const TIREUSES_INIT=[
- {id:1,nom:"1BEC 1",label:"1 Bec",  becs:1,type:"petite", capacite:"1Ã20L ou 30L",  etat:"disponible",couleur:"#D4920E",notes:"Petite tireuse 1 robinet â froid sec"},
- {id:2,nom:"1BEC 2",label:"1 Bec",  becs:1,type:"petite", capacite:"1Ã20L ou 30L",  etat:"disponible",couleur:"#D4920E",notes:"Petite tireuse 1 robinet â froid sec"},
- {id:3,nom:"1BEC 3",label:"1 Bec",  becs:1,type:"petite", capacite:"1Ã20L ou 30L",  etat:"disponible",couleur:"#D4920E",notes:"Petite tireuse 1 robinet â froid sec"},
- {id:4,nom:"2BEC 1",label:"2 Becs", becs:2,type:"petite", capacite:"2Ã20L ou 30L",  etat:"disponible",couleur:"#3A6830",notes:"Petite tireuse 2 robinets â froid sec"},
- {id:5,nom:"2BEC 2",label:"2 Becs", becs:2,type:"petite", capacite:"2Ã20L ou 30L",  etat:"disponible",couleur:"#3A6830",notes:"Petite tireuse 2 robinets â froid sec"},
- {id:6,nom:"2BARI", label:"2 Bari", becs:2,type:"barillet",capacite:"2Ã20L ou 30L",  etat:"disponible",couleur:"#5A6E28",notes:"Puissante & compacte â 2 robinets â froid sec"},
- {id:7,nom:"2BCF",  label:"2 BCF",  becs:2,type:"banc_glace",capacite:"2Ã20L ou 30L",etat:"disponible",couleur:"#2A5A80",notes:"Grosse tireuse banc de glace â robuste â mise en route longue"},
- {id:8,nom:"2BCG",  label:"2 BCG",  becs:2,type:"banc_glace",capacite:"2Ã20L ou 30L",etat:"disponible",couleur:"#7A3A6A",notes:"Grosse tireuse banc de glace â robuste â mise en route longue"},
+ {id:1,nom:"1BEC 1",label:"1 Bec",  becs:1,type:"petite", capacite:"1×20L ou 30L",  etat:"disponible",couleur:"#D4920E",notes:"Petite tireuse 1 robinet — froid sec"},
+ {id:2,nom:"1BEC 2",label:"1 Bec",  becs:1,type:"petite", capacite:"1×20L ou 30L",  etat:"disponible",couleur:"#D4920E",notes:"Petite tireuse 1 robinet — froid sec"},
+ {id:3,nom:"1BEC 3",label:"1 Bec",  becs:1,type:"petite", capacite:"1×20L ou 30L",  etat:"disponible",couleur:"#D4920E",notes:"Petite tireuse 1 robinet — froid sec"},
+ {id:4,nom:"2BEC 1",label:"2 Becs", becs:2,type:"petite", capacite:"2×20L ou 30L",  etat:"disponible",couleur:"#3A6830",notes:"Petite tireuse 2 robinets — froid sec"},
+ {id:5,nom:"2BEC 2",label:"2 Becs", becs:2,type:"petite", capacite:"2×20L ou 30L",  etat:"disponible",couleur:"#3A6830",notes:"Petite tireuse 2 robinets — froid sec"},
+ {id:6,nom:"2BARI", label:"2 Bari", becs:2,type:"barillet",capacite:"2×20L ou 30L",  etat:"disponible",couleur:"#5A6E28",notes:"Puissante & compacte — 2 robinets — froid sec"},
+ {id:7,nom:"2BCF",  label:"2 BCF",  becs:2,type:"banc_glace",capacite:"2×20L ou 30L",etat:"disponible",couleur:"#2A5A80",notes:"Grosse tireuse banc de glace — robuste — mise en route longue"},
+ {id:8,nom:"2BCG",  label:"2 BCG",  becs:2,type:"banc_glace",capacite:"2×20L ou 30L",etat:"disponible",couleur:"#7A3A6A",notes:"Grosse tireuse banc de glace — robuste — mise en route longue"},
 ];
 const LOCATIONS_INIT=[
  {id:1,client:"Mairie de Clisson",contact:"mairie@clisson.fr",tel:"02 40 54 02 14",
  dateDebut:"2026-03-08",dateFin:"2026-03-10",tireuses:[1],
- futs:[{tieuseId:1,biere:"L'ImpÃ¨rtinente",typeFut:"20L",nbFuts:2,volTotal:40}],
- tarif:50,statut:"retournÃ©e",notes:"FÃªte des vins"},
+ futs:[{tieuseId:1,biere:"L'Impèrtinente",typeFut:"20L",nbFuts:2,volTotal:40}],
+ tarif:50,statut:"retournée",notes:"Fête des vins"},
  {id:2,client:"Association Festiv'Clisson",contact:"festiv@gmail.com",tel:"06 12 34 56 78",
  dateDebut:"2026-03-21",dateFin:"2026-03-24",tireuses:[2,3],
- futs:[{tieuseId:2,biere:"La PÃ¨rlimpinpin",typeFut:"20L",nbFuts:3,volTotal:60},{tieuseId:3,biere:"La Blonde des Papas",typeFut:"30L",nbFuts:2,volTotal:60}],
- tarif:90,statut:"confirmÃ©e",notes:"Printemps festif"},
+ futs:[{tieuseId:2,biere:"La Pèrlimpinpin",typeFut:"20L",nbFuts:3,volTotal:60},{tieuseId:3,biere:"La Blonde des Papas",typeFut:"30L",nbFuts:2,volTotal:60}],
+ tarif:90,statut:"confirmée",notes:"Printemps festif"},
  {id:3,client:"ESAT Les Papillons",contact:"direction@esat44.fr",tel:"02 40 36 88 00",
  dateDebut:"2026-04-05",dateFin:"2026-04-06",tireuses:[4],
- futs:[{tieuseId:4,biere:"La PÃ¨rchÃ©e",typeFut:"20L",nbFuts:1,volTotal:20}],
- tarif:45,statut:"confirmÃ©e",notes:"Repas de printemps"},
+ futs:[{tieuseId:4,biere:"La Pèrchée",typeFut:"20L",nbFuts:1,volTotal:20}],
+ tarif:45,statut:"confirmée",notes:"Repas de printemps"},
 ];
 const TARIFS_LOC={tireuse1j:30,tireuse2j:50,tireuseWE:65,tireuseS:110,};
 
-const TYPE_ICONS={"Bouteille 33cl":"ðº","Bouteille 75cl":"ð¾","FÃ»t 20L":"ð¢","FÃ»t 30L":"ð¢","FÃ»t personnalisÃ©":"ð¢"};
-const TYPE_COLORS={"Bouteille 33cl":C.green,"Bouteille 75cl":"#2A6080","FÃ»t 20L":C.brick,"FÃ»t 30L":C.brick,"FÃ»t personnalisÃ©":C.hop};
+const TYPE_ICONS={"Bouteille 33cl":"🍺","Bouteille 75cl":"🍾","Fût 20L":"🛢","Fût 30L":"🛢","Fût personnalisé":"🛢"};
+const TYPE_COLORS={"Bouteille 33cl":C.green,"Bouteille 75cl":"#2A6080","Fût 20L":C.brick,"Fût 30L":C.brick,"Fût personnalisé":C.hop};
 
 function Modal({onClose,children,wide}){
  return (
@@ -287,10 +287,10 @@ function Modal({onClose,children,wide}){
 
 function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stockCond,stockPF,locations,setModule}){
  const [view,setView]        = useState('dashboard'); // 'dashboard'|'hof'|'scoring'|'tracabilite'
- const [tracLot,setTracLot]  = useState(null);        // lot sÃ©lectionnÃ© pour tracabilitÃ©
+ const [tracLot,setTracLot]  = useState(null);        // lot sélectionné pour tracabilité
 
- const actifs   = brassins.filter(b=>b.statut!=='terminÃ©');
- const termines = brassins.filter(b=>b.statut==='terminÃ©'&&b.volume>0);
+ const actifs   = brassins.filter(b=>b.statut!=='terminé');
+ const termines = brassins.filter(b=>b.statut==='terminé'&&b.volume>0);
  const totalVol = termines.reduce((s,b)=>s+b.volume,0);
  const alertes  = stock.filter(s=>s.qte<0||s.qte<=s.seuil);
  const critiques= stock.filter(s=>s.qte<0||s.qte<=s.seuil*0.5);
@@ -298,7 +298,7 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
  const today    = new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
 
  const pCond = calcPrixCond(stockCond);
- const fmtKey = {'Bouteille 33cl':'b33','Bouteille 75cl':'b75','FÃ»t 20L':'f20','FÃ»t 30L':'f30'};
+ const fmtKey = {'Bouteille 33cl':'b33','Bouteille 75cl':'b75','Fût 20L':'f20','Fût 30L':'f30'};
 
  const scoreBieres = recettes.map(r => {
   const brassinRec = termines.filter(b=>b.recette===r.nom);
@@ -323,7 +323,7 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
   });
   const pvL = r.prix?.b33 ? r.prix.b33/0.33 : 0;
   const marge = pvL>0 ? Math.round((pvL-cmL)/pvL*100) : null;
-  const maxVol   = 5000; // rÃ©fÃ©rence
+  const maxVol   = 5000; // référence
   const maxFreq  = 10;
   const sVol     = Math.min(100, vol/maxVol*100)*0.4;
   const sFreq    = Math.min(100, nbBrassins/maxFreq*100)*0.3;
@@ -334,12 +334,12 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
  }).filter(x=>x.nbBrassins>0||x.vol>0)
   .sort((a,b)=>b.score-a.score);
 
- const hofMedals = ['ð¥','ð¥','ð¥'];
+ const hofMedals = ['🥇','🥈','🥉'];
  const hofCats = [
-  {label:'âï¸ Plus brassÃ©e',     key:'vol',       fmt:v=>`${(v/1000).toFixed(2)} hL`,  desc:'Volume total produit'},
-  {label:'ð Plus frÃ©quente',   key:'nbBrassins',fmt:v=>`${v} brassins`,              desc:'Nombre de brassins'},
-  {label:'ð° Meilleure marge',  key:'marge',     fmt:v=>v!=null?`${v}%`:'â',          desc:'Marge brute estimÃ©e'},
-  {label:'ð Meilleur CA',      key:'ca',        fmt:v=>`${v.toLocaleString('fr')}â¬`,  desc:'CA rÃ©alisÃ©'},
+  {label:'⚗️ Plus brassée',     key:'vol',       fmt:v=>`${(v/1000).toFixed(2)} hL`,  desc:'Volume total produit'},
+  {label:'🔁 Plus fréquente',   key:'nbBrassins',fmt:v=>`${v} brassins`,              desc:'Nombre de brassins'},
+  {label:'💰 Meilleure marge',  key:'marge',     fmt:v=>v!=null?`${v}%`:'—',          desc:'Marge brute estimée'},
+  {label:'📈 Meilleur CA',      key:'ca',        fmt:v=>`${v.toLocaleString('fr')}€`,  desc:'CA réalisé'},
  ];
 
  const buildTracabilite = (cs, lot) => {
@@ -358,10 +358,10 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
  ).sort((a,b)=>new Date(b.cs.date)-new Date(a.cs.date));
 
  const TABS = [
-  {id:'dashboard',  label:'Vue gÃ©nÃ©rale', icon:'ð '},
-  {id:'hof',        label:'Hall of Fame',  icon:'ð'},
-  {id:'scoring',    label:'Scoring biÃ¨res',icon:'â­'},
-  {id:'tracabilite',label:'TraÃ§abilitÃ©',   icon:'ð'},
+  {id:'dashboard',  label:'Vue générale', icon:'🏠'},
+  {id:'hof',        label:'Hall of Fame',  icon:'🏆'},
+  {id:'scoring',    label:'Scoring bières',icon:'⭐'},
+  {id:'tracabilite',label:'Traçabilité',   icon:'🔍'},
  ];
 
  return (
@@ -394,16 +394,16 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
        fontFamily:FM,textTransform:'capitalize'}}>{today}</p>
      </div>
      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:16}}>
-      <StatCard label="En cours" value={actifs.length} icon="âï¸" color={C.amber}
+      <StatCard label="En cours" value={actifs.length} icon="⚗️" color={C.amber}
        sub={`${actifs.filter(b=>b.statut==='fermentation').length} en fermentation`}
        onClick={()=>setModule('production')}/>
-      <StatCard label="Volume" value={`${(totalVol/1000).toFixed(2)} hL`} icon="ðª£" color={C.green}
-       sub="Oct.25âMar.26" onClick={()=>setModule('historique')}/>
-      <StatCard label="Alertes stock" value={alertes.length} icon="ð¦"
+      <StatCard label="Volume" value={`${(totalVol/1000).toFixed(2)} hL`} icon="🪣" color={C.green}
+       sub="Oct.25–Mar.26" onClick={()=>setModule('historique')}/>
+      <StatCard label="Alertes stock" value={alertes.length} icon="📦"
        color={critiques.length>0?C.alert:C.warn}
-       sub={critiques.length>0?`â  ${critiques.length} critique(s)`:'Surveiller'}
+       sub={critiques.length>0?`⚠ ${critiques.length} critique(s)`:'Surveiller'}
        onClick={()=>setModule('stocks')}/>
-      <StatCard label="Bouteilles" value={totalBt.toLocaleString('fr')} icon="ð¾"
+      <StatCard label="Bouteilles" value={totalBt.toLocaleString('fr')} icon="🍾"
        color={"#2A6080"} sub={`${condSessions.length} sessions`}
        onClick={()=>setModule('conditionnement')}/>
      </div>
@@ -417,7 +417,7 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
        <button onClick={()=>setModule('production')}
         style={{background:'none',border:`1px solid ${C.border}`,
          borderRadius:8,padding:'5px 12px',cursor:'pointer',
-         fontSize:12,color:C.textMid}}>Voir â</button>
+         fontSize:12,color:C.textMid}}>Voir →</button>
       </div>
       {actifs.length===0&&<p style={{color:C.textLight,textAlign:'center',
        padding:'12px 0',fontSize:13}}>Aucun brassin en cours</p>}
@@ -436,7 +436,7 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
          </div>
          <div style={{fontSize:11,color:C.textLight,
           fontFamily:FM,marginTop:1}}>
-          {fmtDate(b.dateDebut)} Â· J+{j}
+          {fmtDate(b.dateDebut)} · J+{j}
          </div>
         </div>
         <Badge statut={b.statut}/>
@@ -449,16 +449,16 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
       <div style={{display:'flex',justifyContent:'space-between',
        alignItems:'center',marginBottom:10}}>
        <h3 style={{fontFamily:FA,fontSize:17,color:C.text}}>
-        {critiques.length>0?'â  ':''}Alertes stock
+        {critiques.length>0?'⚠ ':''}Alertes stock
        </h3>
        <button onClick={()=>setModule('stocks')}
         style={{background:'none',border:`1px solid ${C.border}`,
          borderRadius:8,padding:'5px 12px',cursor:'pointer',
-         fontSize:12,color:C.textMid}}>GÃ©rer â</button>
+         fontSize:12,color:C.textMid}}>Gérer →</button>
       </div>
       {alertes.length===0
        ?<div style={{textAlign:'center',padding:'10px 0',color:C.ok}}>
-        <span style={{fontSize:22}}>â</span>
+        <span style={{fontSize:22}}>✓</span>
         <p style={{fontSize:13,fontWeight:600,marginTop:4}}>Stocks OK</p>
        </div>
        :alertes.slice(0,5).map(s=>{
@@ -490,7 +490,7 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
        fontSize:'clamp(22px,6vw,30px)',color:C.amber}}>Hall of Fame</h2>
       <p style={{fontSize:12,color:C.textLight,
        fontFamily:FM,marginTop:3}}>
-       PalmarÃ¨s des recettes Â· {termines.length} brassins analysÃ©s
+       Palmarès des recettes · {termines.length} brassins analysés
       </p>
      </div>
 
@@ -530,7 +530,7 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
              ?<img src={img} style={{width:36,height:36,
                objectFit:'contain'}}
                onError={e=>e.target.style.display='none'}/>
-             :<span style={{fontSize:18}}>ðº</span>}
+             :<span style={{fontSize:18}}>🍺</span>}
            </div>
            <div style={{flex:1,minWidth:0}}>
             <div style={{fontFamily:FA,fontSize:14,
@@ -540,7 +540,7 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
             </div>
             <div style={{fontSize:10,color:C.textLight,
              fontFamily:FM,marginTop:1}}>
-             {s.r.style} Â· {s.r.abv}%
+             {s.r.style} · {s.r.abv}%
             </div>
            </div>
            <div style={{textAlign:'right',flexShrink:0}}>
@@ -564,17 +564,17 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
     <div style={{padding:'16px'}}>
      <div style={{marginBottom:16}}>
       <h2 style={{fontFamily:FA,
-       fontSize:'clamp(22px,6vw,30px)',color:C.text}}>Scoring biÃ¨res</h2>
+       fontSize:'clamp(22px,6vw,30px)',color:C.text}}>Scoring bières</h2>
       <p style={{fontSize:12,color:C.textLight,
        fontFamily:FM,marginTop:3}}>
-       Score = volume (40%) + frÃ©quence (30%) + marge (30%)
+       Score = volume (40%) + fréquence (30%) + marge (30%)
       </p>
      </div>
 
      {scoreBieres.length===0&&(
       <div style={{textAlign:'center',padding:'40px 0',color:C.textLight}}>
-       <div style={{fontSize:40,marginBottom:10}}>â­</div>
-       <div style={{fontWeight:600}}>Pas encore de donnÃ©es</div>
+       <div style={{fontSize:40,marginBottom:10}}>⭐</div>
+       <div style={{fontWeight:600}}>Pas encore de données</div>
       </div>
      )}
 
@@ -599,7 +599,7 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
           {s.img
            ?<img src={s.img} style={{width:34,height:34,objectFit:'contain'}}
              onError={e=>e.target.style.display='none'}/>
-           :<span style={{fontSize:18}}>ðº</span>}
+           :<span style={{fontSize:18}}>🍺</span>}
          </div>
          <div style={{flex:1,minWidth:0}}>
           <div style={{fontFamily:FA,fontSize:15,
@@ -607,7 +607,7 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
            whiteSpace:'nowrap'}}>{s.r.nom}</div>
           <div style={{fontSize:10,color:C.textLight,
            fontFamily:FM,marginTop:1}}>
-           {s.r.style} Â· {s.r.permanent?'Permanente':'ÃphÃ©mÃ¨re'}
+           {s.r.style} · {s.r.permanent?'Permanente':'Éphémère'}
           </div>
          </div>
          <div style={{textAlign:'center',flexShrink:0,
@@ -630,8 +630,8 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
          {[
           ['Vol.',`${(s.vol/1000).toFixed(2)} hL`,C.green],
           ['Brassins',s.nbBrassins,C.amber],
-          ['Marge',s.marge!=null?`${s.marge}%`:'â',s.marge>=50?C.ok:s.marge>=30?C.warn:C.alert],
-          ['CA',s.ca>0?`${Math.round(s.ca/1000)}kâ¬`:'â',C.textMid],
+          ['Marge',s.marge!=null?`${s.marge}%`:'—',s.marge>=50?C.ok:s.marge>=30?C.warn:C.alert],
+          ['CA',s.ca>0?`${Math.round(s.ca/1000)}k€`:'—',C.textMid],
          ].map(([l,v,col])=>(
           <div key={l} style={{background:C.bgDark,borderRadius:6,
            padding:'5px 6px',textAlign:'center'}}>
@@ -650,10 +650,10 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
       marginTop:8,border:`1px solid ${C.border}`}}>
       <div style={{fontSize:9,fontFamily:FM,color:C.textLight,
        letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>
-       LÃ©gende du score
+       Légende du score
       </div>
       <div style={{display:'flex',gap:12,flexWrap:'wrap'}}>
-       {[[C.ok,'â¥ 70 â Excellente'],[C.amber,'45â69 â Bonne'],[C.alert,'< 45 â Ã dÃ©velopper']].map(([col,l])=>(
+       {[[C.ok,'≥ 70 — Excellente'],[C.amber,'45–69 — Bonne'],[C.alert,'< 45 — À développer']].map(([col,l])=>(
         <div key={l} style={{display:'flex',alignItems:'center',gap:5,
          fontSize:10,color:C.textMid}}>
          <div style={{width:10,height:10,borderRadius:2,background:col}}/>
@@ -669,10 +669,10 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
     <div style={{padding:'16px'}}>
      <div style={{marginBottom:14}}>
       <h2 style={{fontFamily:FA,
-       fontSize:'clamp(22px,6vw,30px)',color:C.text}}>TraÃ§abilitÃ©</h2>
+       fontSize:'clamp(22px,6vw,30px)',color:C.text}}>Traçabilité</h2>
       <p style={{fontSize:12,color:C.textLight,
        fontFamily:FM,marginTop:3}}>
-       Audit complet lot â brassin â ingrÃ©dients Â· Certification Bio FR-BIO-09
+       Audit complet lot → brassin → ingrédients · Certification Bio FR-BIO-09
       </p>
      </div>
 
@@ -681,7 +681,7 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
        <div style={{fontSize:10,fontWeight:700,color:C.textLight,
         fontFamily:FM,letterSpacing:1.5,
         textTransform:'uppercase',marginBottom:10}}>
-        SÃ©lectionner un lot
+        Sélectionner un lot
        </div>
        {allLots.map(({cs,lot,key})=>(
         <div key={key} onClick={()=>setTracLot({cs,lot})}
@@ -696,23 +696,23 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
           </div>
           <div style={{fontSize:11,color:C.textLight,
            fontFamily:FM}}>
-           {cs.brassinNom} Â· {lot.type} Â· {fmtDate(cs.date)}
+           {cs.brassinNom} · {lot.type} · {fmtDate(cs.date)}
           </div>
          </div>
          <div style={{textAlign:'right',flexShrink:0}}>
           <div style={{fontFamily:FM,fontWeight:700,
            fontSize:14,color:C.amber}}>{lot.contenants}</div>
           <div style={{fontSize:9,color:C.textLight}}>
-           {lot.type.includes('FÃ»t')?'fÃ»ts':'bouteilles'}
+           {lot.type.includes('Fût')?'fûts':'bouteilles'}
           </div>
          </div>
-         <span style={{color:C.textLight,fontSize:16}}>âº</span>
+         <span style={{color:C.textLight,fontSize:16}}>›</span>
         </div>
        ))}
        {allLots.length===0&&(
         <div style={{textAlign:'center',padding:'40px 0',color:C.textLight}}>
-         <div style={{fontSize:36,marginBottom:8}}>ð</div>
-         <div style={{fontWeight:600}}>Aucun lot conditionnÃ©</div>
+         <div style={{fontSize:36,marginBottom:8}}>🔍</div>
+         <div style={{fontWeight:600}}>Aucun lot conditionné</div>
         </div>
        )}
       </div>
@@ -730,7 +730,7 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
           background:'none',border:'none',color:C.textMid,
           fontSize:12,fontWeight:700,fontFamily:FM,
           letterSpacing:0.5,marginBottom:16,padding:0,cursor:'pointer'}}>
-         â LISTE DES LOTS
+         ← LISTE DES LOTS
         </button>
 
         <div style={{background:C.amberPale,borderRadius:12,
@@ -738,36 +738,36 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
          border:`1.5px solid ${C.amber}`}}>
          <div style={{fontFamily:FM,fontSize:8,
           letterSpacing:3,color:C.amber,textTransform:'uppercase',
-          marginBottom:4}}>NÂ° LOT</div>
+          marginBottom:4}}>N° LOT</div>
          <div style={{fontFamily:"'Bebas Neue',sans-serif",
           fontSize:28,color:C.amber,letterSpacing:2,lineHeight:1,
           marginBottom:6}}>{lot.lot}</div>
          <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
           <Tag text={lot.type} color={C.amber} bg={C.bgCard}/>
-          <Tag text={`${lot.contenants} ${lot.type.includes('FÃ»t')?'fÃ»ts':'btl'}`}
+          <Tag text={`${lot.contenants} ${lot.type.includes('Fût')?'fûts':'btl'}`}
            color={C.textMid} bg={C.bgCard}/>
           <Tag text={fmtDate(cs.date)} color={C.textLight} bg={C.bgCard}/>
           <Tag text="FR-BIO-09" color={C.greenL} bg={C.greenPale}/>
          </div>
         </div>
 
-        <Section title="1 â Conditionnement" color={C.amber}>
+        <Section title="1 — Conditionnement" color={C.amber}>
          <Row label="Date"        value={fmtDate(cs.date)}   mono/>
-         <Row label="OpÃ©rateur"   value={cs.operateur}/>
+         <Row label="Opérateur"   value={cs.operateur}/>
          <Row label="Volume"      value={`${lot.volume} L`}  mono/>
          <Row label="Contenants"  value={`${lot.contenants} ${lot.type}`} mono/>
          {cs.notes&&<Row label="Notes" value={cs.notes}/>}
         </Section>
 
-        <Section title="2 â Brassin d'origine" color={C.green}>
+        <Section title="2 — Brassin d'origine" color={C.green}>
          {brassin?(
           <>
            <Row label="Recette"         value={brassin.recette}/>
            <Row label="Fermenteur"      value={brassin.fermenteur} mono/>
            <Row label="Date brassage"   value={fmtDate(brassin.dateDebut)} mono/>
            <Row label="Date cond."      value={fmtDate(brassin.dateCond)}  mono/>
-           {brassin.og&&<Row label="DensitÃ© Initiale (DI)" value={brassin.og.toFixed(3)} mono/>}
-           {brassin.fg&&<Row label="DensitÃ© Finale (DF)"   value={brassin.fg.toFixed(3)} mono/>}
+           {brassin.og&&<Row label="Densité Initiale (DI)" value={brassin.og.toFixed(3)} mono/>}
+           {brassin.fg&&<Row label="Densité Finale (DF)"   value={brassin.fg.toFixed(3)} mono/>}
            {brassin.abv&&<Row label="ABV"                  value={`${brassin.abv}%`} mono/>}
            {brassin.notes&&<Row label="Notes"              value={brassin.notes}/>}
            {brassin.mesures?.length>0&&(
@@ -775,7 +775,7 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
              <div style={{fontSize:9,color:C.textLight,
               fontFamily:FM,letterSpacing:1,
               textTransform:'uppercase',marginBottom:6}}>
-              Suivi densitÃ©
+              Suivi densité
              </div>
              <div style={{display:'flex',gap:5,overflowX:'auto',
               scrollbarWidth:'none'}}>
@@ -795,20 +795,20 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
             </div>
            )}
           </>
-         ):<div style={{fontSize:12,color:C.textLight}}>Brassin non trouvÃ©</div>}
+         ):<div style={{fontSize:12,color:C.textLight}}>Brassin non trouvé</div>}
         </Section>
 
-        <Section title="3 â Recette & ingrÃ©dients" color={C.hop}>
+        <Section title="3 — Recette & ingrédients" color={C.hop}>
          {recette?(
           <>
            <Row label="Recette"  value={recette.nom}/>
-           <Row label="Style"    value={`${recette.style} Â· ${recette.abv}% ABV`}/>
-           <Row label="Volume rÃ©f." value={`${recette.volume} L`} mono/>
+           <Row label="Style"    value={`${recette.style} · ${recette.abv}% ABV`}/>
+           <Row label="Volume réf." value={`${recette.volume} L`} mono/>
            <div style={{marginTop:10}}>
             <div style={{fontSize:9,color:C.textLight,
              fontFamily:FM,letterSpacing:1,
              textTransform:'uppercase',marginBottom:8}}>
-             MatiÃ¨res premiÃ¨res
+             Matières premières
             </div>
             {ingredients.map((ing,i)=>(
              <div key={`k${i}`} style={{padding:'7px 10px',borderRadius:7,
@@ -824,7 +824,7 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
                 {ing.qte} {ing.u}
                 {ing.fournisseur&&
                  <span style={{color:C.hop,marginLeft:6}}>
-                  Â· {ing.fournisseur}
+                  · {ing.fournisseur}
                  </span>}
                </div>
               </div>
@@ -833,28 +833,28 @@ function ModuleDashboard({stock,brassins,fournisseurs,condSessions,recettes,stoc
                borderRadius:4,border:`1px solid ${C.green}30`,
                fontFamily:FM,flexShrink:0,
                marginLeft:8}}>
-               ð¿ BIO
+               🌿 BIO
               </span>
              </div>
             ))}
            </div>
           </>
-         ):<div style={{fontSize:12,color:C.textLight}}>Recette non trouvÃ©e</div>}
+         ):<div style={{fontSize:12,color:C.textLight}}>Recette non trouvée</div>}
         </Section>
 
-        <Section title="4 â Certification & conformitÃ©" color={C.greenL}>
+        <Section title="4 — Certification & conformité" color={C.greenL}>
          <Row label="Certification"   value="Agriculture Biologique FR-BIO-09"/>
-         <Row label="Organisme"        value="Certipaq â FR-BIO-09"/>
+         <Row label="Organisme"        value="Certipaq — FR-BIO-09"/>
          <Row label="Brasserie"        value="Les Papas Brasseurs"/>
          <Row label="Adresse"          value="4 Rue du Puits de la Grange, 44190 Clisson"/>
-         <Row label="IngrÃ©dients"      value="100% issus de l'agriculture biologique"/>
-         <Row label="Contient gluten"  value="Oui (malts d'orge, blÃ©)"/>
+         <Row label="Ingrédients"      value="100% issus de l'agriculture biologique"/>
+         <Row label="Contient gluten"  value="Oui (malts d'orge, blé)"/>
          <div style={{marginTop:10,padding:'8px 12px',borderRadius:8,
           background:C.greenPale,border:`1px solid ${C.green}30`,
           fontSize:11,color:C.greenL,lineHeight:1.6,
           fontFamily:FM}}>
-          â Ce lot est traÃ§able de la matiÃ¨re premiÃ¨re au conditionnement.
-          Document gÃ©nÃ©rÃ© pour audit de certification biologique.
+          ✓ Ce lot est traçable de la matière première au conditionnement.
+          Document généré pour audit de certification biologique.
          </div>
         </Section>
        </div>
@@ -885,8 +885,8 @@ function ModuleStocks({stock,setStock,fournisseurs}){
     <div>
      <h2 style={{fontFamily:FA,fontSize:'clamp(20px,5vw,26px)',color:C.text}}>Stocks</h2>
      <p style={{color:C.textLight,fontSize:12,fontFamily:FM,marginTop:2}}>
-      {stock.length} rÃ©f.{errs>0&&<span style={{color:C.alert,marginLeft:6}}>â {errs}</span>}
-      {alertes>0&&<span style={{color:C.amber,marginLeft:4}}>Â· {alertes} alerte{alertes>1?'s':''}</span>}
+      {stock.length} réf.{errs>0&&<span style={{color:C.alert,marginLeft:6}}>⚠{errs}</span>}
+      {alertes>0&&<span style={{color:C.amber,marginLeft:4}}>· {alertes} alerte{alertes>1?'s':''}</span>}
      </p>
     </div>
     <button onClick={()=>setShowF(true)} style={{background:C.amber,color:'#fff',border:'none',borderRadius:10,padding:'10px 16px',fontWeight:700,fontSize:14,minHeight:44}}>+ Ajouter</button>
@@ -896,9 +896,9 @@ function ModuleStocks({stock,setStock,fournisseurs}){
      <button key={cat} onClick={()=>setFc(cat)} style={{flexShrink:0,padding:'7px 14px',borderRadius:20,border:`1.5px solid ${active?(CAT_COLORS[cat]||C.amber):C.border}`,background:active?(CAT_COLORS[cat]||C.amber):C.bgCard,color:active?'#fff':(CAT_COLORS[cat]||C.text),fontWeight:600,fontSize:12,minHeight:36,whiteSpace:'nowrap'}}>{cat}{n>0?` (${n})`:''}</button>
     );})}
    </div>
-   <input placeholder="ð Rechercher..." value={q} onChange={e=>setQ(e.target.value)} style={{...iSt,marginBottom:12}}/>
+   <input placeholder="🔍 Rechercher..." value={q} onChange={e=>setQ(e.target.value)} style={{...iSt,marginBottom:12}}/>
    <div style={{display:'flex',flexDirection:'column',gap:8}}>
-    {filtered.length===0&&<div style={{textAlign:'center',padding:32,color:C.textLight,fontSize:14}}>Aucun rÃ©sultat</div>}
+    {filtered.length===0&&<div style={{textAlign:'center',padding:32,color:C.textLight,fontSize:14}}>Aucun résultat</div>}
     {filtered.map(s=>{const lv=alertLvl(s.qte,s.seuil);const ac=alertCol(lv);const cc=CAT_COLORS[s.cat]||C.textMid;return(
      <div key={s.id} style={{background:C.bgCard,border:`1.5px solid ${lv==='error'?C.alert:lv==='warn'?C.amber:C.border}`,borderRadius:12,padding:'12px 14px',borderLeft:`4px solid ${cc}`}}>
       <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:6}}>
@@ -907,39 +907,39 @@ function ModuleStocks({stock,setStock,fournisseurs}){
         <Tag text={s.cat} color={cc} bg={`${cc}18`}/>
        </div>
        <div style={{textAlign:'right',flexShrink:0,marginLeft:10}}>
-        <div style={{fontFamily:FM,fontWeight:700,fontSize:18,color:ac}}>{s.qte<0?'â  ':''}{fmt(s.qte)}</div>
+        <div style={{fontFamily:FM,fontWeight:700,fontSize:18,color:ac}}>{s.qte<0?'⚠ ':''}{fmt(s.qte)}</div>
         <div style={{fontSize:11,color:C.textLight}}>{s.u}</div>
        </div>
       </div>
       <div style={{display:'flex',gap:16,fontSize:12,color:C.textMid,marginBottom:8,flexWrap:'wrap'}}>
        <span>Seuil: <strong style={{color:C.text}}>{fmt(s.seuil)} {s.u}</strong></span>
-       {s.prix>0&&<span>Prix: <strong style={{color:C.text}}>{s.prix}â¬/{s.u}</strong></span>}
+       {s.prix>0&&<span>Prix: <strong style={{color:C.text}}>{s.prix}€/{s.u}</strong></span>}
        {s.four&&<span style={{color:C.textLight}}>{s.four}</span>}
       </div>
       <div style={{height:4,background:C.border,borderRadius:2,overflow:'hidden',marginBottom:8}}>
        <div style={{height:'100%',borderRadius:2,background:ac,width:`${Math.min(100,Math.max(0,(s.qte/(s.seuil*2))*100))}%`}}/>
       </div>
       <div style={{display:'flex',gap:8,justifyContent:'flex-end'}}>
-       <button onClick={()=>openEdit(s)} style={{background:C.cream,border:`1px solid ${C.border}`,borderRadius:8,padding:'7px 14px',fontSize:13,minHeight:36,color:C.textMid}}>â Modifier</button>
-       <button onClick={()=>setStock(stock.filter(x=>x.id!==s.id))} style={{background:C.brickPale,border:`1px solid ${C.border}`,borderRadius:8,padding:'7px 14px',fontSize:13,minHeight:36,color:C.alert}}>â</button>
+       <button onClick={()=>openEdit(s)} style={{background:C.cream,border:`1px solid ${C.border}`,borderRadius:8,padding:'7px 14px',fontSize:13,minHeight:36,color:C.textMid}}>✏ Modifier</button>
+       <button onClick={()=>setStock(stock.filter(x=>x.id!==s.id))} style={{background:C.brickPale,border:`1px solid ${C.border}`,borderRadius:8,padding:'7px 14px',fontSize:13,minHeight:36,color:C.alert}}>✕</button>
       </div>
      </div>
     );})}
    </div>
    {showF&&(
     <Modal onClose={()=>{setShowF(false);setEdit(null);setForm(EF);}}>
-     <h3 style={{fontFamily:FA,fontSize:20,color:C.text,marginBottom:16}}>{edit?'Modifier':'Ajouter'} un ingrÃ©dient</h3>
+     <h3 style={{fontFamily:FA,fontSize:20,color:C.text,marginBottom:16}}>{edit?'Modifier':'Ajouter'} un ingrédient</h3>
      <div style={{display:'flex',flexDirection:'column',gap:10}}>
       <div><Label t="Nom"/><input value={form.nom} onChange={e=>setForm({...form,nom:e.target.value})} style={iSt}/></div>
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
-       <div><Label t="CatÃ©gorie"/><select value={form.cat} onChange={e=>setForm({...form,cat:e.target.value})} style={iSt}>{Object.keys(CAT_COLORS).map(c=><option key={c}>{c}</option>)}</select></div>
-       <div><Label t="UnitÃ©"/><input value={form.u} onChange={e=>setForm({...form,u:e.target.value})} style={iSt}/></div>
-       <div><Label t="QuantitÃ©"/><input type="number" value={form.qte} onChange={e=>setForm({...form,qte:e.target.value})} style={iSt}/></div>
+       <div><Label t="Catégorie"/><select value={form.cat} onChange={e=>setForm({...form,cat:e.target.value})} style={iSt}>{Object.keys(CAT_COLORS).map(c=><option key={c}>{c}</option>)}</select></div>
+       <div><Label t="Unité"/><input value={form.u} onChange={e=>setForm({...form,u:e.target.value})} style={iSt}/></div>
+       <div><Label t="Quantité"/><input type="number" value={form.qte} onChange={e=>setForm({...form,qte:e.target.value})} style={iSt}/></div>
        <div><Label t="Seuil alerte"/><input type="number" value={form.seuil} onChange={e=>setForm({...form,seuil:e.target.value})} style={iSt}/></div>
-       <div><Label t="Prix/unitÃ© â¬"/><input type="number" value={form.prix} onChange={e=>setForm({...form,prix:e.target.value})} style={iSt}/></div>
+       <div><Label t="Prix/unité €"/><input type="number" value={form.prix} onChange={e=>setForm({...form,prix:e.target.value})} style={iSt}/></div>
        <div><Label t="Date d'ajout"/><input type="date" value={form.dateAjout} onChange={e=>setForm({...form,dateAjout:e.target.value})} style={iSt}/></div>
       </div>
-      <div><Label t="Fournisseur"/><select value={form.four} onChange={e=>setForm({...form,four:e.target.value})} style={iSt}><option value="">â Choisir â</option>{fournisseurs.map(f=><option key={f.id} value={f.nom}>{f.nom}</option>)}</select></div>
+      <div><Label t="Fournisseur"/><select value={form.four} onChange={e=>setForm({...form,four:e.target.value})} style={iSt}><option value="">— Choisir —</option>{fournisseurs.map(f=><option key={f.id} value={f.nom}>{f.nom}</option>)}</select></div>
      </div>
      <div style={{display:'flex',gap:10,marginTop:18,justifyContent:'flex-end'}}>
       <Btn onClick={()=>{setShowF(false);setEdit(null);setForm(EF);}}>Annuler</Btn>
@@ -955,7 +955,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
  const [sel,setSel]           = useState(null);
  const [editMode,setEditMode] = useState(false);  // 'prix' | 'recette' | false
  const [pxForm,setPxForm]     = useState({});
- const [editForm,setEditForm] = useState(null);   // form d'Ã©dition recette complÃ¨te
+ const [editForm,setEditForm] = useState(null);   // form d'édition recette complète
  const [f,setF]               = useState('Toutes');
  const [q,setQ]               = useState('');
 
@@ -1023,7 +1023,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
   } else {
    const newR = {...updated, id: Date.now()};
    setRecettes([...recettes, newR]);
-   setSel(null);  // ne pas ouvrir la modal aprÃ¨s crÃ©ation
+   setSel(null);  // ne pas ouvrir la modal après création
   }
   setEditMode(false);
   setEditForm(null);
@@ -1085,7 +1085,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
      letterSpacing:0.8,fontFamily:FM,marginBottom:3}}>{label}</div>
     <div style={{fontFamily:FA,fontSize:16,
      color:prix>0?C.amber:C.textLight,lineHeight:1}}>
-     {prix>0?`${prix}â¬`:'â'}
+     {prix>0?`${prix}€`:'—'}
     </div>
     {mg!=null&&<div style={{fontSize:9,marginTop:2,
      color:mg>=60?C.ok:mg>=40?C.warn:C.alert,
@@ -1093,7 +1093,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
      {mg}% marge
     </div>}
     {cout>0&&<div style={{fontSize:8,color:C.textLight,marginTop:1,
-     fontFamily:FM}}>coÃ»t {cout.toFixed(2)}â¬</div>}
+     fontFamily:FM}}>coût {cout.toFixed(2)}€</div>}
    </div>
   );
  };
@@ -1107,30 +1107,30 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
     <button onClick={()=>{setEditMode(false);setEditForm(null);setSel(null);}}
      style={{background:'none',border:`1px solid ${C.border}`,borderRadius:20,
       padding:'6px 14px',fontSize:12,fontWeight:700,color:C.textMid,cursor:'pointer',
-      flexShrink:0}}>â¹ Annuler</button>
+      flexShrink:0}}>‹ Annuler</button>
     <h2 style={{fontFamily:FA,fontSize:18,color:C.text,
      flex:1,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>
      {editForm.id&&recettes.find(r=>r.id===editForm.id)
-      ?`Modifier â ${recettes.find(r=>r.id===editForm.id).nom}`
-      :`Nouvelle recette${editForm.nom?` â ${editForm.nom}`:''}`}
+      ?`Modifier — ${recettes.find(r=>r.id===editForm.id).nom}`
+      :`Nouvelle recette${editForm.nom?` — ${editForm.nom}`:''}`}
     </h2>
-    <Btn p onClick={saveRecette}>â Enregistrer</Btn>
+    <Btn p onClick={saveRecette}>✓ Enregistrer</Btn>
    </div>
 
-   <Section label="IdentitÃ©">
+   <Section label="Identité">
     <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
      <div style={{gridColumn:'1/-1'}}>
       <Label t="Nom de la recette"/>
       <input value={editForm.nom||''} onChange={e=>setEditForm({...editForm,nom:e.target.value})}
-       placeholder="La Nouvelleâ¦" style={iSt}/>
+       placeholder="La Nouvelle…" style={iSt}/>
      </div>
      <div>
-      <Label t="Style biÃ¨re"/>
+      <Label t="Style bière"/>
       <input value={editForm.style||''} onChange={e=>setEditForm({...editForm,style:e.target.value})}
-       placeholder="IPA, AmbrÃ©e, Stoutâ¦" style={iSt}/>
+       placeholder="IPA, Ambrée, Stout…" style={iSt}/>
      </div>
      <div>
-      <Label t="Volume de rÃ©fÃ©rence (L)"/>
+      <Label t="Volume de référence (L)"/>
       <input type="number" value={editForm.volume||''}
        onChange={e=>{
         const rec={...editForm,volume:e.target.value};
@@ -1151,13 +1151,13 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
       <Label t="Description"/>
       <textarea value={editForm.description||''}
        onChange={e=>setEditForm({...editForm,description:e.target.value})}
-       placeholder="Description poÃ©tiqueâ¦"
+       placeholder="Description poétique…"
        style={{...iSt,height:70,resize:'vertical',lineHeight:1.6}}/>
      </div>
     </div>
    </Section>
 
-   <Section label="ParamÃ¨tres techniques">
+   <Section label="Paramètres techniques">
     <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:10}}>
      {[['ABV (%)',  'abv',  '0.1', '6.0'],
       ['IBU',      'ibu',  '1',   '35'],
@@ -1175,7 +1175,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
      <div>
       <Label t="Levure principale"/>
       <input value={editForm.levure||''} onChange={e=>setEditForm({...editForm,levure:e.target.value})}
-       placeholder="Nottinghamâ¦" style={iSt}/>
+       placeholder="Nottingham…" style={iSt}/>
      </div>
      <div style={{gridColumn:'1/-1'}}>
       <Label t="Houblons aromatiques (virgule)"/>
@@ -1187,7 +1187,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
     </div>
    </Section>
 
-   <Section label="â Brassage">
+   <Section label="⚗ Brassage">
 
     <div style={{marginBottom:10}}>
      <Label t="Correction de l'eau"/>
@@ -1197,7 +1197,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
     </div>
 
     <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:10,marginBottom:10}}>
-     {[['EmpÃ¢tage (L)','eauMash'],['RinÃ§age (L)','eauSparge'],['pH mash','pHMash']].map(([l,f])=>(
+     {[['Empâtage (L)','eauMash'],['Rinçage (L)','eauSparge'],['pH mash','pHMash']].map(([l,f])=>(
       <div key={f}>
        <Label t={l}/>
        <input type="number" step={f==='pHMash'?'0.1':'1'}
@@ -1211,7 +1211,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
     <div style={{marginBottom:10}}>
      <div style={{display:'flex',justifyContent:'space-between',
       alignItems:'center',marginBottom:8}}>
-      <Label t="Paliers d'empÃ¢tage"/>
+      <Label t="Paliers d'empâtage"/>
       <div style={{display:'flex',gap:6}}>
        <button onClick={()=>{
          const tmp = {style:editForm.style||'',levure:editForm.levure||'',
@@ -1222,7 +1222,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
         }}
         style={{fontSize:10,color:C.textMid,background:C.bgDark,
          border:`1px solid ${C.border}`,borderRadius:6,padding:'3px 8px',cursor:'pointer'}}>
-        âº Auto
+        ↺ Auto
        </button>
        <button onClick={()=>setEditForm(ef=>({...ef,
          paliersMash:[...(ef.paliersMash||[]),
@@ -1235,7 +1235,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
      </div>
      <div style={{display:'grid',gridTemplateColumns:'1fr 70px 70px 70px 24px',
       gap:4,marginBottom:4}}>
-      {['Nom du palier','Cible Â°C','DurÃ©e min','Note',''].map((h,i)=>(
+      {['Nom du palier','Cible °C','Durée min','Note',''].map((h,i)=>(
        <div key={`k${i}`} style={{fontSize:8,color:C.textLight,fontFamily:FM,
         textTransform:'uppercase',letterSpacing:0.5}}>{h}</div>
       ))}
@@ -1246,7 +1246,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
        gap:4,marginBottom:5,alignItems:'center'}}>
        <input value={p.nom||''}
         onChange={e=>{const pals=[...(editForm.paliersMash||[])];pals[i]={...pals[i],nom:e.target.value};setEditForm({...editForm,paliersMash:pals});}}
-        placeholder="Palier maltoseâ¦" style={{...iSt,padding:'6px 8px',fontSize:11}}/>
+        placeholder="Palier maltose…" style={{...iSt,padding:'6px 8px',fontSize:11}}/>
        <input type="number" value={p.tempCible||''}
         onChange={e=>{const pals=[...(editForm.paliersMash||[])];pals[i]={...pals[i],tempCible:parseFloat(e.target.value)||''};setEditForm({...editForm,paliersMash:pals});}}
         placeholder="67" style={{...iSt,padding:'6px 5px',fontSize:12,textAlign:'center'}}/>
@@ -1255,27 +1255,27 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
         placeholder="30" style={{...iSt,padding:'6px 5px',fontSize:12,textAlign:'center'}}/>
        <input value={p.note||''}
         onChange={e=>{const pals=[...(editForm.paliersMash||[])];pals[i]={...pals[i],note:e.target.value};setEditForm({...editForm,paliersMash:pals});}}
-        placeholder="Beta-amylaseâ¦" style={{...iSt,padding:'6px 5px',fontSize:10}}/>
+        placeholder="Beta-amylase…" style={{...iSt,padding:'6px 5px',fontSize:10}}/>
        <button onClick={()=>setEditForm(ef=>({...ef,
          paliersMash:(ef.paliersMash||[]).filter((_,j)=>j!==i)}))}
         style={{width:24,height:32,borderRadius:5,border:`1px solid ${C.border}`,
          background:'transparent',color:C.alert,fontSize:13,cursor:'pointer',
-         display:'flex',alignItems:'center',justifyContent:'center'}}>Ã</button>
+         display:'flex',alignItems:'center',justifyContent:'center'}}>×</button>
       </div>
      ))}
      {(editForm.paliersMash||[]).length===0&&(
       <div style={{fontSize:11,color:C.textLight,fontStyle:'italic',padding:'6px 0'}}>
-       Aucun palier â cliquez "Auto" pour gÃ©nÃ©rer selon le style
+       Aucun palier — cliquez "Auto" pour générer selon le style
       </div>
      )}
     </div>
    </Section>
 
-   <Section label="ð¿ Houblons & Ãpices (dÃ©taillÃ©)">
+   <Section label="🌿 Houblons & Épices (détaillé)">
     <div style={{display:'flex',justifyContent:'space-between',
      alignItems:'center',marginBottom:8}}>
      <div style={{fontSize:11,color:C.textLight,fontStyle:'italic'}}>
-      Avec timing prÃ©cis pour la fiche de brassage
+      Avec timing précis pour la fiche de brassage
      </div>
      <div style={{display:'flex',gap:6}}>
       <button onClick={()=>{
@@ -1286,7 +1286,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
        }}
        style={{fontSize:10,color:C.textMid,background:C.bgDark,
         border:`1px solid ${C.border}`,borderRadius:6,padding:'3px 8px',cursor:'pointer'}}>
-       âº Depuis ingrÃ©dients
+       ↺ Depuis ingrédients
       </button>
       <button onClick={()=>setEditForm(ef=>({...ef,
         houblonsDetail:[...(ef.houblonsDetail||[]),
@@ -1299,7 +1299,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
     </div>
     <div style={{display:'grid',gridTemplateColumns:'1fr 56px 40px 1fr 40px 24px',
      gap:4,marginBottom:4}}>
-     {['Type','QtÃ©','U','Ãtape / Timing','Î±%',''].map((h,i)=>(
+     {['Type','Qté','U','Étape / Timing','α%',''].map((h,i)=>(
       <div key={`k${i}`} style={{fontSize:8,color:C.textLight,fontFamily:FM,
        textTransform:'uppercase',letterSpacing:0.5}}>{h}</div>
      ))}
@@ -1310,12 +1310,12 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
       gap:4,marginBottom:5,alignItems:'center'}}>
       <input value={hop.nom||''}
        onChange={e=>{const h=[...(editForm.houblonsDetail||[])];h[i]={...h[i],nom:e.target.value};setEditForm({...editForm,houblonsDetail:h});}}
-       placeholder="Cascadeâ¦" style={{...iSt,padding:'6px 7px',fontSize:11}}
+       placeholder="Cascade…" style={{...iSt,padding:'6px 7px',fontSize:11}}
        list={`eh-list-${i}`}/>
       <datalist id={`eh-list-${i}`}>
        {['Cascade','Amarillo','Chinook','Mosaic','Nugget','Simcoe','Elixir','Mistral',
         'Citra','Centennial','Azacca','Sabro','Idaho7','Nectaron','Nelson Sauvin',
-        'AmÃ¨risant','Coriandre','Poivre'].map(h=><option key={h} value={h}/>)}
+        'Amèrisant','Coriandre','Poivre'].map(h=><option key={h} value={h}/>)}
       </datalist>
       <input type="number" value={hop.qte||''}
        onChange={e=>{const h=[...(editForm.houblonsDetail||[])];h[i]={...h[i],qte:e.target.value};setEditForm({...editForm,houblonsDetail:h});}}
@@ -1328,7 +1328,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
       </select>
       <input value={hop.etape||''}
        onChange={e=>{const h=[...(editForm.houblonsDetail||[])];h[i]={...h[i],etape:e.target.value};setEditForm({...editForm,houblonsDetail:h});}}
-       placeholder="60min / aroma 80Â°C / DH J+2â¦"
+       placeholder="60min / aroma 80°C / DH J+2…"
        style={{...iSt,padding:'6px 7px',fontSize:11}}/>
       <input type="number" step="0.1" value={hop.alpha||''}
        onChange={e=>{const h=[...(editForm.houblonsDetail||[])];h[i]={...h[i],alpha:e.target.value};setEditForm({...editForm,houblonsDetail:h});}}
@@ -1337,20 +1337,20 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
         houblonsDetail:(ef.houblonsDetail||[]).filter((_,j)=>j!==i)}))}
        style={{width:24,height:32,borderRadius:5,border:`1px solid ${C.border}`,
         background:'transparent',color:C.alert,fontSize:13,cursor:'pointer',
-        display:'flex',alignItems:'center',justifyContent:'center'}}>Ã</button>
+        display:'flex',alignItems:'center',justifyContent:'center'}}>×</button>
      </div>
     ))}
     {(editForm.houblonsDetail||[]).length===0&&(
      <div style={{fontSize:11,color:C.textLight,fontStyle:'italic',padding:'6px 0'}}>
-      Cliquez "Depuis ingrÃ©dients" pour importer automatiquement
+      Cliquez "Depuis ingrédients" pour importer automatiquement
      </div>
     )}
    </Section>
 
-   <Section label="â Fermentation">
+   <Section label="⚗ Fermentation">
     <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
      <div>
-      <Label t="TempÃ©rature fermentation (Â°C)"/>
+      <Label t="Température fermentation (°C)"/>
       <input type="number" value={editForm.tempFerm||''}
        onChange={e=>setEditForm({...editForm,tempFerm:e.target.value})}
        placeholder="18" style={iSt}/>
@@ -1358,19 +1358,19 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
        fontFamily:FM}}>Levure : {editForm.levure}</div>}
      </div>
      <div>
-      <Label t="DurÃ©e fermentation (jours)"/>
+      <Label t="Durée fermentation (jours)"/>
       <input type="number" value={editForm.dureeFerm||''}
        onChange={e=>setEditForm({...editForm,dureeFerm:e.target.value})}
        placeholder="10" style={iSt}/>
      </div>
      <div>
-      <Label t="Temp. cold crash (Â°C)"/>
+      <Label t="Temp. cold crash (°C)"/>
       <input type="number" value={editForm.tempColdCrash||''}
        onChange={e=>setEditForm({...editForm,tempColdCrash:e.target.value})}
        placeholder="3" style={iSt}/>
      </div>
      <div>
-      <Label t="DurÃ©e cold crash (jours)"/>
+      <Label t="Durée cold crash (jours)"/>
       <input type="number" value={editForm.dureeColdCrash||''}
        onChange={e=>setEditForm({...editForm,dureeColdCrash:e.target.value})}
        placeholder="7" style={iSt}/>
@@ -1378,9 +1378,9 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
     </div>
    </Section>
 
-   <Section label="ð¾ Resucrage (g/L)">
+   <Section label="🍾 Resucrage (g/L)">
     <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:10}}>
-     {[['Bouteilles','bt','5.5'],['Ecofass','ecofass','3.8'],['FÃ»ts Inox','inox','3.5']].map(([l,k,def])=>(
+     {[['Bouteilles','bt','5.5'],['Ecofass','ecofass','3.8'],['Fûts Inox','inox','3.5']].map(([l,k,def])=>(
       <div key={k}>
        <Label t={l}/>
        <input type="number" step="0.1" value={editForm.resucrage?.[k]?.taux||def}
@@ -1395,7 +1395,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
     </div>
    </Section>
 
-   <Section label="IngrÃ©dients â liste complÃ¨te">
+   <Section label="Ingrédients — liste complète">
     <div style={{display:'flex',justifyContent:'flex-end',marginBottom:8}}>
      <button onClick={addIng}
       style={{background:C.amberPale,border:`1px solid ${C.amber}40`,
@@ -1404,7 +1404,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
     </div>
     <div style={{display:'grid',gridTemplateColumns:'1fr 80px 56px 24px',
      gap:4,marginBottom:4}}>
-     {['IngrÃ©dient','QtÃ©','U',''].map((h,i)=>(
+     {['Ingrédient','Qté','U',''].map((h,i)=>(
       <div key={`k${i}`} style={{fontSize:8,color:C.textLight,
        fontFamily:FM,textTransform:'uppercase',
        letterSpacing:0.5}}>{h}</div>
@@ -1418,7 +1418,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
         gap:4,marginBottom:4,alignItems:'center'}}>
         <input value={ing.nom||''}
          onChange={e=>updIng(i,'nom',e.target.value)}
-         placeholder="Pale, Cascadeâ¦"
+         placeholder="Pale, Cascade…"
          style={{...iSt,padding:'7px 9px',fontSize:12,
           borderColor:s?C.border:ing.nom?C.warn:C.border}}
          list={`ing-list-${i}`}/>
@@ -1440,21 +1440,21 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
         <button onClick={()=>delIng(i)}
          style={{width:24,height:32,borderRadius:5,border:`1px solid ${C.border}`,
           background:'transparent',color:C.alert,fontSize:13,cursor:'pointer',
-          display:'flex',alignItems:'center',justifyContent:'center'}}>Ã</button>
+          display:'flex',alignItems:'center',justifyContent:'center'}}>×</button>
        </div>
        {s&&<div style={{gridColumn:'1/3',fontSize:9,
         color:s.qte>=(ing.qte||0)?C.ok:C.alert,
         fontFamily:FM,marginBottom:3,paddingLeft:4}}>
-        Stock: {s.qte} {s.u} {s.qte>=(ing.qte||0)?'â':'â  insuffisant'}
+        Stock: {s.qte} {s.u} {s.qte>=(ing.qte||0)?'✓':'⚠ insuffisant'}
        </div>}
       </div>
      );
     })}
    </Section>
 
-   <Section label="ð° Prix de vente">
+   <Section label="💰 Prix de vente">
     <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
-     {[['33cl','b33'],['75cl','b75'],['FÃ»t 20L','f20'],['FÃ»t 30L','f30']].map(([label,k])=>(
+     {[['33cl','b33'],['75cl','b75'],['Fût 20L','f20'],['Fût 30L','f30']].map(([label,k])=>(
       <div key={k}>
        <Label t={label}/>
        <input type="number" step="0.1" min="0"
@@ -1475,7 +1475,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
 
    <div style={{display:'flex',gap:10,marginTop:20}}>
     <Btn onClick={()=>{setEditMode(false);setEditForm(null);setSel(null);}}>Annuler</Btn>
-    <Btn p onClick={saveRecette}>â Enregistrer la recette</Btn>
+    <Btn p onClick={saveRecette}>✓ Enregistrer la recette</Btn>
    </div>
   </div>
  );
@@ -1501,10 +1501,10 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
     </button>
    </div>
 
-   <SearchBar value={q} onChange={setQ} placeholder="Nom, style, descriptionâ¦"/>
+   <SearchBar value={q} onChange={setQ} placeholder="Nom, style, description…"/>
    <div style={{display:'flex',gap:8,overflowX:'auto',paddingBottom:4,
     marginTop:6,marginBottom:14,scrollbarWidth:'none'}}>
-    {['Toutes','Permanentes','ÃphÃ©mÃ¨res'].map(x=>(
+    {['Toutes','Permanentes','Éphémères'].map(x=>(
      <button key={x} onClick={()=>setF(x)}
       style={{flexShrink:0,padding:'7px 14px',borderRadius:20,
        border:`1.5px solid ${f===x?C.amber:C.border}`,
@@ -1533,7 +1533,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
          <div style={{display:'flex',gap:6,marginTop:4,flexWrap:'wrap'}}>
           <Tag text={r.style} color={r.permanent?C.amber:C.hop}
            bg={r.permanent?C.amberPale:C.hopPale}/>
-          {cL>0&&<Tag text={`${cL.toFixed(2)}â¬/L`}
+          {cL>0&&<Tag text={`${cL.toFixed(2)}€/L`}
            color={C.textMid} bg={C.bgDark}/>}
          </div>
         </div>
@@ -1544,7 +1544,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
            border:`1px solid ${C.border}`,background:C.bgDark,
            fontSize:14,cursor:'pointer',color:C.textMid,
            display:'flex',alignItems:'center',justifyContent:'center'}}>
-          â
+          ⎘
          </button>
          <button onClick={()=>openEdit(r)}
           title="Modifier"
@@ -1552,7 +1552,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
            border:`1px solid ${C.amber}60`,background:C.amberPale,
            fontSize:14,cursor:'pointer',color:C.amber,
            display:'flex',alignItems:'center',justifyContent:'center'}}>
-          â
+          ✏
          </button>
         </div>
        </div>
@@ -1576,13 +1576,13 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
          onClick={()=>setSel(r)}>
          {[['33cl',px.b33,coutRevient(r,'b33')],
           ['75cl',px.b75,coutRevient(r,'b75')],
-          ['FÃ»t 20L',px.f20,coutRevient(r,'f20')],
-          ['FÃ»t 30L',px.f30,coutRevient(r,'f30')],
+          ['Fût 20L',px.f20,coutRevient(r,'f20')],
+          ['Fût 30L',px.f30,coutRevient(r,'f30')],
          ].map(([l,p,co])=>p>0?(
           <div key={l} style={{background:C.bgDark,borderRadius:6,
            padding:'5px 4px',textAlign:'center',border:`1px solid ${C.border}`}}>
            <div style={{fontFamily:FM,fontWeight:700,
-            fontSize:13,color:C.amber}}>{p}â¬</div>
+            fontSize:13,color:C.amber}}>{p}€</div>
            <div style={{fontSize:9,color:C.textLight,marginTop:1}}>{l}</div>
            {marge(p,co)!=null&&<div style={{fontSize:8,marginTop:1,
             color:marge(p,co)>=60?C.ok:marge(p,co)>=40?C.warn:C.alert,
@@ -1598,7 +1598,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
          setPxForm({b33:'',b75:'',f20:'',f30:'',});}}
          style={{fontSize:11,color:C.amber,background:'none',border:'none',
           cursor:'pointer',textDecoration:'underline',padding:0,marginTop:4}}>
-         + DÃ©finir les prix
+         + Définir les prix
         </button>
        )}
       </div>
@@ -1623,7 +1623,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
         <div style={{display:'flex',gap:6,marginTop:4,flexWrap:'wrap'}}>
          <Tag text={r.style} color={r.permanent?C.amber:C.hop}
           bg={r.permanent?C.amberPale:C.hopPale}/>
-         <Tag text={r.permanent?'Permanente':'ÃphÃ©mÃ¨re'}
+         <Tag text={r.permanent?'Permanente':'Éphémère'}
           color={C.textMid} bg={C.bgDark}/>
         </div>
        </div>
@@ -1634,20 +1634,20 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
           background:C.bgCard,border:`1px solid ${C.border}`,
           borderRadius:20,padding:'5px 10px',fontSize:11,
           fontWeight:700,color:C.textMid,cursor:'pointer'}}>
-         â Dupliquer
+         ⎘ Dupliquer
         </button>
         <button onClick={()=>openEdit(r)}
          style={{display:'flex',alignItems:'center',gap:4,
           background:C.amberPale,border:`1px solid ${C.amber}60`,
           borderRadius:20,padding:'5px 10px',fontSize:11,
           fontWeight:700,color:C.amber,cursor:'pointer'}}>
-         â Modifier
+         ✏ Modifier
         </button>
         <button onClick={()=>{setSel(null);setEditMode(false);}}
          style={{background:'none',border:`1px solid ${C.border}`,
           borderRadius:20,padding:'5px 12px',fontSize:12,
           fontWeight:700,color:C.textMid,cursor:'pointer'}}>
-         â¹ Retour
+         ‹ Retour
         </button>
        </div>
       </div>
@@ -1676,10 +1676,10 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
         alignItems:'center',marginBottom:10}}>
         <div style={{fontSize:11,fontWeight:700,color:C.textMid,
          textTransform:'uppercase',letterSpacing:0.8}}>
-         CoÃ»t matiÃ¨res â {r.volume}L
+         Coût matières — {r.volume}L
         </div>
         <div style={{fontFamily:FA,fontSize:18,color:C.alert}}>
-         {cm.toFixed(2)}â¬
+         {cm.toFixed(2)}€
         </div>
        </div>
        {ings.map((ing,i)=>{
@@ -1695,10 +1695,10 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
              color:C.textMid,fontSize:11}}>{ing.qte} {ing.u}</span>
             {ing.px&&<span style={{fontFamily:FM,
              color:C.alert,fontSize:11,fontWeight:700}}>
-             {cout_ing.toFixed(2)}â¬
+             {cout_ing.toFixed(2)}€
             </span>}
             <span style={{fontSize:11,color:ing.ok?C.ok:C.alert}}>
-             {ing.ok?'â':'â '}
+             {ing.ok?'✓':'⚠'}
             </span>
            </div>
           </div>
@@ -1711,9 +1711,9 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
        })}
        <div style={{marginTop:10,paddingTop:8,borderTop:`1px solid ${C.border}`,
         display:'flex',justifyContent:'space-between',fontSize:12}}>
-        <span style={{color:C.textMid}}>CoÃ»t / litre</span>
+        <span style={{color:C.textMid}}>Coût / litre</span>
         <span style={{fontFamily:FM,fontWeight:700,
-         color:C.alert}}>{cL.toFixed(3)}â¬/L</span>
+         color:C.alert}}>{cL.toFixed(3)}€/L</span>
        </div>
       </div>
 
@@ -1728,14 +1728,14 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
          style={{background:C.amberPale,border:`1px solid ${C.amber}40`,
           borderRadius:8,padding:'4px 10px',fontSize:11,
           color:C.amber,fontWeight:600,cursor:'pointer'}}>
-         â Modifier les prix
+         ✏ Modifier les prix
         </button>
        </div>
        <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:8}}>
         <PxCell label="33cl"    prix={px.b33||0} cout={coutRevient(r,'b33')}/>
         <PxCell label="75cl"    prix={px.b75||0} cout={coutRevient(r,'b75')}/>
-        <PxCell label="FÃ»t 20L" prix={px.f20||0} cout={cL*20}/>
-        <PxCell label="FÃ»t 30L" prix={px.f30||0} cout={cL*30}/>
+        <PxCell label="Fût 20L" prix={px.f20||0} cout={cL*20}/>
+        <PxCell label="Fût 30L" prix={px.f30||0} cout={cL*30}/>
        </div>
       </div>
 
@@ -1744,7 +1744,7 @@ function ModuleRecettes({recettes,setRecettes,stock,stockCond}){
         style={{width:'100%',padding:'9px',borderRadius:8,
          border:`1px solid ${C.alert}40`,background:'transparent',
          color:C.alert,fontSize:12,fontWeight:600,cursor:'pointer',marginTop:8}}>
-        ð Supprimer cette recette
+        🗑 Supprimer cette recette
        </button>
       )}
      </Modal>
@@ -1760,8 +1760,8 @@ function autoFillFromRecette(rec, volumeL){
 
  const HOUBLONS_NOMS = ['Cascade','Amarillo','Chinook','Mosaic','Nugget','Simcoe',
   'Elixir','Mistral','Citra','Centennial','Azacca','Sabro','Idaho7','Nectaron',
-  'Nelson Sauvin','Motueka','Super delic','Barbe rouge','Ekuanot','AmÃ¨risant',
-  'Best coast hazy','Coriandre','Poivre','Ãcorce','Ecorce','Sucre','Phily',
+  'Nelson Sauvin','Motueka','Super delic','Barbe rouge','Ekuanot','Amèrisant',
+  'Best coast hazy','Coriandre','Poivre','Écorce','Ecorce','Sucre','Phily',
   'Kveik','Windsor','Nottingham','NEIPA','BRY','Verdant','CBC1','Ananas',
   'Kiwi','Framboise','Passion','Miel','sour','Nova','K-97','S-04','WB','BE256'];
  const isMalt = ing => !HOUBLONS_NOMS.some(h=>ing.nom.toLowerCase().includes(h.toLowerCase()))
@@ -1777,7 +1777,7 @@ function autoFillFromRecette(rec, volumeL){
  const avantEbu  = Math.round(eauMash + eauSparge - absorption);
 
  const PALIERS_STD = [
-  {nom:'Palier protÃ©inique', tempCible:50,  duree:0,  note:'Optionnel â skip si pale ale'},
+  {nom:'Palier protéinique', tempCible:50,  duree:0,  note:'Optionnel — skip si pale ale'},
   {nom:'Palier maltose',     tempCible:63,  duree:30, note:'Beta-amylase'},
   {nom:'Maltose/Dextrines',  tempCible:68,  duree:30, note:'Alpha+Beta'},
   {nom:'Palier dextrines',   tempCible:72,  duree:10, note:'Alpha-amylase'},
@@ -1787,27 +1787,27 @@ function autoFillFromRecette(rec, volumeL){
  let paliers;
  if(styleL.includes('blanche')||styleL.includes('wit')){
   paliers = [
-   {nom:'Palier protÃ©inique',tempCible:50,  duree:15,note:'Blanche â obligatoire',tempReelle:'',dureeSaisie:''},
+   {nom:'Palier protéinique',tempCible:50,  duree:15,note:'Blanche — obligatoire',tempReelle:'',dureeSaisie:''},
    {nom:'Palier maltose',    tempCible:63,  duree:25,note:'Beta-amylase',          tempReelle:'',dureeSaisie:''},
    {nom:'Maltose/Dextrines', tempCible:68,  duree:20,note:'Corps',                 tempReelle:'',dureeSaisie:''},
    {nom:'Inactivation',      tempCible:78,  duree:5, note:'Mash out',              tempReelle:'',dureeSaisie:''},
   ];
  } else if(styleL.includes('sour')||styleL.includes('gose')){
   paliers = [
-   {nom:'Acidification',     tempCible:45,  duree:20,note:'Acide â optionnel',     tempReelle:'',dureeSaisie:''},
-   {nom:'Palier maltose',    tempCible:63,  duree:30,note:'Beta-amylase â sec',     tempReelle:'',dureeSaisie:''},
+   {nom:'Acidification',     tempCible:45,  duree:20,note:'Acide — optionnel',     tempReelle:'',dureeSaisie:''},
+   {nom:'Palier maltose',    tempCible:63,  duree:30,note:'Beta-amylase — sec',     tempReelle:'',dureeSaisie:''},
    {nom:'Inactivation',      tempCible:78,  duree:5, note:'Mash out',              tempReelle:'',dureeSaisie:''},
   ];
  } else if(styleL.includes('triple')||styleL.includes('saison')){
   paliers = [
-   {nom:'Palier maltose',    tempCible:63,  duree:40,note:'TrÃ¨s sec â longue beta', tempReelle:'',dureeSaisie:''},
+   {nom:'Palier maltose',    tempCible:63,  duree:40,note:'Très sec — longue beta', tempReelle:'',dureeSaisie:''},
    {nom:'Maltose/Dextrines', tempCible:65,  duree:20,note:'',                       tempReelle:'',dureeSaisie:''},
    {nom:'Inactivation',      tempCible:78,  duree:5, note:'Mash out',               tempReelle:'',dureeSaisie:''},
   ];
  } else if(styleL.includes('stout')||styleL.includes('porter')||styleL.includes('brune')){
   paliers = [
    {nom:'Palier maltose',    tempCible:65,  duree:30,note:'',                       tempReelle:'',dureeSaisie:''},
-   {nom:'Maltose/Dextrines', tempCible:68,  duree:30,note:'Corps â malts foncÃ©s',   tempReelle:'',dureeSaisie:''},
+   {nom:'Maltose/Dextrines', tempCible:68,  duree:30,note:'Corps — malts foncés',   tempReelle:'',dureeSaisie:''},
    {nom:'Inactivation',      tempCible:78,  duree:5, note:'Mash out',               tempReelle:'',dureeSaisie:''},
   ];
  } else if(styleL.includes('neipa')||styleL.includes('dipa')||styleL.includes('hazy')){
@@ -1818,7 +1818,7 @@ function autoFillFromRecette(rec, volumeL){
   ];
  } else {
   const temp = styleL.includes('ipa')||styleL.includes('pale')?66
-        :styleL.includes('ambrÃ©e')||styleL.includes('amber')?68:67;
+        :styleL.includes('ambrée')||styleL.includes('amber')?68:67;
   paliers = [
    {nom:'Palier principal',  tempCible:temp,duree:60,note:'Mono palier',            tempReelle:'',dureeSaisie:''},
    {nom:'Inactivation',      tempCible:78,  duree:5, note:'Mash out',               tempReelle:'',dureeSaisie:''},
@@ -1876,7 +1876,7 @@ function autoFillFromRecette(rec, volumeL){
   pressurisation: isColdFerm?'0.8':'0',
   dureeMash:   '60',
   tempMash:    paliers[0]?.tempCible||67,
-  notes: `Recette ref: ${rec.nom} â ${rec.volume}L, DI ${rec.og||'?'}, DF ${rec.fg||'?'}`,
+  notes: `Recette ref: ${rec.nom} — ${rec.volume}L, DI ${rec.og||'?'}, DF ${rec.fg||'?'}`,
   datePrimaire:'', fermenteurPrimaire:'',
   dateSoftCrash:'', tempSoftCrash:'',
   dateColdCrash:'', tempColdCrash: isColdFerm?'2':'3',
@@ -1891,8 +1891,8 @@ function autoFillFromRecette(rec, volumeL){
  };
 }
 
-function MesureFormPlus({onAdd,label='Ajouter un relevÃ©',placeholder='Observationâ¦',
- hideVal=false,showType=false,types=['densitÃ©','pH','visuel','goÃ»t','brassage']}){
+function MesureFormPlus({onAdd,label='Ajouter un relevé',placeholder='Observation…',
+ hideVal=false,showType=false,types=['densité','pH','visuel','goût','brassage']}){
  const [val, setVal]   = useState('');
  const [temp,setTemp]  = useState('');
  const [note,setNote]  = useState('');
@@ -1924,7 +1924,7 @@ function MesureFormPlus({onAdd,label='Ajouter un relevÃ©',placeholder='Observa
     {!hideVal&&<div>
      <div style={{fontSize:9,color:C.textLight,fontFamily:FM,
       letterSpacing:1,textTransform:'uppercase',marginBottom:4}}>
-      {type==='pH'?'pH':'DensitÃ©'}
+      {type==='pH'?'pH':'Densité'}
      </div>
      <input type="number" step="0.001" value={val}
       onChange={e=>setVal(e.target.value)}
@@ -1933,7 +1933,7 @@ function MesureFormPlus({onAdd,label='Ajouter un relevÃ©',placeholder='Observa
     </div>}
     <div>
      <div style={{fontSize:9,color:C.textLight,fontFamily:FM,
-      letterSpacing:1,textTransform:'uppercase',marginBottom:4}}>Temp Â°C</div>
+      letterSpacing:1,textTransform:'uppercase',marginBottom:4}}>Temp °C</div>
      <input type="number" value={temp}
       onChange={e=>setTemp(e.target.value)} placeholder="18"
       style={{...iSt,background:C.bgCard}}/>
@@ -1953,7 +1953,7 @@ function MesureFormPlus({onAdd,label='Ajouter un relevÃ©',placeholder='Observa
  );
 }
 function MesureForm({onAdd}){
- return <MesureFormPlus onAdd={(v,t,n)=>onAdd(v,t,n,'densitÃ©')}/>;
+ return <MesureFormPlus onAdd={(v,t,n)=>onAdd(v,t,n,'densité')}/>;
 }
 
 function CourbeDensite({mesures,og,fg}){
@@ -1977,7 +1977,7 @@ function CourbeDensite({mesures,og,fg}){
    <div style={{display:'flex',justifyContent:'space-between',
     fontSize:9,color:C.textLight,fontFamily:FM,
     textTransform:'uppercase',letterSpacing:1,marginBottom:4}}>
-    <span>Courbe densitÃ©</span>
+    <span>Courbe densité</span>
     {attPct!=null&&<span style={{color:attPct>80?C.ok:attPct>50?C.warn:C.textLight}}>
      Att. {attPct}%
     </span>}
@@ -2022,7 +2022,7 @@ function ModuleProduction({brassins,setBrassins,recettes}){
  const [q,setQ]             = useState('');
 
  const EF = {
-  recette:'', volume:'', statut:'planifiÃ©', dateDebut:'', fermenteur:'',
+  recette:'', volume:'', statut:'planifié', dateDebut:'', fermenteur:'',
   og:'', fg:'', notes:'',
   eauMash:'', eauSparge:'', tempMash:'', dureeMash:'', rendement:'',
   pHMash:'', pHFinal:'',
@@ -2030,9 +2030,9 @@ function ModuleProduction({brassins,setBrassins,recettes}){
  };
  const [form,setForm] = useState(EF);
 
- const actifs   = brassins.filter(b=>b.statut!=='terminÃ©'&&
+ const actifs   = brassins.filter(b=>b.statut!=='terminé'&&
   (b.recette+' '+(b.fermenteur||'')+(b.notes||'')).toLowerCase().includes(q.toLowerCase()));
- const termines = brassins.filter(b=>b.statut==='terminÃ©'&&b.volume>0&&
+ const termines = brassins.filter(b=>b.statut==='terminé'&&b.volume>0&&
   (b.recette+' '+(b.fermenteur||'')+(b.notes||'')).toLowerCase().includes(q.toLowerCase()))
   .sort((a,b)=>b.id-a.id);
  const displayed = filter==='actifs' ? actifs : termines;
@@ -2046,7 +2046,7 @@ function ModuleProduction({brassins,setBrassins,recettes}){
    date:new Date().toISOString().split('T')[0],
    valeur:parseFloat(val)||null,
    temp:parseFloat(temp)||null,
-   note, type:type||'densitÃ©',
+   note, type:type||'densité',
   }]
  });
 
@@ -2071,23 +2071,23 @@ function ModuleProduction({brassins,setBrassins,recettes}){
   const jours = joursDepuis(b);
   const expFG = expectedFG(b);
   const lastMes = b.mesures?.filter(m=>m.valeur).slice(-1)[0];
-  const densites = b.mesures?.filter(m=>m.type==='densitÃ©'||!m.type);
+  const densites = b.mesures?.filter(m=>m.type==='densité'||!m.type);
   const isFerme  = ['fermentation','garde','conditionnement'].includes(b.statut);
   const pHFin    = b.pHFinal || b.mesures?.find(m=>m.type==='pH')?.valeur;
 
   const fermStatus = () => {
    if(!att) return null;
-   if(att>=85) return {col:C.ok,    txt:'â Fermentation terminÃ©e', bg:C.greenPale};
-   if(att>=60) return {col:C.amber, txt:'â En cours',              bg:C.amberPale};
-   return       {col:C.warn,  txt:'â³ DÃ©marrage',                  bg:C.amberPale};
+   if(att>=85) return {col:C.ok,    txt:'✓ Fermentation terminée', bg:C.greenPale};
+   if(att>=60) return {col:C.amber, txt:'⚗ En cours',              bg:C.amberPale};
+   return       {col:C.warn,  txt:'⏳ Démarrage',                  bg:C.amberPale};
   };
   const fs = fermStatus();
 
   const TABS_FICHE = [
-   {id:'suivi',       label:'ð Suivi'},
-   {id:'brassage',    label:'ð¥ Brassage'},
-   {id:'fermentation',label:'â Ferm.'},
-   {id:'notes',       label:'ð Notes'},
+   {id:'suivi',       label:'📊 Suivi'},
+   {id:'brassage',    label:'🔥 Brassage'},
+   {id:'fermentation',label:'⚗ Ferm.'},
+   {id:'notes',       label:'📝 Notes'},
   ];
 
   return (
@@ -2104,14 +2104,14 @@ function ModuleProduction({brassins,setBrassins,recettes}){
         <span style={{fontFamily:FM,fontSize:10,
          color:C.textLight}}>{b.fermenteur}</span>
         <span style={{fontFamily:FM,fontSize:10,
-         color:C.textLight}}>{fmtDate(b.dateDebut)} Â· J+{jours}</span>
+         color:C.textLight}}>{fmtDate(b.dateDebut)} · J+{jours}</span>
        </div>
       </div>
       <button onClick={()=>{setSel(null);setSelTab('suivi');}}
        style={{background:'none',border:`1px solid ${C.border}`,
         borderRadius:20,padding:'5px 12px',fontSize:12,
         fontWeight:700,color:C.textMid,flexShrink:0}}>
-       â¹ Retour
+       ‹ Retour
       </button>
      </div>
      <div style={{display:'flex',gap:0,overflowX:'auto',scrollbarWidth:'none',marginTop:4}}>
@@ -2136,10 +2136,10 @@ function ModuleProduction({brassins,setBrassins,recettes}){
       <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',
        gap:8,marginBottom:14}}>
        {[
-        ['DI',     b.og?b.og.toFixed(3):'â',       C.amber],
-        ['DF actuelle', lastMes?lastMes.valeur.toFixed(3):'â', C.green],
-        ['DF cible', expFG?expFG.toFixed(3):'â',   C.textMid],
-        ['ABV',    abvCalc?`${abvCalc}%`:(b.abv?`${b.abv}%`:'â'), C.hop],
+        ['DI',     b.og?b.og.toFixed(3):'—',       C.amber],
+        ['DF actuelle', lastMes?lastMes.valeur.toFixed(3):'—', C.green],
+        ['DF cible', expFG?expFG.toFixed(3):'—',   C.textMid],
+        ['ABV',    abvCalc?`${abvCalc}%`:(b.abv?`${b.abv}%`:'—'), C.hop],
        ].map(([l,v,col])=>(
         <div key={l} style={{background:C.bgDark,borderRadius:8,
          padding:'10px 6px',textAlign:'center',
@@ -2190,12 +2190,12 @@ function ModuleProduction({brassins,setBrassins,recettes}){
        <div style={{marginBottom:12}}>
         <div style={{fontSize:9,fontFamily:FM,fontWeight:700,
          letterSpacing:1.5,color:C.textLight,textTransform:'uppercase',marginBottom:6}}>
-         Historique des relevÃ©s
+         Historique des relevés
         </div>
         <div style={{display:'flex',flexDirection:'column',gap:3}}>
          {[...b.mesures].reverse().map((m,i)=>{
-          const icons = {'densitÃ©':'â¬','pH':'ð§ª','temp':'ð¡','visuel':'ð','goÃ»t':'ð'};
-          const ic = icons[m.type||'densitÃ©']||'â¢';
+          const icons = {'densité':'⬟','pH':'🧪','temp':'🌡','visuel':'👁','goût':'👅'};
+          const ic = icons[m.type||'densité']||'•';
           return(
            <div key={`k${i}`} style={{display:'flex',gap:8,padding:'7px 10px',
             borderRadius:7,background:C.bgDark,fontSize:11,
@@ -2208,7 +2208,7 @@ function ModuleProduction({brassins,setBrassins,recettes}){
              {m.valeur.toFixed(m.type==='pH'?2:3)}
             </span>}
             {m.temp!=null&&<span style={{color:C.textLight,fontSize:10,flexShrink:0}}>
-             {m.temp}Â°C
+             {m.temp}°C
             </span>}
             <span style={{color:C.textMid,flex:1,overflow:'hidden',
              textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{m.note}</span>
@@ -2219,7 +2219,7 @@ function ModuleProduction({brassins,setBrassins,recettes}){
        </div>
       )}
 
-      {b.statut!=='terminÃ©'&&(
+      {b.statut!=='terminé'&&(
        <MesureFormPlus onAdd={(val,temp,note,type)=>addMes(b,val,temp,note,type)}/>
       )}
      </div>
@@ -2248,9 +2248,9 @@ function ModuleProduction({brassins,setBrassins,recettes}){
        </div>
        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8}}>
         {[
-         ['EmpÃ¢tage',         'eauMash',    rec?.eauMash||''],
-         ['RinÃ§age',          'eauSparge',  rec?.eauSparge||''],
-         ['Avant Ã©bu (100Â°C)','avantEbu',   rec?.avantEbu||''],
+         ['Empâtage',         'eauMash',    rec?.eauMash||''],
+         ['Rinçage',          'eauSparge',  rec?.eauSparge||''],
+         ['Avant ébu (100°C)','avantEbu',   rec?.avantEbu||''],
         ].map(([label,field,hint])=>(
          <div key={field}>
           <div style={{fontSize:9,color:C.textLight,fontFamily:FM,
@@ -2265,7 +2265,7 @@ function ModuleProduction({brassins,setBrassins,recettes}){
         <div>
          <div style={{fontSize:9,color:C.textLight,fontFamily:FM,
           letterSpacing:0.5,textTransform:'uppercase',marginBottom:4}}>
-          pH empÃ¢tage
+          pH empâtage
          </div>
          <input type="number" step="0.1" value={b.pHMash||''}
           onChange={e=>updB(b,{pHMash:e.target.value})}
@@ -2274,7 +2274,7 @@ function ModuleProduction({brassins,setBrassins,recettes}){
         <div>
          <div style={{fontSize:9,color:C.textLight,fontFamily:FM,
           letterSpacing:0.5,textTransform:'uppercase',marginBottom:4}}>
-          DensitÃ© avant Ã©bu
+          Densité avant ébu
          </div>
          <input type="number" step="0.001" value={b.densAvantEbu||''}
           onChange={e=>updB(b,{densAvantEbu:e.target.value})}
@@ -2289,7 +2289,7 @@ function ModuleProduction({brassins,setBrassins,recettes}){
         alignItems:'center',marginBottom:10}}>
         <div style={{fontSize:9,color:C.amber,fontFamily:FM,
          fontWeight:700,letterSpacing:1.5,textTransform:'uppercase'}}>
-         Paliers d'empÃ¢tage
+         Paliers d'empâtage
         </div>
         <button onClick={()=>{
          const pal = [...(b.paliersMash||rec?.paliersMash||[]),
@@ -2305,7 +2305,7 @@ function ModuleProduction({brassins,setBrassins,recettes}){
        <div style={{display:'grid',
         gridTemplateColumns:'1fr 70px 70px 70px 70px',
         gap:4,marginBottom:6}}>
-        {['Palier','CibleÂ°C','RÃ©elÂ°C','DurÃ©e',''].map((h,i)=>(
+        {['Palier','Cible°C','Réel°C','Durée',''].map((h,i)=>(
          <div key={`k${i}`} style={{fontSize:8,color:C.textLight,
           fontFamily:FM,textTransform:'uppercase',
           letterSpacing:0.8}}>{h}</div>
@@ -2326,7 +2326,7 @@ function ModuleProduction({brassins,setBrassins,recettes}){
          <div style={{background:C.bgCard,border:`1px solid ${C.border}`,
           borderRadius:8,padding:'6px',textAlign:'center',
           fontFamily:FM,fontSize:12,color:C.textMid}}>
-          {pal.tempCible}Â°
+          {pal.tempCible}°
          </div>
          <input type="number" value={pal.tempReelle||''}
           onChange={e=>{
@@ -2334,7 +2334,7 @@ function ModuleProduction({brassins,setBrassins,recettes}){
            pals[i]={...pals[i],tempReelle:e.target.value};
            updB(b,{paliersMash:pals});
           }}
-          placeholder="RÃ©el" style={{...iSt,padding:'6px 5px',fontSize:12,textAlign:'center'}}/>
+          placeholder="Réel" style={{...iSt,padding:'6px 5px',fontSize:12,textAlign:'center'}}/>
          <input type="number" value={pal.dureeSaisie||pal.duree||''}
           onChange={e=>{
            const pals=[...(b.paliersMash||rec?.paliersMash||[])];
@@ -2349,7 +2349,7 @@ function ModuleProduction({brassins,setBrassins,recettes}){
          }}
           style={{width:24,height:32,borderRadius:5,border:`1px solid ${C.border}`,
            background:'transparent',color:C.alert,fontSize:13,cursor:'pointer',
-           display:'flex',alignItems:'center',justifyContent:'center'}}>Ã</button>
+           display:'flex',alignItems:'center',justifyContent:'center'}}>×</button>
         </div>
        ))}
 
@@ -2357,7 +2357,7 @@ function ModuleProduction({brassins,setBrassins,recettes}){
         <div key={i+'n'} style={{fontSize:9,color:C.textLight,
          fontFamily:FM,marginBottom:3,
          paddingLeft:4}}>
-         â³ {pal.nom}: {pal.note}
+         ↳ {pal.nom}: {pal.note}
         </div>
        ):null)}
       </div>
@@ -2368,7 +2368,7 @@ function ModuleProduction({brassins,setBrassins,recettes}){
         alignItems:'center',marginBottom:10}}>
         <div style={{fontSize:9,color:C.amber,fontFamily:FM,
          fontWeight:700,letterSpacing:1.5,textTransform:'uppercase'}}>
-         Houblons & Ãpices
+         Houblons & Épices
         </div>
         <button onClick={()=>{
          const hops=[...(b.houblonsDetail||rec?.houblonsDetail||[]),
@@ -2384,7 +2384,7 @@ function ModuleProduction({brassins,setBrassins,recettes}){
        <div style={{display:'grid',
         gridTemplateColumns:'1fr 60px 44px 1fr 36px 26px',
         gap:4,marginBottom:6}}>
-        {['Type','QtÃ©','UÂ°','Ãtape / Timing','Î±%',''].map((h,i)=>(
+        {['Type','Qté','U°','Étape / Timing','α%',''].map((h,i)=>(
          <div key={`k${i}`} style={{fontSize:8,color:C.textLight,
           fontFamily:FM,textTransform:'uppercase',
           letterSpacing:0.5}}>{h}</div>
@@ -2401,13 +2401,13 @@ function ModuleProduction({brassins,setBrassins,recettes}){
            h[i]={...h[i],nom:e.target.value};
            updB(b,{houblonsDetail:h});
           }}
-          placeholder="Cascadeâ¦" style={{...iSt,padding:'6px 7px',fontSize:11}}
+          placeholder="Cascade…" style={{...iSt,padding:'6px 7px',fontSize:11}}
           list={`hop-list-${i}`}/>
          <datalist id={`hop-list-${i}`}>
           {['Cascade','Amarillo','Chinook','Mosaic','Nugget','Simcoe','Elixir',
            'Mistral','Citra','Centennial','Azacca','Sabro','Idaho7','Nectaron',
            'Nelson Sauvin','Motueka','Super delic','Barbe rouge','Ekuanot',
-           'AmÃ¨risant','Coriandre','Poivre'].map(h=>(
+           'Amèrisant','Coriandre','Poivre'].map(h=>(
            <option key={h} value={h}/>
           ))}
          </datalist>
@@ -2434,7 +2434,7 @@ function ModuleProduction({brassins,setBrassins,recettes}){
            h[i]={...h[i],etape:e.target.value};
            updB(b,{houblonsDetail:h});
           }}
-          placeholder="60min / aroma / DH J+2â¦"
+          placeholder="60min / aroma / DH J+2…"
           style={{...iSt,padding:'6px 7px',fontSize:11}}/>
          <input type="number" value={hop.alpha||''}
           onChange={e=>{
@@ -2449,7 +2449,7 @@ function ModuleProduction({brassins,setBrassins,recettes}){
          }}
           style={{width:24,height:32,borderRadius:5,border:`1px solid ${C.border}`,
            background:'transparent',color:C.alert,fontSize:13,cursor:'pointer',
-           display:'flex',alignItems:'center',justifyContent:'center'}}>Ã</button>
+           display:'flex',alignItems:'center',justifyContent:'center'}}>×</button>
         </div>
        ))}
       </div>
@@ -2457,8 +2457,8 @@ function ModuleProduction({brassins,setBrassins,recettes}){
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8,marginBottom:12}}>
        {[
         ['Rendement (%)',   'rendement',  '72'],
-        ['DI mesurÃ©e',      'og',         '1.050'],
-        ['pH final moÃ»t',   'pHFinal',    '4.3'],
+        ['DI mesurée',      'og',         '1.050'],
+        ['pH final moût',   'pHFinal',    '4.3'],
        ].map(([label,field,ph])=>(
         <div key={field}>
          <div style={{fontSize:9,color:C.textLight,fontFamily:FM,
@@ -2482,14 +2482,14 @@ function ModuleProduction({brassins,setBrassins,recettes}){
         <div key={`k${i}`} style={{padding:'7px 10px',borderRadius:7,
          background:C.bgDark,fontSize:11,border:`1px solid ${C.border}`,
          marginBottom:4,color:C.textMid,display:'flex',gap:8}}>
-         ð¥
+         🔥
          <span style={{color:C.textLight,fontSize:10,flexShrink:0}}>{m.date}</span>
          <span>{m.note}</span>
-         {m.temp&&<span style={{color:C.textLight,fontSize:10}}>{m.temp}Â°C</span>}
+         {m.temp&&<span style={{color:C.textLight,fontSize:10}}>{m.temp}°C</span>}
         </div>
        ))}
        <MesureFormPlus onAdd={(v,t,n)=>addMes(b,v,t,n,'brassage')}
-        placeholder="Observation de brassageâ¦" hideVal
+        placeholder="Observation de brassage…" hideVal
         label="Ajouter une note brassage"/>
       </div>
      </div>
@@ -2517,10 +2517,10 @@ function ModuleProduction({brassins,setBrassins,recettes}){
           </div>
           <div>
            <div style={{fontSize:9,color:C.textLight,fontFamily:FM,
-            letterSpacing:0.5,textTransform:'uppercase',marginBottom:4}}>NÂ° lot</div>
+            letterSpacing:0.5,textTransform:'uppercase',marginBottom:4}}>N° lot</div>
            <input value={b.levureLot||''}
             onChange={e=>updB(b,{levureLot:e.target.value})}
-            placeholder="LOTâ¦"
+            placeholder="LOT…"
             style={{...iSt,padding:'7px 9px',fontSize:12}}/>
           </div>
          </div>
@@ -2531,23 +2531,23 @@ function ModuleProduction({brassins,setBrassins,recettes}){
          letterSpacing:0.5,textTransform:'uppercase',marginBottom:4}}>pH fermentation</div>
         <input type="number" step="0.1" value={b.pHFerm||''}
          onChange={e=>updB(b,{pHFerm:e.target.value})}
-         placeholder="Cible 4.0â4.5"
+         placeholder="Cible 4.0–4.5"
          style={{...iSt,padding:'7px 9px',fontSize:13,width:'50%'}}/>
        </div>
       </div>
 
       {[
-       {key:'primaire',  label:'Primaire',   icon:'ð¢',
+       {key:'primaire',  label:'Primaire',   icon:'🟢',
        fields:[['Date',       'datePrimaire',      'date'],
-           ['TempÃ©rature','tempFerm',          'number'],
+           ['Température','tempFerm',          'number'],
            ['Fermenteur', 'fermenteurPrimaire','text']]},
-       {key:'soft',     label:'Soft Crash',  icon:'ðµ',
+       {key:'soft',     label:'Soft Crash',  icon:'🔵',
        fields:[['Date',       'dateSoftCrash',  'date'],
-           ['TempÃ©rature','tempSoftCrash',  'number']]},
-       {key:'cold',     label:'Cold Crash',  icon:'âï¸',
+           ['Température','tempSoftCrash',  'number']]},
+       {key:'cold',     label:'Cold Crash',  icon:'❄️',
        fields:[['Date',       'dateColdCrash',  'date'],
-           ['TempÃ©rature','tempColdCrash',  'number'],
-           ['DurÃ©e (j)',   'dureeColdCrash', 'number']]},
+           ['Température','tempColdCrash',  'number'],
+           ['Durée (j)',   'dureeColdCrash', 'number']]},
       ].map(stage=>(
        <div key={stage.key} style={{background:C.bgDark,borderRadius:10,
         padding:'12px 14px',marginBottom:10,border:`1px solid ${C.border}`}}>
@@ -2577,7 +2577,7 @@ function ModuleProduction({brassins,setBrassins,recettes}){
        marginBottom:12,border:`1px solid ${C.border}`}}>
        <div style={{fontSize:9,color:C.amber,fontFamily:FM,
         fontWeight:700,letterSpacing:1.5,textTransform:'uppercase',marginBottom:8}}>
-        ð¾ Conditionnement & Resucrage
+        🍾 Conditionnement & Resucrage
        </div>
        <div style={{marginBottom:10}}>
         <div style={{fontSize:9,color:C.textLight,fontFamily:FM,
@@ -2598,9 +2598,9 @@ function ModuleProduction({brassins,setBrassins,recettes}){
        </div>
 
        {[
-        {key:'inox',   label:'FÃ»ts Inox', defaultTaux:3.5, icon:'ð¢'},
-        {key:'ecofass',label:'Ecofass',    defaultTaux:3.8, icon:'ð¢'},
-        {key:'bt',     label:'Bouteilles', defaultTaux:5.5, icon:'ðº'},
+        {key:'inox',   label:'Fûts Inox', defaultTaux:3.5, icon:'🛢'},
+        {key:'ecofass',label:'Ecofass',    defaultTaux:3.8, icon:'🛢'},
+        {key:'bt',     label:'Bouteilles', defaultTaux:5.5, icon:'🍺'},
        ].map(row=>{
         const res = b.resucrage?.[row.key]||{};
         const taux  = parseFloat(res.taux||row.defaultTaux)||0;
@@ -2634,39 +2634,39 @@ function ModuleProduction({brassins,setBrassins,recettes}){
            borderRadius:8,padding:'7px 6px',textAlign:'center',
            fontFamily:FM,fontWeight:700,fontSize:12,
            color:sucreCalc?C.amber:C.textLight}}>
-           {sucreCalc||'â'}
+           {sucreCalc||'—'}
           </div>
          </div>
         );
        })}
       </div>
 
-      {(b.mesures?.filter(m=>!m.type||m.type==='densitÃ©').length||0)>=2&&(
+      {(b.mesures?.filter(m=>!m.type||m.type==='densité').length||0)>=2&&(
        <div style={{marginBottom:12}}>
         <div style={{fontSize:9,fontFamily:FM,fontWeight:700,
          letterSpacing:1.5,color:C.textLight,textTransform:'uppercase',marginBottom:6}}>
          Courbe de fermentation
         </div>
         <CourbeDensite
-         mesures={b.mesures.filter(m=>!m.type||m.type==='densitÃ©')}
+         mesures={b.mesures.filter(m=>!m.type||m.type==='densité')}
          og={b.og} fg={b.fg||expFG}/>
        </div>
       )}
 
       <MesureFormPlus onAdd={(v,t,n,tp)=>addMes(b,v,t,n,tp)}
-       label="Ajouter un relevÃ© fermentation"
-       showType types={['densitÃ©','pH','visuel','goÃ»t','temp']}/>
+       label="Ajouter un relevé fermentation"
+       showType types={['densité','pH','visuel','goût','temp']}/>
      </div>
     )}
 
     {selTab==='notes'&&(
      <div>
       <div style={{marginBottom:14}}>
-       <Label t="Notes gÃ©nÃ©rales"/>
+       <Label t="Notes générales"/>
        <textarea
         value={b.notes||''}
         onChange={e=>updB(b,{notes:e.target.value})}
-        placeholder="Observations, pH, incidents, caractÃ©ristiques organoleptiquesâ¦"
+        placeholder="Observations, pH, incidents, caractéristiques organoleptiques…"
         style={{...iSt,height:120,resize:'vertical',lineHeight:1.6}}/>
       </div>
       {rec&&(
@@ -2674,7 +2674,7 @@ function ModuleProduction({brassins,setBrassins,recettes}){
         border:`1px solid ${C.border}`,marginBottom:14}}>
         <div style={{fontSize:9,fontFamily:FM,fontWeight:700,
          letterSpacing:1.5,color:C.textLight,textTransform:'uppercase',marginBottom:8}}>
-         Recette de rÃ©fÃ©rence
+         Recette de référence
         </div>
         {[
          ['Style',         rec.style],
@@ -2682,7 +2682,7 @@ function ModuleProduction({brassins,setBrassins,recettes}){
          ['IBU',           rec.ibu],
          ['DI cible',      rec.og?.toFixed(3)],
          ['DF cible',      rec.fg?.toFixed(3)],
-         ['Volume brassÃ©', `${rec.volume} L`],
+         ['Volume brassé', `${rec.volume} L`],
          ['Levure',        rec.levure],
         ].filter(([,v])=>v).map(([l,v])=>(
          <div key={l} style={{display:'flex',justifyContent:'space-between',
@@ -2724,23 +2724,23 @@ function ModuleProduction({brassins,setBrassins,recettes}){
      fontSize:'clamp(20px,5vw,26px)',color:C.text}}>Production</h2>
     <p style={{color:C.textLight,fontSize:12,
      fontFamily:FM,marginTop:2}}>
-     Braumeister 575L Â· 5 fermenteurs
+     Braumeister 575L · 5 fermenteurs
     </p>
    </div>
 
    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:16}}>
-    <StatCard label="TerminÃ©s"   value={termines.length}                  icon="ðº" color={C.amber}/>
-    <StatCard label="Volume"     value={`${(totalVol/1000).toFixed(2)} hL`} icon="ðª£" color={C.green}/>
-    <StatCard label="En cours"   value={actifs.length}                    icon="âï¸" color={C.hop}/>
-    <StatCard label="Vol. moyen" value={termines.length?`${Math.round(totalVol/termines.length)}L`:'â'} icon="ð" color={C.brick}/>
+    <StatCard label="Terminés"   value={termines.length}                  icon="🍺" color={C.amber}/>
+    <StatCard label="Volume"     value={`${(totalVol/1000).toFixed(2)} hL`} icon="🪣" color={C.green}/>
+    <StatCard label="En cours"   value={actifs.length}                    icon="⚗️" color={C.hop}/>
+    <StatCard label="Vol. moyen" value={termines.length?`${Math.round(totalVol/termines.length)}L`:'—'} icon="📊" color={C.brick}/>
    </div>
 
-   <SearchBar value={q} onChange={setQ} placeholder="Recette, fermenteurâ¦"/>
+   <SearchBar value={q} onChange={setQ} placeholder="Recette, fermenteur…"/>
 
    <div style={{display:'flex',justifyContent:'space-between',
     alignItems:'center',marginBottom:12}}>
     <div style={{display:'flex',gap:6}}>
-     {[['actifs',`Actifs (${actifs.length})`],['terminÃ©s',`TerminÃ©s (${termines.length})`]].map(([k,l])=>(
+     {[['actifs',`Actifs (${actifs.length})`],['terminés',`Terminés (${termines.length})`]].map(([k,l])=>(
       <button key={k} onClick={()=>setFilter(k)}
        style={{padding:'7px 12px',borderRadius:20,fontWeight:600,fontSize:12,
         border:`1.5px solid ${filter===k?C.amber:C.border}`,
@@ -2760,7 +2760,7 @@ function ModuleProduction({brassins,setBrassins,recettes}){
    <div style={{display:'flex',flexDirection:'column',gap:8}}>
     {displayed.map(b=>{
      const att   = calcAtt(b);
-     const last  = b.mesures?.filter(m=>m.valeur&&(!m.type||m.type==='densitÃ©')).slice(-1)[0];
+     const last  = b.mesures?.filter(m=>m.valeur&&(!m.type||m.type==='densité')).slice(-1)[0];
      const jours = joursDepuis(b);
      const expFG = expectedFG(b);
      const fermPct = b.og&&last ? Math.min(100,Math.round((b.og-last.valeur)/(b.og-(expFG||1.010))*100)) : 0;
@@ -2779,11 +2779,11 @@ function ModuleProduction({brassins,setBrassins,recettes}){
           whiteSpace:'nowrap'}}>{b.recette}</div>
          <div style={{fontSize:11,color:C.textLight,
           fontFamily:FM,marginTop:2}}>
-          {b.fermenteur} Â· {fmtDate(b.dateDebut)}
-          {b.statut!=='terminÃ©'&&<span style={{color:C.amber}}> Â· J+{jours}</span>}
+          {b.fermenteur} · {fmtDate(b.dateDebut)}
+          {b.statut!=='terminé'&&<span style={{color:C.amber}}> · J+{jours}</span>}
          </div>
         </div>
-        <span style={{fontSize:18,color:C.textLight,flexShrink:0,marginLeft:8}}>âº</span>
+        <span style={{fontSize:18,color:C.textLight,flexShrink:0,marginLeft:8}}>›</span>
        </div>
 
        <div style={{display:'flex',gap:6,flexWrap:'wrap',marginBottom:inFerm?8:0,
@@ -2794,10 +2794,10 @@ function ModuleProduction({brassins,setBrassins,recettes}){
          borderRadius:4,border:`1px solid ${C.border}`}}>
          DI {b.og.toFixed(3)}
         </span>}
-        {last&&b.statut!=='terminÃ©'&&<span style={{fontFamily:FM,
+        {last&&b.statut!=='terminé'&&<span style={{fontFamily:FM,
          fontSize:10,color:C.green,background:C.greenPale,padding:'1px 6px',
          borderRadius:4,border:`1px solid ${C.green}30`}}>
-         â {last.valeur.toFixed(3)}
+         ↓ {last.valeur.toFixed(3)}
         </span>}
         {att!=null&&<span style={{fontFamily:FM,fontSize:10,
          color:att>=80?C.ok:att>=50?C.warn:C.textLight,
@@ -2834,9 +2834,9 @@ function ModuleProduction({brassins,setBrassins,recettes}){
     })}
     {displayed.length===0&&(
      <div style={{textAlign:'center',padding:'40px 0',color:C.textLight}}>
-      <div style={{fontSize:36,marginBottom:8}}>âï¸</div>
+      <div style={{fontSize:36,marginBottom:8}}>⚗️</div>
       <div style={{fontWeight:600}}>
-       {filter==='actifs'?'Aucun brassin en cours':'Aucun brassin terminÃ©'}
+       {filter==='actifs'?'Aucun brassin en cours':'Aucun brassin terminé'}
       </div>
      </div>
     )}
@@ -2855,14 +2855,14 @@ function ModuleProduction({brassins,setBrassins,recettes}){
        <div style={{background:C.amberPale,borderRadius:8,padding:'8px 12px',
         marginBottom:12,border:`1px solid ${C.amber}40`,
         display:'flex',alignItems:'center',gap:8}}>
-        <span style={{fontSize:16}}>âï¸</span>
+        <span style={{fontSize:16}}>⚗️</span>
         <div style={{flex:1,minWidth:0}}>
          <div style={{fontSize:11,fontWeight:700,color:C.amber}}>
-          PrÃ©-rempli depuis {rec.nom}
+          Pré-rempli depuis {rec.nom}
          </div>
          <div style={{fontSize:10,color:C.textMid,
           fontFamily:FM,marginTop:1}}>
-          DI {rec.og?.toFixed(3)||'?'} Â· DF {rec.fg?.toFixed(3)||'?'} Â· {rec.abv}% Â· {rec.levure}
+          DI {rec.og?.toFixed(3)||'?'} · DF {rec.fg?.toFixed(3)||'?'} · {rec.abv}% · {rec.levure}
          </div>
         </div>
        </div>
@@ -2880,7 +2880,7 @@ function ModuleProduction({brassins,setBrassins,recettes}){
           ...(rec ? autoFillFromRecette(rec, prev.volume||rec.volume) : {})
          }));
         }} style={iSt}>
-        <option value="">â Choisir â</option>
+        <option value="">— Choisir —</option>
         {recettes.map(r=><option key={r.id} value={r.nom}>{r.nom}</option>)}
        </select>
       </div>
@@ -2911,7 +2911,7 @@ function ModuleProduction({brassins,setBrassins,recettes}){
           }
          }} style={iSt}/>
        </div>
-       <div><Label t="DI visÃ©e"/>
+       <div><Label t="DI visée"/>
         <input type="number" step="0.001" value={form.og}
          onChange={e=>setForm({...form,og:e.target.value})}
          placeholder="1.050" style={iSt}/>
@@ -2925,14 +2925,14 @@ function ModuleProduction({brassins,setBrassins,recettes}){
         padding:'10px 12px',border:`1px solid ${C.border}`}}>
         <div style={{fontSize:9,color:C.amber,fontFamily:FM,
          fontWeight:700,letterSpacing:1.5,textTransform:'uppercase',marginBottom:8}}>
-         â Eau & brassage â modifiable
+         ⚗ Eau & brassage — modifiable
         </div>
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
          {[
           ['Eau mash (L)',    'eauMash',   'Ratio 3.2L/kg'],
-          ['Eau rinÃ§age (L)', 'eauSparge', 'Auto-calculÃ©'],
+          ['Eau rinçage (L)', 'eauSparge', 'Auto-calculé'],
           ['Temp. mash',      'tempMash',  'Ex: 67'],
-          ['DurÃ©e mash (min)','dureeMash', '60'],
+          ['Durée mash (min)','dureeMash', '60'],
          ].map(([label,field,hint])=>(
           <div key={field}>
            <div style={{fontSize:9,color:C.textLight,marginBottom:3,
@@ -2950,7 +2950,7 @@ function ModuleProduction({brassins,setBrassins,recettes}){
          onChange={e=>setForm({...form,pHMash:e.target.value})}
          placeholder="5.4" style={iSt}/>
        </div>
-       <div><Label t="Temp. ferm (Â°C)"/>
+       <div><Label t="Temp. ferm (°C)"/>
         <input type="number" value={form.tempFerm}
          onChange={e=>setForm({...form,tempFerm:e.target.value})}
          placeholder="18" style={iSt}/>
@@ -2986,13 +2986,13 @@ function ModuleProduction({brassins,setBrassins,recettes}){
          date:   form.dateDebut||today,
          valeur: ogVal,
          temp:   parseFloat(form.tempFerm)||20,
-         note:   'DI â initial',
-         type:   'densitÃ©',
+         note:   'DI — initial',
+         type:   'densité',
         }] : [],
        };
        setBrassins([...brassins, newB]);
        setShowF(false);setForm(EF);
-      }}>CrÃ©er</Btn>
+      }}>Créer</Btn>
      </div>
     </Modal>
    )}
@@ -3007,20 +3007,20 @@ function ModuleConditionnement({brassins,setBrassins,stockCond,setStockCond,cond
  const [showStock,setShowStock]=useState(false);
  const [editStock,setEditStock]=useState(null);
  const today=new Date().toISOString().split('T')[0];
- const ES={nom:'',cat:'Bouteille',qte:'',u:'unitÃ©s',seuil:'',prix:'',four:'',dateAjout:today};
+ const ES={nom:'',cat:'Bouteille',qte:'',u:'unités',seuil:'',prix:'',four:'',dateAjout:today};
  const [sf,setSf]=useState(ES);
  const EF={brassinId:'',date:today,operateur:'',notes:'',lots:[{type:'Bouteille 33cl',volume:'',contenants:'',lot:'',capacite:0.33}]};
  const [condForm,setCondForm]=useState(EF);
 
  const totalBt33=condSessions.reduce((s,cs)=>s+cs.lots.filter(l=>l.type==='Bouteille 33cl').reduce((a,l)=>a+l.contenants,0),0);
  const totalBt75=condSessions.reduce((s,cs)=>s+cs.lots.filter(l=>l.type==='Bouteille 75cl').reduce((a,l)=>a+l.contenants,0),0);
- const totalFuts=condSessions.reduce((s,cs)=>s+cs.lots.filter(l=>l.type.startsWith('FÃ»t')).reduce((a,l)=>a+l.contenants,0),0);
+ const totalFuts=condSessions.reduce((s,cs)=>s+cs.lots.filter(l=>l.type.startsWith('Fût')).reduce((a,l)=>a+l.contenants,0),0);
  const alertesCond=stockCond.filter(s=>s.qte<=s.seuil).length;
 
- const brassinsActifs = brassins.filter(b=>b.statut!=='terminÃ©');
+ const brassinsActifs = brassins.filter(b=>b.statut!=='terminé');
  const brassinsGarde  = brassinsActifs.filter(b=>b.statut==='garde');
- const brassinsEnCours= brassinsActifs.filter(b=>b.statut!=='garde'&&b.statut!=='planifiÃ©');
- const brassinsPlanif = brassinsActifs.filter(b=>b.statut==='planifiÃ©');
+ const brassinsEnCours= brassinsActifs.filter(b=>b.statut!=='garde'&&b.statut!=='planifié');
+ const brassinsPlanif = brassinsActifs.filter(b=>b.statut==='planifié');
 
  const selBrassin = condForm.brassinId ? brassins.find(x=>x.id===parseInt(condForm.brassinId)) : null;
 
@@ -3046,7 +3046,7 @@ function ModuleConditionnement({brassins,setBrassins,stockCond,setStockCond,cond
  const updLot=(i,k,v)=>{
   const lots=[...condForm.lots];
   lots[i]={...lots[i],[k]:v};
-  if(k==='type'){const cap={"Bouteille 33cl":0.33,"Bouteille 75cl":0.75,"FÃ»t 20L":20,"FÃ»t 30L":30}[v]||0;lots[i].capacite=cap;}
+  if(k==='type'){const cap={"Bouteille 33cl":0.33,"Bouteille 75cl":0.75,"Fût 20L":20,"Fût 30L":30}[v]||0;lots[i].capacite=cap;}
   if(k==='volume'&&lots[i].capacite>0)lots[i].contenants=Math.round(parseFloat(v||0)/lots[i].capacite);
   setCondForm({...condForm,lots});
  };
@@ -3066,15 +3066,15 @@ function ModuleConditionnement({brassins,setBrassins,stockCond,setStockCond,cond
   const session={id:Date.now(),brassinId:parseInt(condForm.brassinId),brassinNom:b?.recette||'',date:condForm.date,operateur:condForm.operateur,notes:condForm.notes,lots:condForm.lots.map(l=>({...l,volume:parseFloat(l.volume)||0,contenants:parseInt(l.contenants)||0}))};
   const newStock=[...stockCond];
   session.lots.forEach(lot=>{
-   const m={"Bouteille 33cl":"Bouteille 33cl","Bouteille 75cl":"Bouteille 75cl","FÃ»t 20L":"FÃ»t 20L Inox","FÃ»t 30L":"FÃ»t 30L Inox"};
+   const m={"Bouteille 33cl":"Bouteille 33cl","Bouteille 75cl":"Bouteille 75cl","Fût 20L":"Fût 20L Inox","Fût 30L":"Fût 30L Inox"};
    const sn=m[lot.type];if(sn){const si=newStock.findIndex(s=>s.nom===sn);if(si>=0)newStock[si]={...newStock[si],qte:newStock[si].qte-lot.contenants};}
-   if(lot.type==='Bouteille 33cl'){const ci=newStock.findIndex(s=>s.nom==='Capsule couronne 26mm');if(ci>=0)newStock[ci]={...newStock[ci],qte:newStock[ci].qte-lot.contenants};const ei=newStock.findIndex(s=>s.nom==='Ãtiquette avant 33cl');if(ei>=0)newStock[ei]={...newStock[ei],qte:newStock[ei].qte-lot.contenants};}
-   if(lot.type==='Bouteille 75cl'){const ci=newStock.findIndex(s=>s.nom==='Bouchon liÃ¨ge 75cl');if(ci>=0)newStock[ci]={...newStock[ci],qte:newStock[ci].qte-lot.contenants};const ei=newStock.findIndex(s=>s.nom==='Ãtiquette avant 75cl');if(ei>=0)newStock[ei]={...newStock[ei],qte:newStock[ei].qte-lot.contenants};}
+   if(lot.type==='Bouteille 33cl'){const ci=newStock.findIndex(s=>s.nom==='Capsule couronne 26mm');if(ci>=0)newStock[ci]={...newStock[ci],qte:newStock[ci].qte-lot.contenants};const ei=newStock.findIndex(s=>s.nom==='Étiquette avant 33cl');if(ei>=0)newStock[ei]={...newStock[ei],qte:newStock[ei].qte-lot.contenants};}
+   if(lot.type==='Bouteille 75cl'){const ci=newStock.findIndex(s=>s.nom==='Bouchon liège 75cl');if(ci>=0)newStock[ci]={...newStock[ci],qte:newStock[ci].qte-lot.contenants};const ei=newStock.findIndex(s=>s.nom==='Étiquette avant 75cl');if(ei>=0)newStock[ei]={...newStock[ei],qte:newStock[ei].qte-lot.contenants};}
   });
   setStockCond(newStock);
   setCondSessions([session,...condSessions]);
   const totalVol=session.lots.reduce((s,l)=>s+l.volume,0);
-  setBrassins(brassins.map(x=>x.id===session.brassinId?{...x,volume:totalVol,statut:'terminÃ©',dateCond:session.date}:x));
+  setBrassins(brassins.map(x=>x.id===session.brassinId?{...x,volume:totalVol,statut:'terminé',dateCond:session.date}:x));
   setView('sessions');setCondForm(EF);
  };
 
@@ -3083,7 +3083,7 @@ function ModuleConditionnement({brassins,setBrassins,stockCond,setStockCond,cond
  const BrassinCard = ({b, highlight}) => {
   const sel = condForm.brassinId===String(b.id);
   const j   = b.dateDebut ? Math.floor((Date.now()-new Date(b.dateDebut))/86400000) : null;
-  const s   = STATUTS[b.statut]||STATUTS.planifiÃ©;
+  const s   = STATUTS[b.statut]||STATUTS.planifié;
   return (
    <div onClick={()=>selectBrassin(b.id)}
     style={{display:'flex',alignItems:'center',gap:10,padding:'11px 12px',borderRadius:10,
@@ -3109,12 +3109,12 @@ function ModuleConditionnement({brassins,setBrassins,stockCond,setStockCond,cond
      <Badge statut={b.statut}/>
      {sel&&(
       <span style={{fontSize:10,color:C.amber,fontWeight:700,
-       fontFamily:FM}}>â sÃ©lectionnÃ©</span>
+       fontFamily:FM}}>✓ sélectionné</span>
      )}
-     {sel&&b.statut!=='terminÃ©'&&(
+     {sel&&b.statut!=='terminé'&&(
       <span style={{fontSize:10,color:C.hop,fontWeight:600,
        background:C.hopPale,borderRadius:4,padding:'1px 5px',
-       fontFamily:FM}}>â conditionnement</span>
+       fontFamily:FM}}>→ conditionnement</span>
      )}
     </div>
    </div>
@@ -3125,23 +3125,23 @@ function ModuleConditionnement({brassins,setBrassins,stockCond,setStockCond,cond
   <div style={{padding:'16px',paddingBottom:80}}>
    <div style={{marginBottom:14}}>
     <h2 style={{fontFamily:FA,fontSize:'clamp(20px,5vw,26px)',color:C.text}}>Conditionnement</h2>
-    {alertesCond>0&&<p style={{color:C.alert,fontSize:12,fontFamily:FM,marginTop:2}}>â  {alertesCond} alerte{alertesCond>1?'s':''} stock emballage</p>}
+    {alertesCond>0&&<p style={{color:C.alert,fontSize:12,fontFamily:FM,marginTop:2}}>⚠ {alertesCond} alerte{alertesCond>1?'s':''} stock emballage</p>}
    </div>
    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:14}}>
-    <StatCard label="Sessions" value={condSessions.length} icon="ð" color={C.amber}/>
-    <StatCard label="Bouteilles 33cl" value={totalBt33.toLocaleString('fr')} icon="ðº" color={C.green} sub={`${stockCond.find(s=>s.nom==='Bouteille 33cl')?.qte||0} en stock`}/>
-    <StatCard label="Bouteilles 75cl" value={totalBt75.toLocaleString('fr')} icon="ð¾" color={"#2A6080"} sub={`${stockCond.find(s=>s.nom==='Bouteille 75cl')?.qte||0} en stock`}/>
-    <StatCard label="FÃ»ts remplis" value={totalFuts} icon="ð¢" color={C.brick} sub={`20LÂ·${stockCond.find(s=>s.nom==='FÃ»t 20L Inox')?.qte||0} / 30LÂ·${stockCond.find(s=>s.nom==='FÃ»t 30L Inox')?.qte||0}`}/>
+    <StatCard label="Sessions" value={condSessions.length} icon="🗂" color={C.amber}/>
+    <StatCard label="Bouteilles 33cl" value={totalBt33.toLocaleString('fr')} icon="🍺" color={C.green} sub={`${stockCond.find(s=>s.nom==='Bouteille 33cl')?.qte||0} en stock`}/>
+    <StatCard label="Bouteilles 75cl" value={totalBt75.toLocaleString('fr')} icon="🍾" color={"#2A6080"} sub={`${stockCond.find(s=>s.nom==='Bouteille 75cl')?.qte||0} en stock`}/>
+    <StatCard label="Fûts remplis" value={totalFuts} icon="🛢" color={C.brick} sub={`20L·${stockCond.find(s=>s.nom==='Fût 20L Inox')?.qte||0} / 30L·${stockCond.find(s=>s.nom==='Fût 30L Inox')?.qte||0}`}/>
    </div>
    <div style={{display:'flex',gap:8,overflowX:'auto',paddingBottom:4,marginBottom:14,scrollbarWidth:'none'}}>
-    {[['sessions','ð Sessions'],['stock','ð¦ Stock emballage'],['nouvelle','+ Nouvelle session']].map(([v,l])=>(
+    {[['sessions','📋 Sessions'],['stock','📦 Stock emballage'],['nouvelle','+ Nouvelle session']].map(([v,l])=>(
      <button key={v} onClick={()=>setView(v)} style={{flexShrink:0,padding:'8px 14px',borderRadius:20,border:`1.5px solid ${view===v?C.amber:C.border}`,background:view===v?C.amberPale:C.bgCard,color:view===v?C.amber:C.textMid,fontWeight:600,fontSize:13,minHeight:40,whiteSpace:'nowrap'}}>{l}</button>
     ))}
    </div>
 
    {view==='sessions'&&(
     <div>
-     {condSessions.length===0&&<div style={{textAlign:'center',padding:'40px 0',color:C.textLight}}><div style={{fontSize:36,marginBottom:8}}>ð¾</div><p style={{fontSize:14}}>Aucune session</p></div>}
+     {condSessions.length===0&&<div style={{textAlign:'center',padding:'40px 0',color:C.textLight}}><div style={{fontSize:36,marginBottom:8}}>🍾</div><p style={{fontSize:14}}>Aucune session</p></div>}
      {condSessions.map(cs=>{
       const totalL=cs.lots.reduce((s,l)=>s+l.volume,0);const open=selId===cs.id;
       return (
@@ -3150,14 +3150,14 @@ function ModuleConditionnement({brassins,setBrassins,stockCond,setStockCond,cond
          <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:8}}>
           <div>
            <div style={{fontFamily:FA,fontSize:17,color:C.text}}>{cs.brassinNom}</div>
-           <div style={{fontSize:11,color:C.textLight,fontFamily:FM,marginTop:2}}>{fmtDate(cs.date)} Â· {cs.operateur} Â· {totalL}L</div>
+           <div style={{fontSize:11,color:C.textLight,fontFamily:FM,marginTop:2}}>{fmtDate(cs.date)} · {cs.operateur} · {totalL}L</div>
           </div>
-          <span style={{fontSize:18,color:C.textLight}}>{open?'â§':'â¨'}</span>
+          <span style={{fontSize:18,color:C.textLight}}>{open?'∧':'∨'}</span>
          </div>
          <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
           {cs.lots.map((l,i)=>(
            <div key={`k${i}`} style={{display:'flex',alignItems:'center',gap:5,background:C.bg,borderRadius:8,padding:'5px 10px',border:`1px solid ${C.border}`}}>
-            <span style={{fontSize:15}}>{TYPE_ICONS[l.type]||'ð¦'}</span>
+            <span style={{fontSize:15}}>{TYPE_ICONS[l.type]||'📦'}</span>
             <span style={{fontFamily:FM,fontWeight:700,fontSize:14,color:TYPE_COLORS[l.type]||C.text}}>{l.contenants}</span>
             <span style={{fontSize:11,color:C.textLight}}>{l.type}</span>
            </div>
@@ -3169,7 +3169,7 @@ function ModuleConditionnement({brassins,setBrassins,stockCond,setStockCond,cond
           {cs.lots.map((l,i)=>(
            <div key={`k${i}`} style={{background:C.bg,borderRadius:10,padding:'10px 12px',marginBottom:8,marginTop:8}}>
             <div style={{fontWeight:700,color:TYPE_COLORS[l.type]||C.text,fontSize:14,marginBottom:6}}>{TYPE_ICONS[l.type]} {l.type}</div>
-            {[['Volume',`${l.volume} L`],['Contenants',`${l.contenants}`],['NÂ° lot',l.lot||'â']].map(([k,v])=>(
+            {[['Volume',`${l.volume} L`],['Contenants',`${l.contenants}`],['N° lot',l.lot||'—']].map(([k,v])=>(
              <div key={k} style={{display:'flex',justifyContent:'space-between',fontSize:12,marginBottom:2}}>
               <span style={{color:C.textLight}}>{k}</span>
               <span style={{fontFamily:FM,fontWeight:600,color:C.text}}>{v}</span>
@@ -3192,7 +3192,7 @@ function ModuleConditionnement({brassins,setBrassins,stockCond,setStockCond,cond
      <h3 style={{fontFamily:FA,fontSize:18,color:C.text,marginBottom:14}}>Nouvelle session de conditionnement</h3>
 
      <div style={{marginBottom:16}}>
-      <Label t="Brassin Ã  conditionner"/>
+      <Label t="Brassin à conditionner"/>
 
       {selBrassin&&(
        <div style={{marginBottom:12,padding:'12px 14px',borderRadius:10,
@@ -3201,16 +3201,16 @@ function ModuleConditionnement({brassins,setBrassins,stockCond,setStockCond,cond
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:8}}>
          <div>
           <div style={{fontFamily:FA,fontSize:18,color:C.text,lineHeight:1}}>{selBrassin.recette}</div>
-          <div style={{fontFamily:FM,fontSize:11,color:C.textLight,marginTop:3}}>{selBrassin.fermenteur} Â· dÃ©marrÃ© le {fmtDate(selBrassin.dateDebut)}</div>
+          <div style={{fontFamily:FM,fontSize:11,color:C.textLight,marginTop:3}}>{selBrassin.fermenteur} · démarré le {fmtDate(selBrassin.dateDebut)}</div>
          </div>
          <Badge statut={selBrassin.statut}/>
         </div>
         <div style={{display:'flex',gap:10,flexWrap:'wrap'}}>
          {[
-          ['DI', selBrassin.og?selBrassin.og.toFixed(3):'â'],
-          ['DF', selBrassin.fg?selBrassin.fg.toFixed(3):'â'],
-          ['ABV', selBrassin.abv?`${selBrassin.abv}%`:'â'],
-          ['J+', selBrassin.dateDebut?Math.floor((Date.now()-new Date(selBrassin.dateDebut))/86400000):'â'],
+          ['DI', selBrassin.og?selBrassin.og.toFixed(3):'—'],
+          ['DF', selBrassin.fg?selBrassin.fg.toFixed(3):'—'],
+          ['ABV', selBrassin.abv?`${selBrassin.abv}%`:'—'],
+          ['J+', selBrassin.dateDebut?Math.floor((Date.now()-new Date(selBrassin.dateDebut))/86400000):'—'],
          ].map(([k,v])=>(
           <div key={k} style={{background:C.bgCard,borderRadius:6,padding:'5px 10px',
            border:`1px solid ${C.border}`,textAlign:'center',flex:'0 0 auto'}}>
@@ -3219,11 +3219,11 @@ function ModuleConditionnement({brassins,setBrassins,stockCond,setStockCond,cond
           </div>
          ))}
         </div>
-        {selBrassin.statut!=='terminÃ©'&&(
+        {selBrassin.statut!=='terminé'&&(
          <div style={{marginTop:8,padding:'5px 10px',borderRadius:6,
           background:C.hopPale,border:`1px solid ${C.hop}40`,
           display:'inline-flex',alignItems:'center',gap:5,fontSize:11,color:C.hop,fontWeight:600}}>
-          <span>ð¾</span> Ce brassin passera en <strong>terminÃ©</strong> Ã  l'enregistrement
+          <span>🍾</span> Ce brassin passera en <strong>terminé</strong> à l'enregistrement
          </div>
         )}
        </div>
@@ -3234,7 +3234,7 @@ function ModuleConditionnement({brassins,setBrassins,stockCond,setStockCond,cond
         <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:7}}>
          <div style={{width:8,height:8,borderRadius:'50%',background:'#2A6080'}}/>
          <span style={{fontSize:11,color:'#2A6080',fontWeight:700,textTransform:'uppercase',letterSpacing:0.8}}>
-          PrÃªts Ã  conditionner
+          Prêts à conditionner
          </span>
          <span style={{fontSize:10,color:C.textLight,background:C.border,
           borderRadius:10,padding:'1px 6px'}}>{brassinsGarde.length}</span>
@@ -3261,22 +3261,22 @@ function ModuleConditionnement({brassins,setBrassins,stockCond,setStockCond,cond
        </div>
       )}
 
-      {brassinsActifs.filter(b=>b.statut!=='planifiÃ©').length===0&&(
+      {brassinsActifs.filter(b=>b.statut!=='planifié').length===0&&(
        <div style={{textAlign:'center',padding:'24px 16px',background:C.bg,
         borderRadius:10,border:`1.5px dashed ${C.border}`,color:C.textLight}}>
-        <div style={{fontSize:28,marginBottom:6}}>âï¸</div>
+        <div style={{fontSize:28,marginBottom:6}}>⚗️</div>
         <div style={{fontSize:13,fontWeight:600,marginBottom:3}}>Aucun brassin en cours</div>
-        <div style={{fontSize:12}}>DÃ©marrez un brassin dans l'onglet Brassin</div>
+        <div style={{fontSize:12}}>Démarrez un brassin dans l'onglet Brassin</div>
        </div>
       )}
 
       {(brassinsPlanif.length>0||brassinsActifs.length===0)&&(
        <div style={{marginTop:8}}>
         <select value={condForm.brassinId} onChange={e=>setCondForm({...condForm,brassinId:e.target.value})} style={{...iSt,fontSize:13,color:condForm.brassinId?C.text:C.textLight}}>
-         <option value="">â Ou sÃ©lectionner un autre brassin â</option>
-         <optgroup label="TerminÃ©s rÃ©cents">
-          {brassins.filter(b=>b.statut==='terminÃ©').slice(-10).reverse().map(b=>
-           <option key={b.id} value={b.id}>{b.recette} â {b.fermenteur} ({fmtDate(b.dateCond||b.dateDebut)})</option>
+         <option value="">— Ou sélectionner un autre brassin —</option>
+         <optgroup label="Terminés récents">
+          {brassins.filter(b=>b.statut==='terminé').slice(-10).reverse().map(b=>
+           <option key={b.id} value={b.id}>{b.recette} — {b.fermenteur} ({fmtDate(b.dateCond||b.dateDebut)})</option>
           )}
          </optgroup>
         </select>
@@ -3286,30 +3286,30 @@ function ModuleConditionnement({brassins,setBrassins,stockCond,setStockCond,cond
 
      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:14}}>
       <div><Label t="Date"/><input type="date" value={condForm.date} onChange={e=>{const d=e.target.value;setCondForm(f=>({...f,date:d,lots:f.brassinId?rebuildLotNums(f.lots,f.brassinId,d):f.lots}));}} style={iSt}/></div>
-      <div><Label t="OpÃ©rateur"/><input value={condForm.operateur} onChange={e=>setCondForm({...condForm,operateur:e.target.value})} placeholder="PrÃ©nom" style={iSt}/></div>
+      <div><Label t="Opérateur"/><input value={condForm.operateur} onChange={e=>setCondForm({...condForm,operateur:e.target.value})} placeholder="Prénom" style={iSt}/></div>
      </div>
 
      <div style={{fontSize:12,fontWeight:700,color:C.text,textTransform:'uppercase',letterSpacing:0.8,marginBottom:10}}>Lots de conditionnement</div>
      {condForm.lots.map((lot,i)=>{
       const tc=TYPE_COLORS[lot.type]||C.text;
-      const stokOK=lot.type.startsWith('FÃ»t')?true:(()=>{const sn={"Bouteille 33cl":"Bouteille 33cl","Bouteille 75cl":"Bouteille 75cl"}[lot.type];const s=stockCond.find(x=>x.nom===sn);return !s||s.qte>=(parseInt(lot.contenants)||0);})();
+      const stokOK=lot.type.startsWith('Fût')?true:(()=>{const sn={"Bouteille 33cl":"Bouteille 33cl","Bouteille 75cl":"Bouteille 75cl"}[lot.type];const s=stockCond.find(x=>x.nom===sn);return !s||s.qte>=(parseInt(lot.contenants)||0);})();
       return (
        <div key={`k${i}`} style={{background:C.bg,borderRadius:12,padding:'12px 14px',marginBottom:10,border:`1.5px solid ${tc}25`}}>
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:10}}>
-         <span style={{fontWeight:700,color:tc,fontSize:14}}>{TYPE_ICONS[lot.type]||'ð¦'} Lot {i+1} â {lot.type}</span>
-         {condForm.lots.length>1&&<button onClick={()=>setCondForm({...condForm,lots:condForm.lots.filter((_,j)=>j!==i)})} style={{background:'none',border:`1px solid ${C.border}`,borderRadius:6,padding:'4px 10px',fontSize:12,color:C.alert,minHeight:32}}>â</button>}
+         <span style={{fontWeight:700,color:tc,fontSize:14}}>{TYPE_ICONS[lot.type]||'📦'} Lot {i+1} — {lot.type}</span>
+         {condForm.lots.length>1&&<button onClick={()=>setCondForm({...condForm,lots:condForm.lots.filter((_,j)=>j!==i)})} style={{background:'none',border:`1px solid ${C.border}`,borderRadius:6,padding:'4px 10px',fontSize:12,color:C.alert,minHeight:32}}>✕</button>}
         </div>
         <div style={{display:'flex',flexDirection:'column',gap:8}}>
-         <div><Label t="Type de contenant"/><select value={lot.type} onChange={e=>updLot(i,'type',e.target.value)} style={iSt}><option>Bouteille 33cl</option><option>Bouteille 75cl</option><option>FÃ»t 20L</option><option>FÃ»t 30L</option><option>FÃ»t personnalisÃ©</option></select></div>
+         <div><Label t="Type de contenant"/><select value={lot.type} onChange={e=>updLot(i,'type',e.target.value)} style={iSt}><option>Bouteille 33cl</option><option>Bouteille 75cl</option><option>Fût 20L</option><option>Fût 30L</option><option>Fût personnalisé</option></select></div>
          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
           <div><Label t="Volume (L)"/><input type="number" value={lot.volume} onChange={e=>updLot(i,'volume',e.target.value)} placeholder="556" style={iSt}/></div>
-          <div><Label t={lot.type.startsWith('FÃ»t')?'Nb fÃ»ts':'Nb bouteilles'}/><input type="number" value={lot.contenants} onChange={e=>updLot(i,'contenants',e.target.value)} placeholder={lot.capacite>0&&lot.volume?Math.round(parseFloat(lot.volume)/lot.capacite):'auto'} style={iSt}/></div>
+          <div><Label t={lot.type.startsWith('Fût')?'Nb fûts':'Nb bouteilles'}/><input type="number" value={lot.contenants} onChange={e=>updLot(i,'contenants',e.target.value)} placeholder={lot.capacite>0&&lot.volume?Math.round(parseFloat(lot.volume)/lot.capacite):'auto'} style={iSt}/></div>
          </div>
-         <div><Label t="NÂ° de lot"/><input value={lot.lot} onChange={e=>updLot(i,'lot',e.target.value)} placeholder="ex: 26-323-A" style={iSt}/></div>
+         <div><Label t="N° de lot"/><input value={lot.lot} onChange={e=>updLot(i,'lot',e.target.value)} placeholder="ex: 26-323-A" style={iSt}/></div>
         </div>
-        {lot.contenants>0&&!lot.type.startsWith('FÃ»t')&&(
+        {lot.contenants>0&&!lot.type.startsWith('Fût')&&(
          <div style={{marginTop:8,padding:'6px 10px',borderRadius:8,background:stokOK?C.greenPale:C.brickPale,fontSize:11,color:stokOK?C.green:C.brick,fontFamily:FM}}>
-          {stokOK?'â':'â '} Stock {lot.type}: {(()=>{const s=stockCond.find(x=>x.nom==={"Bouteille 33cl":"Bouteille 33cl","Bouteille 75cl":"Bouteille 75cl"}[lot.type]);return s?`${s.qte} dispo`:'â';})()}
+          {stokOK?'✓':'⚠'} Stock {lot.type}: {(()=>{const s=stockCond.find(x=>x.nom==={"Bouteille 33cl":"Bouteille 33cl","Bouteille 75cl":"Bouteille 75cl"}[lot.type]);return s?`${s.qte} dispo`:'—';})()}
          </div>
         )}
        </div>
@@ -3317,16 +3317,16 @@ function ModuleConditionnement({brassins,setBrassins,stockCond,setStockCond,cond
      })}
      <button onClick={addLot} style={{width:'100%',padding:'10px',borderRadius:10,border:`1.5px dashed ${C.green}`,background:C.greenPale,color:C.green,fontWeight:600,fontSize:13,marginBottom:14,minHeight:44}}>+ Ajouter un lot</button>
      <div style={{background:C.amberPale,borderRadius:10,padding:'10px 14px',marginBottom:14,border:`1px solid ${C.amber}30`}}>
-      <div style={{fontSize:11,fontWeight:700,color:C.amber,marginBottom:6}}>RÃ©capitulatif</div>
+      <div style={{fontSize:11,fontWeight:700,color:C.amber,marginBottom:6}}>Récapitulatif</div>
       <div style={{display:'flex',gap:12,flexWrap:'wrap'}}>
-       {condForm.lots.map((l,i)=>l.contenants>0&&<div key={`k${i}`} style={{fontSize:12,color:C.textMid}}><span style={{fontSize:15}}>{TYPE_ICONS[l.type]||'ð¦'}</span> <strong style={{color:TYPE_COLORS[l.type]||C.text}}>{l.contenants}</strong> {l.type}</div>)}
+       {condForm.lots.map((l,i)=>l.contenants>0&&<div key={`k${i}`} style={{fontSize:12,color:C.textMid}}><span style={{fontSize:15}}>{TYPE_ICONS[l.type]||'📦'}</span> <strong style={{color:TYPE_COLORS[l.type]||C.text}}>{l.contenants}</strong> {l.type}</div>)}
        <div style={{marginLeft:'auto',fontFamily:FM,fontWeight:700,color:C.amber,fontSize:13}}>{condForm.lots.reduce((s,l)=>s+(parseFloat(l.volume)||0),0).toFixed(0)} L total</div>
       </div>
      </div>
      <div><Label t="Notes"/><textarea value={condForm.notes} onChange={e=>setCondForm({...condForm,notes:e.target.value})} placeholder="Observations, pH final..." style={{...iSt,height:60,resize:'none',marginBottom:14}}/></div>
      <div style={{display:'flex',gap:10,justifyContent:'flex-end'}}>
       <Btn onClick={()=>setView('sessions')}>Annuler</Btn>
-      <Btn p onClick={saveSession} style={{opacity:condForm.brassinId?1:0.5,cursor:condForm.brassinId?'pointer':'not-allowed'}}>â Enregistrer</Btn>
+      <Btn p onClick={saveSession} style={{opacity:condForm.brassinId?1:0.5,cursor:condForm.brassinId?'pointer':'not-allowed'}}>✓ Enregistrer</Btn>
      </div>
     </div>
    )}
@@ -3342,7 +3342,7 @@ function ModuleConditionnement({brassins,setBrassins,stockCond,setStockCond,cond
        <div key={cat} style={{flexShrink:0,background:C.bgCard,border:`1.5px solid ${low>0?C.alert:C.border}`,borderRadius:10,padding:'8px 12px',textAlign:'center',minWidth:72}}>
         <div style={{fontFamily:FA,fontSize:18,color}}>{n}</div>
         <div style={{fontSize:10,color:C.textMid,fontWeight:600,marginTop:1}}>{cat}</div>
-        {low>0&&<div style={{fontSize:9,color:C.alert,marginTop:1}}>â {low}</div>}
+        {low>0&&<div style={{fontSize:9,color:C.alert,marginTop:1}}>⚠{low}</div>}
        </div>
       );})}
      </div>
@@ -3361,11 +3361,11 @@ function ModuleConditionnement({brassins,setBrassins,stockCond,setStockCond,cond
         </div>
         <div style={{display:'flex',gap:12,fontSize:12,color:C.textMid,marginBottom:8}}>
          <span>Seuil: <strong style={{color:C.text}}>{s.seuil} {s.u}</strong></span>
-         {s.four&&s.four!=='â'&&<span style={{color:C.textLight}}>{s.four}</span>}
+         {s.four&&s.four!=='—'&&<span style={{color:C.textLight}}>{s.four}</span>}
         </div>
         <div style={{display:'flex',gap:8}}>
          <button onClick={()=>{setEditStock(s);setSf({...s,qte:String(s.qte),seuil:String(s.seuil),prix:String(s.prix)});setShowStock(true);}} style={{background:'none',border:`1px solid ${C.border}`,borderRadius:8,padding:'6px 12px',fontSize:12,color:C.textMid,minHeight:34}}>Modifier</button>
-         <button onClick={()=>{const v=prompt(`Ajuster ${s.nom} (actuel: ${s.qte})`);if(v!==null){const n=parseInt(v);if(!isNaN(n))setStockCond(stockCond.map(x=>x.id===s.id?{...x,qte:n}:x));}}} style={{background:C.amberPale,border:`1px solid ${C.amber}40`,borderRadius:8,padding:'6px 12px',fontSize:12,color:C.amber,fontWeight:600,minHeight:34}}>Ajuster qtÃ©</button>
+         <button onClick={()=>{const v=prompt(`Ajuster ${s.nom} (actuel: ${s.qte})`);if(v!==null){const n=parseInt(v);if(!isNaN(n))setStockCond(stockCond.map(x=>x.id===s.id?{...x,qte:n}:x));}}} style={{background:C.amberPale,border:`1px solid ${C.amber}40`,borderRadius:8,padding:'6px 12px',fontSize:12,color:C.amber,fontWeight:600,minHeight:34}}>Ajuster qté</button>
         </div>
        </div>
       );})}
@@ -3379,20 +3379,20 @@ function ModuleConditionnement({brassins,setBrassins,stockCond,setStockCond,cond
       <h3 style={{fontFamily:FA,fontSize:18,color:C.text,marginBottom:14}}>{editStock?'Modifier':'Ajouter'} un article</h3>
       <div style={{display:'flex',flexDirection:'column',gap:10}}>
        <div><Label t="Nom"/><input value={sf.nom} onChange={e=>setSf({...sf,nom:e.target.value})} style={iSt}/></div>
-       <div><Label t="CatÃ©gorie"/><select value={sf.cat} onChange={e=>setSf({...sf,cat:e.target.value})} style={iSt}>{Object.keys(CAT_COND_COLORS).map(c=><option key={c}>{c}</option>)}</select></div>
+       <div><Label t="Catégorie"/><select value={sf.cat} onChange={e=>setSf({...sf,cat:e.target.value})} style={iSt}>{Object.keys(CAT_COND_COLORS).map(c=><option key={c}>{c}</option>)}</select></div>
        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
-        <div><Label t="QuantitÃ©"/><input type="number" value={sf.qte} onChange={e=>setSf({...sf,qte:e.target.value})} style={iSt}/></div>
-        <div><Label t="UnitÃ©"/><input value={sf.u} onChange={e=>setSf({...sf,u:e.target.value})} style={iSt}/></div>
+        <div><Label t="Quantité"/><input type="number" value={sf.qte} onChange={e=>setSf({...sf,qte:e.target.value})} style={iSt}/></div>
+        <div><Label t="Unité"/><input value={sf.u} onChange={e=>setSf({...sf,u:e.target.value})} style={iSt}/></div>
        </div>
        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
         <div><Label t="Seuil alerte"/><input type="number" value={sf.seuil} onChange={e=>setSf({...sf,seuil:e.target.value})} style={iSt}/></div>
-        <div><Label t="Prix unit. (â¬)"/><input type="number" value={sf.prix} onChange={e=>setSf({...sf,prix:e.target.value})} style={iSt}/></div>
+        <div><Label t="Prix unit. (€)"/><input type="number" value={sf.prix} onChange={e=>setSf({...sf,prix:e.target.value})} style={iSt}/></div>
        </div>
        <div><Label t="Fournisseur"/><input value={sf.four} onChange={e=>setSf({...sf,four:e.target.value})} style={iSt}/></div>
       </div>
       <div style={{display:'flex',gap:10,justifyContent:'flex-end',marginTop:16}}>
        <Btn onClick={()=>{setShowStock(false);setEditStock(null);setSf(ES);}}>Annuler</Btn>
-       <Btn p onClick={saveStock}>â Enregistrer</Btn>
+       <Btn p onClick={saveStock}>✓ Enregistrer</Btn>
       </div>
      </div>
     </Modal>
@@ -3417,7 +3417,7 @@ function ModuleFournisseurs({fournisseurs,setFournisseurs,stock}){
     <h2 style={{fontFamily:FA,fontSize:'clamp(20px,5vw,26px)',color:C.text}}>Fournisseurs</h2>
     <button onClick={()=>setShowF(true)} style={{background:C.amber,color:'#fff',border:'none',borderRadius:10,padding:'10px 16px',fontWeight:700,fontSize:14,minHeight:44}}>+ Ajouter</button>
    </div>
-   <input placeholder="ð Rechercher..." value={q} onChange={e=>setQ(e.target.value)} style={{...iSt,marginBottom:12}}/>
+   <input placeholder="🔍 Rechercher..." value={q} onChange={e=>setQ(e.target.value)} style={{...iSt,marginBottom:12}}/>
    <div style={{display:'flex',flexDirection:'column',gap:8}}>
     {filtered.map(f=>{const c=CAT_COLORS[f.type]||C.textMid;const ni=stock.filter(s=>s.four===f.nom).length;return(
      <div key={f.id} onClick={()=>setSel(f)} style={{background:C.bgCard,border:`1.5px solid ${C.border}`,borderRadius:14,padding:'14px 16px',cursor:'pointer',borderLeft:`4px solid ${c}`}}>
@@ -3429,7 +3429,7 @@ function ModuleFournisseurs({fournisseurs,setFournisseurs,stock}){
        <Tag text={f.type} color={c} bg={`${c}18`}/>
       </div>
       <div style={{display:'flex',gap:12,fontSize:12,color:C.textMid,flexWrap:'wrap'}}>
-       <span>DÃ©lai: <strong style={{color:C.text}}>{f.delai}j</strong></span>
+       <span>Délai: <strong style={{color:C.text}}>{f.delai}j</strong></span>
        {f.remise>0&&<span style={{color:C.green}}>-{f.remise}%</span>}
        <span>{ni} produit{ni>1?'s':''} en stock</span>
       </div>
@@ -3443,12 +3443,12 @@ function ModuleFournisseurs({fournisseurs,setFournisseurs,stock}){
        <h3 style={{fontFamily:FA,fontSize:20,color:C.text}}>{sel.nom}</h3>
        <Tag text={sel.type} color={CAT_COLORS[sel.type]||C.textMid} bg={`${CAT_COLORS[sel.type]||C.textMid}18`}/>
       </div>
-      <button onClick={()=>setSel(null)} style={{background:'none',border:`1px solid ${C.border}`,borderRadius:8,padding:'6px 12px',fontSize:16,color:C.textMid}}>â</button>
+      <button onClick={()=>setSel(null)} style={{background:'none',border:`1px solid ${C.border}`,borderRadius:8,padding:'6px 12px',fontSize:16,color:C.textMid}}>✕</button>
      </div>
-     {[['Ville',sel.ville],['Contact',sel.contact],['TÃ©l.',sel.tel],[`DÃ©lai`,`${sel.delai} jours`],['Remise',sel.remise>0?`-${sel.remise}%`:'Aucune']].map(([l,v])=>(
+     {[['Ville',sel.ville],['Contact',sel.contact],['Tél.',sel.tel],[`Délai`,`${sel.delai} jours`],['Remise',sel.remise>0?`-${sel.remise}%`:'Aucune']].map(([l,v])=>(
       <div key={l} style={{display:'flex',justifyContent:'space-between',padding:'8px 12px',background:C.bg,borderRadius:8,marginBottom:5,fontSize:13}}>
        <span style={{color:C.textLight,fontSize:11,textTransform:'uppercase',fontWeight:700}}>{l}</span>
-       <span style={{color:C.text}}>{v||'â'}</span>
+       <span style={{color:C.text}}>{v||'—'}</span>
       </div>
      ))}
      {sel.notes&&<div style={{margin:'12px 0',padding:'10px 12px',background:C.amberPale,borderRadius:8,fontSize:12,color:C.textMid}}>{sel.notes}</div>}
@@ -3462,8 +3462,8 @@ function ModuleFournisseurs({fournisseurs,setFournisseurs,stock}){
       );})}
      </div>
      <div style={{display:'flex',gap:8,marginTop:14,justifyContent:'flex-end'}}>
-      <button onClick={()=>{setSel(null);openEdit(sel);}} style={{background:C.cream,border:`1px solid ${C.border}`,borderRadius:8,padding:'9px 16px',fontSize:13,minHeight:40}}>â Modifier</button>
-      <button onClick={()=>{setFournisseurs(fournisseurs.filter(x=>x.id!==sel.id));setSel(null);}} style={{background:C.brickPale,border:`1px solid ${C.border}`,borderRadius:8,padding:'9px 16px',fontSize:13,color:C.alert,minHeight:40}}>â Supprimer</button>
+      <button onClick={()=>{setSel(null);openEdit(sel);}} style={{background:C.cream,border:`1px solid ${C.border}`,borderRadius:8,padding:'9px 16px',fontSize:13,minHeight:40}}>✏ Modifier</button>
+      <button onClick={()=>{setFournisseurs(fournisseurs.filter(x=>x.id!==sel.id));setSel(null);}} style={{background:C.brickPale,border:`1px solid ${C.border}`,borderRadius:8,padding:'9px 16px',fontSize:13,color:C.alert,minHeight:40}}>✕ Supprimer</button>
      </div>
     </Modal>
    )}
@@ -3475,7 +3475,7 @@ function ModuleFournisseurs({fournisseurs,setFournisseurs,stock}){
       <div><Label t="Type"/><select value={form.type} onChange={e=>setForm({...form,type:e.target.value})} style={iSt}>{Object.keys(CAT_COLORS).map(c=><option key={c}>{c}</option>)}</select></div>
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
        <div><Label t="Ville / Pays"/><input value={form.ville} onChange={e=>setForm({...form,ville:e.target.value})} style={iSt}/></div>
-       <div><Label t="DÃ©lai (jours)"/><input type="number" value={form.delai} onChange={e=>setForm({...form,delai:e.target.value})} style={iSt}/></div>
+       <div><Label t="Délai (jours)"/><input type="number" value={form.delai} onChange={e=>setForm({...form,delai:e.target.value})} style={iSt}/></div>
        <div><Label t="Email"/><input value={form.contact} onChange={e=>setForm({...form,contact:e.target.value})} style={iSt}/></div>
        <div><Label t="Remise (%)"/><input type="number" value={form.remise} onChange={e=>setForm({...form,remise:e.target.value})} style={iSt}/></div>
       </div>
@@ -3493,26 +3493,26 @@ function ModuleFournisseurs({fournisseurs,setFournisseurs,stock}){
 
 function ModuleHistorique({brassins}){
  const [q,setQ]=useState('');
- const termines=brassins.filter(b=>b.statut==='terminÃ©'&&b.volume>0&&
+ const termines=brassins.filter(b=>b.statut==='terminé'&&b.volume>0&&
   (b.recette+' '+(b.notes||'')).toLowerCase().includes(q.toLowerCase()));
  const parRec={};
  termines.forEach(b=>{if(!parRec[b.recette])parRec[b.recette]={n:0,v:0};parRec[b.recette].n++;parRec[b.recette].v+=b.volume;});
  const top=Object.entries(parRec).sort((a,b)=>b[1].v-a[1].v);
  const totalL=termines.reduce((s,b)=>s+b.volume,0);
  const maxV=Math.max(...top.map(x=>x[1].v));
- const mois=[{m:'Oct. 2025',v:65.46},{m:'Nov. 2025',v:63.16},{m:'DÃ©c. 2025',v:69.66},{m:'Jan. 2026',v:47.98},{m:'FÃ©v. 2026',v:61.14},{m:'Mars 2026',v:0}];
+ const mois=[{m:'Oct. 2025',v:65.46},{m:'Nov. 2025',v:63.16},{m:'Déc. 2025',v:69.66},{m:'Jan. 2026',v:47.98},{m:'Fév. 2026',v:61.14},{m:'Mars 2026',v:0}];
  return (
   <div style={{padding:'16px',paddingBottom:80}}>
    <h2 style={{fontFamily:FA,fontSize:'clamp(20px,5vw,26px)',color:C.text,marginBottom:4}}>Historique</h2>
-   <SearchBar value={q} onChange={setQ} placeholder="Recette, notesâ¦"/>
-   <p style={{color:C.textLight,fontSize:12,fontFamily:FM,marginBottom:16}}>{termines.length} brassins Â· {(totalL/1000).toFixed(2)} hL total</p>
+   <SearchBar value={q} onChange={setQ} placeholder="Recette, notes…"/>
+   <p style={{color:C.textLight,fontSize:12,fontFamily:FM,marginBottom:16}}>{termines.length} brassins · {(totalL/1000).toFixed(2)} hL total</p>
    <div style={{background:C.bgCard,border:`1px solid ${C.border}`,borderRadius:14,padding:'14px 16px',marginBottom:14}}>
     <h3 style={{fontFamily:FA,fontSize:17,color:C.text,marginBottom:12}}>Volume par recette</h3>
     {top.map(([nom,d])=>(
      <div key={nom} style={{marginBottom:10}}>
       <div style={{display:'flex',justifyContent:'space-between',marginBottom:3}}>
        <span style={{fontWeight:600,color:C.text,fontSize:13,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',flex:1}}>{nom}</span>
-       <span style={{fontFamily:FM,color:C.amber,fontSize:12,flexShrink:0,marginLeft:8}}>{(d.v/1000).toFixed(2)} hL Â· {d.n}Ã</span>
+       <span style={{fontFamily:FM,color:C.amber,fontSize:12,flexShrink:0,marginLeft:8}}>{(d.v/1000).toFixed(2)} hL · {d.n}×</span>
       </div>
       <div style={{height:6,background:C.border,borderRadius:3,overflow:'hidden'}}>
        <div style={{height:'100%',borderRadius:3,background:C.amber,width:`${(d.v/maxV)*100}%`}}/>
@@ -3537,7 +3537,7 @@ function ModuleHistorique({brassins}){
     </div>
    </div>
    <div style={{background:C.bgCard,border:`1px solid ${C.border}`,borderRadius:14,overflow:'hidden'}}>
-    <div style={{padding:'10px 16px',background:C.cream,borderBottom:`1px solid ${C.border}`,fontSize:11,fontWeight:700,color:C.textMid,letterSpacing:1,textTransform:'uppercase',fontFamily:FM}}>Brassins terminÃ©s</div>
+    <div style={{padding:'10px 16px',background:C.cream,borderBottom:`1px solid ${C.border}`,fontSize:11,fontWeight:700,color:C.textMid,letterSpacing:1,textTransform:'uppercase',fontFamily:FM}}>Brassins terminés</div>
     {[...termines].reverse().map((b,i)=>(
      <div key={b.id} style={{padding:'10px 14px',borderBottom:i<termines.length-1?`1px solid ${C.border}`:'none',background:i%2===0?C.bgCard:C.bg}}>
       <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}}>
@@ -3582,29 +3582,29 @@ const T = {
 };
 
 const STATUTS_LOC = {
- demande:   {label:"Demande",    color:"#7A9A5A", bg:"#141E0A", dot:"â"},
- confirmÃ©e: {label:"ConfirmÃ©e", color:"#6AA050", bg:"#0E1E0A", dot:"â"},
- "en cours":{label:"En cours",  color:"#E8A020", bg:"#2A1E08", dot:"â"},
- retournÃ©e: {label:"RetournÃ©e", color:"#8A7A62", bg:"#201810", dot:"â"},
- annulÃ©e:   {label:"AnnulÃ©e",   color:"#C04030", bg:"#200A08", dot:"â"},
+ demande:   {label:"Demande",    color:"#7A9A5A", bg:"#141E0A", dot:"○"},
+ confirmée: {label:"Confirmée", color:"#6AA050", bg:"#0E1E0A", dot:"●"},
+ "en cours":{label:"En cours",  color:"#E8A020", bg:"#2A1E08", dot:"◉"},
+ retournée: {label:"Retournée", color:"#8A7A62", bg:"#201810", dot:"◎"},
+ annulée:   {label:"Annulée",   color:"#C04030", bg:"#200A08", dot:"✕"},
 };
 
 const BIERES = [
- "L'ImpÃ¨rtinente (APA 6%)",
- "La PÃ¨rchÃ©e (Blanche 4.5%)",
- "La PÃ¨rilleuse (AmbrÃ©e 6%)",
- "La PÃ¨rlimpinpin (IPA 6.5%)",
- "La SupÃ¨re (Triple 8.5%)",
+ "L'Impèrtinente (APA 6%)",
+ "La Pèrchée (Blanche 4.5%)",
+ "La Pèrilleuse (Ambrée 6%)",
+ "La Pèrlimpinpin (IPA 6.5%)",
+ "La Supère (Triple 8.5%)",
  "La Blonde des Papas (Blonde 5%)",
- "La MÃ¨rveilleuse (NEIPA 6%)",
- "La MÃ¨rlimpinpin (DIPA 8%)",
+ "La Mèrveilleuse (NEIPA 6%)",
+ "La Mèrlimpinpin (DIPA 8%)",
  "La Mary'Stout (Brune 6%)",
  "La Mamagascar (Porter 7%)",
 ];
 
 const STOCK_FUTS = {"20L":42,"30L":68};
 
-const fmtDateLong = d => d ? new Date(d+"T00:00").toLocaleDateString("fr-FR",{weekday:"short",day:"numeric",month:"long"}) : "â";
+const fmtDateLong = d => d ? new Date(d+"T00:00").toLocaleDateString("fr-FR",{weekday:"short",day:"numeric",month:"long"}) : "—";
 const nbJours = (a,b) => Math.max(1,Math.round((new Date(b+"T00:00")-new Date(a+"T00:00"))/86400000)+1);
 const addDays = (d,n) => { const r=new Date(d); r.setDate(r.getDate()+n); return r; };
 const startOfWeek = d => { const r=new Date(d); const day=r.getDay()||7; r.setDate(r.getDate()-day+1); r.setHours(0,0,0,0); return r; };
@@ -3630,7 +3630,7 @@ const LblT = ({t}) => (
 );
 
 const PillT = ({statut}) => {
- const s = STATUTS_LOC[statut]||STATUTS_LOC.confirmÃ©e;
+ const s = STATUTS_LOC[statut]||STATUTS_LOC.confirmée;
  return (
   <span style={{display:"inline-flex",alignItems:"center",gap:5,padding:"3px 10px",
    borderRadius:3,background:s.bg,color:s.color,fontSize:11,fontWeight:700,
@@ -3681,7 +3681,7 @@ const FORM_VIDE_T = {
  dateDebut:"",dateFin:"",
  tireuses:[],futs:[],
  gobelets25:0,gobelets50:0,
- statut:"confirmÃ©e",notes:"",
+ statut:"confirmée",notes:"",
 };
 
 function FormLocationT({editLoc,tireuses,recettes,onSave,onCancel}) {
@@ -3742,10 +3742,10 @@ function FormLocationT({editLoc,tireuses,recettes,onSave,onCancel}) {
 
  const handleSave = () => {
   if(!form.client.trim())        {setErr("Le nom du client est requis");      return;}
-  if(!form.dateDebut)            {setErr("La date de dÃ©but est requise");     return;}
+  if(!form.dateDebut)            {setErr("La date de début est requise");     return;}
   if(!form.dateFin)              {setErr("La date de fin est requise");       return;}
-  if(form.dateFin<form.dateDebut){setErr("La date de fin doit Ãªtre aprÃ¨s le dÃ©but"); return;}
-  if(!form.tireuses.length)      {setErr("SÃ©lectionnez au moins une tireuse"); return;}
+  if(form.dateFin<form.dateDebut){setErr("La date de fin doit être après le début"); return;}
+  if(!form.tireuses.length)      {setErr("Sélectionnez au moins une tireuse"); return;}
   setErr("");
   onSave({
    ...form,
@@ -3771,14 +3771,14 @@ function FormLocationT({editLoc,tireuses,recettes,onSave,onCancel}) {
     <div style={{background:T.redPale,border:`1px solid ${T.red}`,borderRadius:6,
      padding:"10px 14px",marginBottom:12,color:T.red,fontWeight:600,fontSize:13,
      display:"flex",alignItems:"center",gap:8}}>
-     <span>â </span>{err}
+     <span>⚠</span>{err}
     </div>
    )}
 
    <div style={{...sec,background:T.amberPale,border:`1.5px dashed ${T.amber}`,marginBottom:12}}>
-    <SecT n="â" t="Import depuis Google Agenda (optionnel)"/>
+    <SecT n="→" t="Import depuis Google Agenda (optionnel)"/>
     <div style={{fontSize:11,color:T.creamDim,marginBottom:8}}>
-     Coller le titre d'un Ã©vÃ©nement : <span style={{fontFamily:FM,color:T.amber}}>1BEC Client / 2Ã20L APA 100 Gobelets</span>
+     Coller le titre d'un événement : <span style={{fontFamily:FM,color:T.amber}}>1BEC Client / 2×20L APA 100 Gobelets</span>
     </div>
     <div style={{display:"flex",gap:8}}>
      <input
@@ -3822,9 +3822,9 @@ function FormLocationT({editLoc,tireuses,recettes,onSave,onCancel}) {
         placeholder="email@..." style={IST}/>
       </div>
       <div>
-       <LblT t="TÃ©lÃ©phone"/>
+       <LblT t="Téléphone"/>
        <input value={form.tel} onChange={e=>set("tel",e.target.value)}
-        placeholder="06â¦" style={IST}/>
+        placeholder="06…" style={IST}/>
       </div>
      </div>
     </div>
@@ -3834,7 +3834,7 @@ function FormLocationT({editLoc,tireuses,recettes,onSave,onCancel}) {
     <SecT n="02" t="Dates & statut"/>
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
      <div>
-      <LblT t="DÃ©but *"/>
+      <LblT t="Début *"/>
       <input type="date" value={form.dateDebut}
        onChange={e=>setDate("dateDebut",e.target.value)} style={IST}/>
      </div>
@@ -3848,7 +3848,7 @@ function FormLocationT({editLoc,tireuses,recettes,onSave,onCancel}) {
      <div style={{background:T.amberPale,border:`1px solid ${T.amber}40`,borderRadius:6,
       padding:"6px 12px",marginBottom:10,fontFamily:FM,
       fontSize:12,color:T.amberL}}>
-      DurÃ©e : <strong>{j} jour{j>1?"s":""}</strong>
+      Durée : <strong>{j} jour{j>1?"s":""}</strong>
      </div>
     )}
     <LblT t="Statut"/>
@@ -3868,7 +3868,7 @@ function FormLocationT({editLoc,tireuses,recettes,onSave,onCancel}) {
    </div>
 
    <div style={sec}>
-    <SecT n="03" t={`Tireuses * â ${form.tireuses.length} sÃ©lectionnÃ©e${form.tireuses.length>1?"s":""}`}/>
+    <SecT n="03" t={`Tireuses * — ${form.tireuses.length} sélectionnée${form.tireuses.length>1?"s":""}`}/>
     <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:6,marginBottom:8}}>
      {tireuses.map(t=>{
       const sel = form.tireuses.includes(t.id);
@@ -3881,7 +3881,7 @@ function FormLocationT({editLoc,tireuses,recettes,onSave,onCancel}) {
          fontSize:13,color:sel?T.gold:T.creamMid,lineHeight:1,letterSpacing:-0.5}}>{t.nom}</div>
         <div style={{fontSize:9,color:sel?T.amberL:T.creamDim,marginTop:3,
          fontFamily:FM}}>{t.capacite}</div>
-        {sel&&<div style={{fontSize:9,color:T.amber,marginTop:2,fontWeight:700}}>â</div>}
+        {sel&&<div style={{fontSize:9,color:T.amber,marginTop:2,fontWeight:700}}>✓</div>}
        </button>
       );
      })}
@@ -3889,18 +3889,18 @@ function FormLocationT({editLoc,tireuses,recettes,onSave,onCancel}) {
     <div style={{padding:"6px 10px",background:T.bgCard,borderRadius:5,
      border:`1px solid ${T.border}`,fontSize:10,color:T.creamDim,
      fontFamily:FM,display:"flex",gap:12,flexWrap:"wrap"}}>
-     <span>1BEC â 1 robinet Â· froid sec</span>
-     <span>2BEC â 2 robinets Â· froid sec</span>
-     <span>2BARI â 2 rob. compacte Â· froid sec</span>
-     <span>2BCF / 2BCG â banc de glace</span>
+     <span>1BEC — 1 robinet · froid sec</span>
+     <span>2BEC — 2 robinets · froid sec</span>
+     <span>2BARI — 2 rob. compacte · froid sec</span>
+     <span>2BCF / 2BCG — banc de glace</span>
     </div>
    </div>
 
    <div style={sec}>
-    <SecT n="04" t="BiÃ¨res & FÃ»ts"/>
+    <SecT n="04" t="Bières & Fûts"/>
     {form.futs.length===0&&(
      <p style={{fontSize:13,color:T.creamDim,marginBottom:10,fontStyle:"italic"}}>
-      Aucun fÃ»t â optionnel
+      Aucun fût — optionnel
      </p>
     )}
     {form.futs.map((ft,i)=>(
@@ -3909,7 +3909,7 @@ function FormLocationT({editLoc,tireuses,recettes,onSave,onCancel}) {
       <div style={{display:"flex",justifyContent:"space-between",
        alignItems:"center",marginBottom:10}}>
        <span style={{fontFamily:FB,fontWeight:700,
-        fontSize:13,color:T.hop,letterSpacing:1}}>ð¢ FÃT {i+1}</span>
+        fontSize:13,color:T.hop,letterSpacing:1}}>🛢 FÛT {i+1}</span>
        <button onClick={()=>remFut(i)}
         style={{background:"none",border:`1px solid ${T.border}`,borderRadius:3,
          padding:"2px 8px",color:T.red,fontSize:11,
@@ -3917,33 +3917,33 @@ function FormLocationT({editLoc,tireuses,recettes,onSave,onCancel}) {
       </div>
       <div style={{display:"flex",flexDirection:"column",gap:8}}>
        <div>
-        <LblT t="BiÃ¨re"/>
+        <LblT t="Bière"/>
         <select value={ft.biere} onChange={e=>updFut(i,"biere",e.target.value)}
          style={{...IST,background:T.bgMid}}>
-         <option value="">â Choisir une biÃ¨re â</option>
+         <option value="">— Choisir une bière —</option>
          {BIERES.map(b=><option key={b} value={b}>{b}</option>)}
         </select>
        </div>
        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
         <div>
-         <LblT t="Format fÃ»t"/>
+         <LblT t="Format fût"/>
          <select value={ft.typeFut} onChange={e=>updFut(i,"typeFut",e.target.value)}
           style={{...IST,background:T.bgMid}}>
-          <option value="20L">FÃ»t 20L â {STOCK_FUTS["20L"]} dispo</option>
-          <option value="30L">FÃ»t 30L â {STOCK_FUTS["30L"]} dispo</option>
+          <option value="20L">Fût 20L — {STOCK_FUTS["20L"]} dispo</option>
+          <option value="30L">Fût 30L — {STOCK_FUTS["30L"]} dispo</option>
          </select>
         </div>
         <div>
-         <LblT t="QuantitÃ©"/>
+         <LblT t="Quantité"/>
          <input type="number" min="1" max="20" value={ft.nbFuts}
           onChange={e=>updFut(i,"nbFuts",e.target.value)}
           style={{...IST,background:T.bgMid}}/>
          <div style={{fontSize:10,marginTop:3,color:T.greenL,
-          fontFamily:FM}}>â {ft.volTotal}L</div>
+          fontFamily:FM}}>≈ {ft.volTotal}L</div>
         </div>
        </div>
        <div>
-        <LblT t="Prix / fÃ»t (â¬) â facturÃ© au retour"/>
+        <LblT t="Prix / fût (€) — facturé au retour"/>
         <input type="number" min="0" step="5" value={ft.prixFut||""}
          placeholder="ex: 80"
          onChange={e=>updFut(i,"prixFut",e.target.value)}
@@ -3951,8 +3951,8 @@ function FormLocationT({editLoc,tireuses,recettes,onSave,onCancel}) {
         {(ft.prixFut>0&&ft.nbFuts>0)&&(
          <div style={{fontSize:10,marginTop:3,fontFamily:FM,
           fontWeight:700,color:T.gold}}>
-          EstimÃ© : {Math.round(parseFloat(ft.prixFut)*parseInt(ft.nbFuts))}â¬
-          {" "}Â· {ft.volTotal}L
+          Estimé : {Math.round(parseFloat(ft.prixFut)*parseInt(ft.nbFuts))}€
+          {" "}· {ft.volTotal}L
          </div>
         )}
        </div>
@@ -3964,7 +3964,7 @@ function FormLocationT({editLoc,tireuses,recettes,onSave,onCancel}) {
       border:`1.5px dashed ${T.hop}`,background:"transparent",color:T.hop,
       fontFamily:FB,fontWeight:700,
       fontSize:13,letterSpacing:1,textTransform:"uppercase",minHeight:42}}>
-     + Ajouter un fÃ»t
+     + Ajouter un fût
     </button>
     {volTotal>0&&(
      <div style={{marginTop:8,padding:"8px 12px",borderRadius:5,
@@ -3977,9 +3977,9 @@ function FormLocationT({editLoc,tireuses,recettes,onSave,onCancel}) {
       {form.futs.some(ft=>parseFloat(ft.prixFut)>0)&&(
        <div style={{display:"flex",justifyContent:"space-between",
         paddingTop:4,borderTop:`1px solid ${T.amber}30`}}>
-        <span style={{color:T.creamDim}}>Prix estimÃ© fÃ»ts</span>
+        <span style={{color:T.creamDim}}>Prix estimé fûts</span>
         <span style={{color:T.gold,fontWeight:700}}>
-         {form.futs.reduce((s,ft)=>s+(parseFloat(ft.prixFut)||0)*(parseInt(ft.nbFuts)||1),0)}â¬
+         {form.futs.reduce((s,ft)=>s+(parseFloat(ft.prixFut)||0)*(parseInt(ft.nbFuts)||1),0)}€
          <span style={{fontSize:9,color:T.creamDim,fontWeight:400,marginLeft:4}}>(au retour)</span>
         </span>
        </div>
@@ -3989,11 +3989,11 @@ function FormLocationT({editLoc,tireuses,recettes,onSave,onCancel}) {
    </div>
 
    <div style={sec}>
-    <SecT n="05" t="Gobelets consignÃ©s"/>
+    <SecT n="05" t="Gobelets consignés"/>
     <div style={{background:T.bgCard,borderRadius:6,padding:"12px",border:`1px solid ${T.border}`}}>
      <div style={{fontFamily:FB,fontWeight:800,fontSize:11,
       letterSpacing:2,color:T.hop,textTransform:"uppercase",marginBottom:10}}>
-      Gobelets consignÃ©s â 1â¬/gobelet
+      Gobelets consignés — 1€/gobelet
      </div>
      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
       <div>
@@ -4003,7 +4003,7 @@ function FormLocationT({editLoc,tireuses,recettes,onSave,onCancel}) {
         style={{...IST,background:T.bgMid}}/>
        {(form.gobelets25>0)&&(
         <div style={{fontSize:10,marginTop:3,color:T.greenL,fontFamily:FM,fontWeight:700}}>
-         Consigne : {form.gobelets25}â¬
+         Consigne : {form.gobelets25}€
         </div>
        )}
       </div>
@@ -4014,7 +4014,7 @@ function FormLocationT({editLoc,tireuses,recettes,onSave,onCancel}) {
         style={{...IST,background:T.bgMid}}/>
        {(form.gobelets50>0)&&(
         <div style={{fontSize:10,marginTop:3,color:T.greenL,fontFamily:FM,fontWeight:700}}>
-         Consigne : {form.gobelets50}â¬
+         Consigne : {form.gobelets50}€
         </div>
        )}
       </div>
@@ -4029,7 +4029,7 @@ function FormLocationT({editLoc,tireuses,recettes,onSave,onCancel}) {
        </span>
        <span style={{fontFamily:FM,fontWeight:700,
         color:T.greenL,fontSize:14}}>
-        {(form.gobelets25||0)+(form.gobelets50||0)} â¬
+        {(form.gobelets25||0)+(form.gobelets50||0)} €
        </span>
       </div>
      )}
@@ -4037,17 +4037,17 @@ function FormLocationT({editLoc,tireuses,recettes,onSave,onCancel}) {
       <div style={{marginTop:6,padding:"6px 10px",borderRadius:4,
        background:T.amberPale,border:`1px solid ${T.amber}30`,
        fontFamily:FM,fontSize:10,color:T.amberL}}>
-       Total gobelets consignÃ©s : <strong>{(form.gobelets25||0) + (form.gobelets50||0)} â¬</strong>
-       {" "}({(form.gobelets25||0)+(form.gobelets50||0)} gobelets Ã 1â¬)
+       Total gobelets consignés : <strong>{(form.gobelets25||0) + (form.gobelets50||0)} €</strong>
+       {" "}({(form.gobelets25||0)+(form.gobelets50||0)} gobelets × 1€)
       </div>
      )}
     </div>
    </div>
 
    <div style={{marginBottom:14}}>
-    <LblT t="Notes / ÃvÃ©nement"/>
+    <LblT t="Notes / Événement"/>
     <textarea value={form.notes} onChange={e=>set("notes",e.target.value)}
-     placeholder="Description de l'Ã©vÃ©nement, instructions..."
+     placeholder="Description de l'événement, instructions..."
      style={{...IST,height:70,resize:"none"}}/>
    </div>
 
@@ -4064,7 +4064,7 @@ function FormLocationT({editLoc,tireuses,recettes,onSave,onCancel}) {
       background:T.amber,color:"#000",
       fontFamily:FB,fontWeight:900,
       fontSize:14,letterSpacing:1.5,textTransform:"uppercase",minHeight:46}}>
-     {editLoc?"Modifier â":"CrÃ©er â"}
+     {editLoc?"Modifier →":"Créer →"}
     </button>
    </div>
   </div>
@@ -4104,7 +4104,7 @@ function VuePlanning({tireuses,locations,onClickLoc}){
  const locDay = day => {
   const d0 = day; d0.setHours&&d0.setHours(0,0,0,0);
   return locations.filter(l=>{
-   if(l.statut==='annulÃ©e') return false;
+   if(l.statut==='annulée') return false;
    const s=new Date(l.dateDebut+'T00:00'); s.setHours(0,0,0,0);
    const e=new Date(l.dateFin+'T23:59');
    if(s>d0||e<d0) return false;
@@ -4116,7 +4116,7 @@ function VuePlanning({tireuses,locations,onClickLoc}){
 
  const locsVisible = [...new Set(days.flatMap(d=>locDay(d).map(l=>l.id)))].length;
 
- const SCOL = {confirmÃ©e:T.green,demande:T.amber,retournÃ©e:T.creamDim,annulÃ©e:T.red};
+ const SCOL = {confirmée:T.green,demande:T.amber,retournée:T.creamDim,annulée:T.red};
 
  const PlanSemaine = () => (
   <div style={{overflowX:'auto',WebkitOverflowScrolling:'touch'}}>
@@ -4254,7 +4254,7 @@ function VuePlanning({tireuses,locations,onClickLoc}){
            {(l.tireuses||[]).length>0&&(
             <div style={{fontSize:7,color:T.creamDim,
              fontFamily:FM}}>
-             {l.tireuses.length}ðº
+             {l.tireuses.length}🍺
             </div>
            )}
           </div>
@@ -4297,7 +4297,7 @@ function VuePlanning({tireuses,locations,onClickLoc}){
       style={{background:T.bgMid,border:`1px solid ${T.border}`,
        borderRadius:7,width:36,height:36,fontSize:18,color:T.cream,
        cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
-      â¹
+      ‹
      </button>
      <div style={{textAlign:'center',flex:1}}>
       <div style={{fontFamily:FB,fontWeight:700,
@@ -4308,7 +4308,7 @@ function VuePlanning({tireuses,locations,onClickLoc}){
        <button onClick={()=>setOffset(0)}
         style={{background:'none',border:'none',fontSize:10,color:T.amber,
          fontWeight:700,cursor:'pointer',fontFamily:FM}}>
-        â Aujourd'hui
+        → Aujourd'hui
        </button>
       )}
      </div>
@@ -4316,7 +4316,7 @@ function VuePlanning({tireuses,locations,onClickLoc}){
       style={{background:T.bgMid,border:`1px solid ${T.border}`,
        borderRadius:7,width:36,height:36,fontSize:18,color:T.cream,
        cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
-      âº
+      ›
      </button>
     </div>
 
@@ -4326,7 +4326,7 @@ function VuePlanning({tireuses,locations,onClickLoc}){
       borderRadius:8,padding:'6px 10px',fontSize:11,fontWeight:700,
       color:dateMin||dateMax?T.amber:T.creamMid,cursor:'pointer',
       fontFamily:FM,minHeight:34}}>
-     ð {dateMin||dateMax?'FiltrÃ©':'Dates'}
+     🗓 {dateMin||dateMax?'Filtré':'Dates'}
     </button>
    </div>
 
@@ -4335,7 +4335,7 @@ function VuePlanning({tireuses,locations,onClickLoc}){
      marginBottom:12,border:`1px solid ${T.border}`}}>
      <div style={{fontSize:9,color:T.amber,fontFamily:FM,
       fontWeight:700,letterSpacing:1.5,textTransform:'uppercase',marginBottom:8}}>
-      Filtrer par pÃ©riode
+      Filtrer par période
      </div>
      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
       {[['Du','dateMin',dateMin,setDateMin],['Au','dateMax',dateMax,setDateMax]].map(([l,k,v,set])=>(
@@ -4360,7 +4360,7 @@ function VuePlanning({tireuses,locations,onClickLoc}){
    )}
 
    <div style={{display:'flex',gap:10,marginBottom:10,flexWrap:'wrap',alignItems:'center'}}>
-    {[['confirmÃ©e',T.green],['demande',T.amber],['retournÃ©e',T.creamDim]].map(([k,col])=>(
+    {[['confirmée',T.green],['demande',T.amber],['retournée',T.creamDim]].map(([k,col])=>(
      <div key={k} style={{display:'flex',alignItems:'center',gap:4}}>
       <div style={{width:10,height:10,borderRadius:3,background:col}}/>
       <span style={{fontSize:10,color:T.creamDim,
@@ -4392,7 +4392,7 @@ function VueLocations({locations,setLocations,tireuses,setTireuses,onEdit,initSe
   const today = new Date(); today.setHours(0,0,0,0);
   const dateFin = new Date(l.dateFin+'T00:00');
   const matchStatut = filtre==='toutes'
-   || (filtre==='a_venir' && dateFin>=today && l.statut!=='annulÃ©e')
+   || (filtre==='a_venir' && dateFin>=today && l.statut!=='annulée')
    || l.statut===filtre;
   const matchQ      = !q || [l.client,l.contact,l.tel,(l.notes||''),
    (l.futs||[]).map(f=>f.biere).join(' ')]
@@ -4409,16 +4409,16 @@ function VueLocations({locations,setLocations,tireuses,setTireuses,onEdit,initSe
   }
  });
 
- const SCOL = {confirmÃ©e:T.green, demande:T.amber,
-        retournÃ©e:T.creamDim, annulÃ©e:T.red};
+ const SCOL = {confirmée:T.green, demande:T.amber,
+        retournée:T.creamDim, annulée:T.red};
 
  const retourner = l => {
-  setLocations(prev=>prev.map(x=>x.id===l.id?{...x,statut:'retournÃ©e'}:x));
+  setLocations(prev=>prev.map(x=>x.id===l.id?{...x,statut:'retournée'}:x));
   setTireuses(prev=>prev.map(t=>l.tireuses?.includes(t.id)?{...t,etat:'disponible'}:t));
   setSelLoc(null);
  };
  const annuler = l => {
-  window.confirm('Annuler cette location ?')&&setLocations(prev=>prev.map(x=>x.id===l.id?{...x,statut:'annulÃ©e'}:x));
+  window.confirm('Annuler cette location ?')&&setLocations(prev=>prev.map(x=>x.id===l.id?{...x,statut:'annulée'}:x));
   setTireuses(prev=>prev.map(t=>l.tireuses?.includes(t.id)?{...t,etat:'disponible'}:t));
   setSelLoc(null);
  };
@@ -4428,19 +4428,19 @@ function VueLocations({locations,setLocations,tireuses,setTireuses,onEdit,initSe
   const fD=d=>{const dt=new Date(d+'T00:00');return`${dt.getFullYear()}${pad(dt.getMonth()+1)}${pad(dt.getDate())}`;};
   const titreTireuses = l.tireuses?.length > 0
    ? `[${l.tireuses.length} tireuse${l.tireuses.length>1?'s':''}]` : '';
-  const tel = l.tel ? ` Â· ${l.tel}` : '';
+  const tel = l.tel ? ` · ${l.tel}` : '';
   const title = encodeURIComponent(`${titreTireuses} ${l.client}${tel}`);
   const futsList = (l.futs||[]).length>0
-   ? (l.futs||[]).map(f=>`â¢ ${f.nbFuts}Ã${f.typeFut} ${f.biere}`)
-   : ['â¢ FÃ»ts : Ã  prÃ©ciser'];
+   ? (l.futs||[]).map(f=>`• ${f.nbFuts}×${f.typeFut} ${f.biere}`)
+   : ['• Fûts : à préciser'];
   const gobelets = [];
   if((l.gobelets25||0)+(l.gobelets50||0)>0)
-   gobelets.push(`â¢ Gobelets consignÃ©s : ${(l.gobelets25||0)+(l.gobelets50||0)} Ã 1â¬ = ${(l.gobelets25||0)+(l.gobelets50||0)}â¬`);
+   gobelets.push(`• Gobelets consignés : ${(l.gobelets25||0)+(l.gobelets50||0)} × 1€ = ${(l.gobelets25||0)+(l.gobelets50||0)}€`);
   const det = encodeURIComponent([
-   `ð ${l.contact||'â'}${l.tel?' â '+l.tel:''}`,``,
-   `ð¢ FÃTS`,...futsList,
-   ...(gobelets.length?[``,`ð¥¤ GOBELETS`,...gobelets]:[]),
-   ...(l.notes?['',`ð ${l.notes}`]:[]),
+   `📞 ${l.contact||'—'}${l.tel?' — '+l.tel:''}`,``,
+   `🛢 FÛTS`,...futsList,
+   ...(gobelets.length?[``,`🥤 GOBELETS`,...gobelets]:[]),
+   ...(l.notes?['',`📝 ${l.notes}`]:[]),
   ].join('\n'));
   window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${fD(l.dateDebut)}/${fD(l.dateFin)}&details=${det}`,'_blank');
  };
@@ -4461,24 +4461,24 @@ function VueLocations({locations,setLocations,tireuses,setTireuses,onEdit,initSe
   <div>
    <div style={{position:'relative',marginBottom:8}}>
     <input value={q} onChange={e=>setQ(e.target.value)}
-     placeholder="Rechercher client, biÃ¨re, contactâ¦"
+     placeholder="Rechercher client, bière, contact…"
      style={{...iSt,paddingLeft:32,paddingRight:q?32:12,
       fontFamily:FM,fontSize:12}}/>
     <span style={{position:'absolute',left:10,top:'50%',transform:'translateY(-50%)',
-     fontSize:14,color:T.creamDim,pointerEvents:'none'}}>ð</span>
+     fontSize:14,color:T.creamDim,pointerEvents:'none'}}>🔍</span>
     {q&&<button onClick={()=>setQ('')}
      style={{position:'absolute',right:8,top:'50%',transform:'translateY(-50%)',
       background:'none',border:'none',fontSize:14,color:T.creamDim,cursor:'pointer'}}>
-     â
+     ✕
     </button>}
    </div>
 
    <div style={{display:'flex',gap:5,overflowX:'auto',marginBottom:8,
     scrollbarWidth:'none',paddingBottom:2}}>
-    {['toutes','a_venir','confirmÃ©e','demande','retournÃ©e','annulÃ©e'].map(f=>{
+    {['toutes','a_venir','confirmée','demande','retournée','annulée'].map(f=>{
      const today2 = new Date(); today2.setHours(0,0,0,0);
      const n   = f==='toutes'?locations.length
-      :f==='a_venir'?locations.filter(l=>new Date(l.dateFin+'T00:00')>=today2&&l.statut!=='annulÃ©e').length
+      :f==='a_venir'?locations.filter(l=>new Date(l.dateFin+'T00:00')>=today2&&l.statut!=='annulée').length
       :locations.filter(l=>l.statut===f).length;
      const col = f==='toutes'?T.amber:SCOL[f]||T.amber;
      const act = filtre===f;
@@ -4490,9 +4490,9 @@ function VueLocations({locations,setLocations,tireuses,setTireuses,onEdit,initSe
         color:act?col:T.creamDim,fontSize:11,fontWeight:600,
         fontFamily:FM,cursor:'pointer',
         minHeight:32,whiteSpace:'nowrap'}}>
-       {{a_venir:'Ã venir',toutes:'Toutes',
-        confirmÃ©e:'ConfirmÃ©e',demande:'Demande',
-        retournÃ©e:'RetournÃ©e',annulÃ©e:'AnnulÃ©e'}[f]||f}
+       {{a_venir:'À venir',toutes:'Toutes',
+        confirmée:'Confirmée',demande:'Demande',
+        retournée:'Retournée',annulée:'Annulée'}[f]||f}
        {' '}<span style={{opacity:0.7}}>({n})</span>
       </button>
      );
@@ -4502,8 +4502,8 @@ function VueLocations({locations,setLocations,tireuses,setTireuses,onEdit,initSe
    <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:12}}>
     <span style={{fontSize:9,color:T.creamDim,fontFamily:FM,
      flexShrink:0}}>TRIER :</span>
-    {[['date_desc','ð Plus rÃ©cent'],['date_asc','ð Plus ancien'],
-     ['client','AâZ'],['statut','Statut']].map(([k,l])=>(
+    {[['date_desc','📅 Plus récent'],['date_asc','📅 Plus ancien'],
+     ['client','A→Z'],['statut','Statut']].map(([k,l])=>(
      <button key={k} onClick={()=>setTri(k)}
       style={{padding:'4px 8px',borderRadius:12,border:`1px solid ${tri===k?T.amber:T.border}`,
        background:tri===k?T.amberPale:'transparent',
@@ -4516,7 +4516,7 @@ function VueLocations({locations,setLocations,tireuses,setTireuses,onEdit,initSe
 
    <div style={{fontSize:10,color:T.creamDim,fontFamily:FM,
     marginBottom:8}}>
-    {sorted.length} location{sorted.length!==1?'s':''}{q?` Â· "â¦${q}"`:''}
+    {sorted.length} location{sorted.length!==1?'s':''}{q?` · "…${q}"`:''}
    </div>
 
    <div style={{display:'flex',flexDirection:'column',gap:8}}>
@@ -4541,9 +4541,9 @@ function VueLocations({locations,setLocations,tireuses,setTireuses,onEdit,initSe
          </div>
          <div style={{fontSize:10,color:T.creamDim,
           fontFamily:FM,marginTop:2}}>
-          ð {fmtDate(l.dateDebut)}
-          {l.dateFin&&l.dateFin!==l.dateDebut?` â ${fmtDate(l.dateFin)}`:''}
-          {' '}Â· {dur} jour{dur>1?'s':''}
+          📅 {fmtDate(l.dateDebut)}
+          {l.dateFin&&l.dateFin!==l.dateDebut?` → ${fmtDate(l.dateFin)}`:''}
+          {' '}· {dur} jour{dur>1?'s':''}
          </div>
         </div>
         <div style={{display:'flex',flexDirection:'column',
@@ -4578,13 +4578,13 @@ function VueLocations({locations,setLocations,tireuses,setTireuses,onEdit,initSe
         {(l.futs||[]).length>0&&(
          <div style={{fontSize:10,color:T.creamDim,
           fontFamily:FM}}>
-          ð¢ {(l.futs||[]).map(f=>`${f.nbFuts}Ã${f.typeFut}`).join(' Â· ')}
+          🛢 {(l.futs||[]).map(f=>`${f.nbFuts}×${f.typeFut}`).join(' · ')}
          </div>
         )}
         {caut>0&&(
          <div style={{fontSize:10,color:T.greenL,
           fontFamily:FM,marginLeft:'auto'}}>
-          ð¥¤ {caut}â¬
+          🥤 {caut}€
          </div>
         )}
        </div>
@@ -4592,7 +4592,7 @@ function VueLocations({locations,setLocations,tireuses,setTireuses,onEdit,initSe
        {(l.contact||l.tel)&&(
         <div style={{fontSize:10,color:T.creamDim,
          fontFamily:FM,marginTop:5}}>
-         ð {[l.contact,l.tel].filter(Boolean).join(' â ')}
+         📞 {[l.contact,l.tel].filter(Boolean).join(' — ')}
         </div>
        )}
       </div>
@@ -4601,9 +4601,9 @@ function VueLocations({locations,setLocations,tireuses,setTireuses,onEdit,initSe
 
     {sorted.length===0&&(
      <div style={{textAlign:'center',padding:'40px 0',color:T.creamDim}}>
-      <div style={{fontSize:32,marginBottom:8}}>ð»</div>
+      <div style={{fontSize:32,marginBottom:8}}>🍻</div>
       <div style={{fontSize:13,fontWeight:600}}>
-       {q?`Aucun rÃ©sultat pour "${q}"`:'Aucune location'}
+       {q?`Aucun résultat pour "${q}"`:'Aucune location'}
       </div>
      </div>
     )}
@@ -4630,14 +4630,14 @@ function VueLocations({locations,setLocations,tireuses,setTireuses,onEdit,initSe
           </div>
           <div style={{fontSize:11,color:T.creamDim,
            fontFamily:FM}}>
-           {fmtDate(l.dateDebut)}{l.dateFin!==l.dateDebut?` â ${fmtDate(l.dateFin)}`:''} Â· {dur}j
+           {fmtDate(l.dateDebut)}{l.dateFin!==l.dateDebut?` → ${fmtDate(l.dateFin)}`:''} · {dur}j
           </div>
          </div>
         </div>
         <button onClick={()=>setSelLoc(null)}
          style={{background:'none',border:`1px solid ${T.border}`,
           borderRadius:20,padding:'5px 12px',fontSize:12,
-          fontWeight:700,color:T.creamMid,cursor:'pointer'}}>â</button>
+          fontWeight:700,color:T.creamMid,cursor:'pointer'}}>✕</button>
        </div>
       </div>
 
@@ -4670,7 +4670,7 @@ function VueLocations({locations,setLocations,tireuses,setTireuses,onEdit,initSe
        <div style={{marginBottom:12}}>
         <div style={{fontSize:9,color:T.amber,fontFamily:FM,
          fontWeight:700,letterSpacing:1.5,textTransform:'uppercase',marginBottom:6}}>
-         FÃ»ts commandÃ©s
+         Fûts commandés
         </div>
         {(l.futs||[]).map((f,i)=>(
          <div key={`k${i}`} style={{display:'flex',justifyContent:'space-between',
@@ -4678,7 +4678,7 @@ function VueLocations({locations,setLocations,tireuses,setTireuses,onEdit,initSe
           marginBottom:4,fontSize:12}}>
           <span style={{fontWeight:700,color:T.cream}}>{f.biere}</span>
           <span style={{fontFamily:FM,color:T.amber,fontWeight:700}}>
-           {f.nbFuts}Ã{f.typeFut} = {f.volTotal}L
+           {f.nbFuts}×{f.typeFut} = {f.volTotal}L
           </span>
          </div>
         ))}
@@ -4693,11 +4693,11 @@ function VueLocations({locations,setLocations,tireuses,setTireuses,onEdit,initSe
          Contact
         </div>
         <div style={{fontSize:13,color:T.cream,fontWeight:600}}>
-         {l.contact||'â'}
+         {l.contact||'—'}
         </div>
         {l.tel&&<div style={{fontSize:12,color:T.amber,
          fontFamily:FM,marginTop:3}}>
-         ð {l.tel}
+         📞 {l.tel}
         </div>}
        </div>
       )}
@@ -4706,11 +4706,11 @@ function VueLocations({locations,setLocations,tireuses,setTireuses,onEdit,initSe
        marginBottom:12,border:`1px solid ${T.border}`}}>
        <div style={{fontSize:9,color:T.amber,fontFamily:FM,
         fontWeight:700,letterSpacing:1.5,textTransform:'uppercase',marginBottom:6}}>
-        Gobelets consignÃ©s (1â¬/unitÃ©)
+        Gobelets consignés (1€/unité)
        </div>
        {[
-        ['Gobelets 25cl',   l.gobelets25>0?`${l.gobelets25} Ã 1â¬ = ${l.gobelets25}â¬`:'â'],
-        ['Gobelets 50cl',   l.gobelets50>0?`${l.gobelets50} Ã 1â¬ = ${l.gobelets50}â¬`:'â'],
+        ['Gobelets 25cl',   l.gobelets25>0?`${l.gobelets25} × 1€ = ${l.gobelets25}€`:'—'],
+        ['Gobelets 50cl',   l.gobelets50>0?`${l.gobelets50} × 1€ = ${l.gobelets50}€`:'—'],
        ].map(([lbl,val])=>(
         <div key={lbl} style={{display:'flex',justifyContent:'space-between',
          fontSize:12,padding:'4px 0',borderBottom:`1px solid ${T.border}`,
@@ -4724,7 +4724,7 @@ function VueLocations({locations,setLocations,tireuses,setTireuses,onEdit,initSe
         <div style={{display:'flex',justifyContent:'space-between',
          fontSize:13,padding:'6px 0 0',color:T.greenL,fontWeight:700}}>
          <span>TOTAL CONSIGNE</span>
-         <span style={{fontFamily:FM}}>{caut}â¬</span>
+         <span style={{fontFamily:FM}}>{caut}€</span>
         </div>
        )}
       </div>
@@ -4733,39 +4733,39 @@ function VueLocations({locations,setLocations,tireuses,setTireuses,onEdit,initSe
        <div style={{background:T.bgCard,borderRadius:8,padding:'8px 12px',
         marginBottom:12,border:`1px solid ${T.border}`,
         fontSize:11,color:T.creamDim,lineHeight:1.6}}>
-        ð {l.notes}
+        📝 {l.notes}
        </div>
       )}
 
       <div style={{display:'flex',gap:6,flexWrap:'wrap',marginBottom:10}}>
-       {l.statut!=='retournÃ©e'&&l.statut!=='annulÃ©e'&&(
+       {l.statut!=='retournée'&&l.statut!=='annulée'&&(
         <button onClick={()=>retourner(l)}
          style={{flex:1,padding:'10px',borderRadius:8,border:'none',
           background:T.green,color:'#fff',fontWeight:700,fontSize:12,cursor:'pointer'}}>
-         â RetournÃ©e
+         ✓ Retournée
         </button>
        )}
        <button onClick={()=>gCal(l)}
         style={{flex:1,padding:'10px',borderRadius:8,
          border:`1px solid ${T.border}`,background:T.bgLight,
          color:T.creamMid,fontWeight:700,fontSize:12,cursor:'pointer'}}>
-        ð Google Agenda
+        📅 Google Agenda
        </button>
        {onEdit&&(
         <button onClick={()=>{setSelLoc(null);onEdit(l);}}
          style={{flex:1,padding:'10px',borderRadius:8,
           border:`1px solid ${T.amber}60`,background:T.amberPale,
           color:T.amber,fontWeight:700,fontSize:12,cursor:'pointer'}}>
-         â Modifier
+         ✏ Modifier
         </button>
        )}
       </div>
-      {l.statut!=='annulÃ©e'&&(
+      {l.statut!=='annulée'&&(
        <button onClick={()=>annuler(l)}
         style={{width:'100%',padding:'8px',borderRadius:8,
          border:`1px solid ${T.red}40`,background:'transparent',
          color:T.red,fontSize:11,fontWeight:600,cursor:'pointer'}}>
-        ð Annuler la location
+        🗑 Annuler la location
        </button>
       )}
      </Modal>
@@ -4776,7 +4776,7 @@ function VueLocations({locations,setLocations,tireuses,setTireuses,onEdit,initSe
 }
 
 function VueParc({tireuses,locations}) {
- const actives = locations.filter(l=>l.statut!=="retournÃ©e"&&l.statut!=="annulÃ©e");
+ const actives = locations.filter(l=>l.statut!=="retournée"&&l.statut!=="annulée");
  const dispos  = tireuses.filter(t=>!actives.some(l=>l.tireuses.includes(t.id))).length;
 
  return (
@@ -4803,7 +4803,7 @@ function VueParc({tireuses,locations}) {
         fontFamily:FB,fontWeight:700,
         letterSpacing:0.5,textTransform:"uppercase",
         color:libre?T.green:s?.color||T.amber}}>
-        {libre?"LIBRE":s?.label||"LouÃ©e"}
+        {libre?"LIBRE":s?.label||"Louée"}
        </div>
        {lc&&<div style={{fontSize:8,color:T.creamDim,marginTop:3,overflow:"hidden",
         textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
@@ -4834,7 +4834,7 @@ function VueParc({tireuses,locations}) {
 
    <div style={{fontFamily:FB,fontWeight:800,fontSize:13,
     letterSpacing:2,color:T.amber,textTransform:"uppercase",marginBottom:10}}>
-    DÃ©tail du parc
+    Détail du parc
    </div>
    {tireuses.map(t=>{
     const lc   = actives.find(l=>l.tireuses.includes(t.id));
@@ -4857,17 +4857,17 @@ function VueParc({tireuses,locations}) {
        </div>
        <div style={{fontSize:11,color:T.creamDim,
         fontFamily:FM,marginTop:1}}>
-        {t.capacite}{t.notes?` Â· ${t.notes}`:""}
+        {t.capacite}{t.notes?` · ${t.notes}`:""}
        </div>
        {lc&&<div style={{fontSize:11,color:STATUTS_LOC[lc.statut]?.color,
         marginTop:3,fontFamily:FB,fontWeight:600}}>
-        {lc.client} Â· {fmtDate(lc.dateDebut)}â{fmtDate(lc.dateFin)}
+        {lc.client} · {fmtDate(lc.dateDebut)}→{fmtDate(lc.dateFin)}
        </div>}
       </div>
       <span style={{flexShrink:0,fontFamily:FB,
        fontWeight:700,fontSize:11,letterSpacing:0.5,textTransform:"uppercase",
        color:libre?T.greenL:STATUTS_LOC[lc?.statut]?.color||T.amber}}>
-       {libre?"â LIBRE":"â³ LOUÃE"}
+       {libre?"✓ LIBRE":"⏳ LOUÉE"}
       </span>
      </div>
     );
@@ -4877,9 +4877,9 @@ function VueParc({tireuses,locations}) {
 }
 
 function VueStats({locations}) {
- const nonAnn   = locations.filter(l=>l.statut!=="annulÃ©e");
- const retour   = locations.filter(l=>l.statut==="retournÃ©e");
- const actives  = locations.filter(l=>l.statut!=="annulÃ©e"&&l.statut!=="retournÃ©e");
+ const nonAnn   = locations.filter(l=>l.statut!=="annulée");
+ const retour   = locations.filter(l=>l.statut==="retournée");
+ const actives  = locations.filter(l=>l.statut!=="annulée"&&l.statut!=="retournée");
  const totalCA  = nonAnn.reduce((s,l)=>s+(l.tarif||0),0);
  const totalGob = actives.reduce((s,l)=>s+((l.gobelets25||0)+(l.gobelets50||0)),0);
  const totalVol = nonAnn.reduce((s,l)=>s+l.futs.reduce((a,f)=>a+(f.volTotal||0),0),0);
@@ -4905,10 +4905,10 @@ function VueStats({locations}) {
   <div>
    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:20}}>
     {[
-     {label:"Chiffre d'affaires",val:`${totalCA}â¬`,color:T.gold,  sub:`${nonAnn.length} locations`},
-     {label:"Gobelets en consigne",val:`${totalGob}`,color:T.amber, sub:`${totalGob}â¬ Ã  rÃ©cupÃ©rer`},
-     {label:"Volume servi",      val:`${totalVol}L`,color:T.hop,  sub:"en fÃ»t"},
-     {label:"Jours de location", val:totalJ,       color:T.greenL,sub:`${retour.length} terminÃ©es`},
+     {label:"Chiffre d'affaires",val:`${totalCA}€`,color:T.gold,  sub:`${nonAnn.length} locations`},
+     {label:"Gobelets en consigne",val:`${totalGob}`,color:T.amber, sub:`${totalGob}€ à récupérer`},
+     {label:"Volume servi",      val:`${totalVol}L`,color:T.hop,  sub:"en fût"},
+     {label:"Jours de location", val:totalJ,       color:T.greenL,sub:`${retour.length} terminées`},
     ].map(({label,val,color,sub})=>(
      <div key={label} style={{background:T.bgCard,borderRadius:8,padding:"14px 16px",
       border:`1px solid ${T.border}`,position:"relative",overflow:"hidden"}}>
@@ -4943,7 +4943,7 @@ function VueStats({locations}) {
          width:`${(d.ca/maxC)*100}%`}}/>
        </div>
        <div style={{fontFamily:FB,fontWeight:700,
-        fontSize:13,color:T.gold,minWidth:40,textAlign:"right"}}>{d.ca}â¬</div>
+        fontSize:13,color:T.gold,minWidth:40,textAlign:"right"}}>{d.ca}€</div>
       </div>
      ))}
     </div>
@@ -4954,7 +4954,7 @@ function VueStats({locations}) {
      border:`1px solid ${T.border}`}}>
      <div style={{fontFamily:FB,fontWeight:800,
       fontSize:13,letterSpacing:2,color:T.hop,textTransform:"uppercase",
-      marginBottom:12}}>BiÃ¨res les + louÃ©es</div>
+      marginBottom:12}}>Bières les + louées</div>
      {topB.map(([nom,n])=>(
       <div key={nom} style={{display:"flex",alignItems:"center",gap:10,marginBottom:8}}>
        <div style={{flex:1,fontSize:13,color:T.cream,overflow:"hidden",
@@ -4966,7 +4966,7 @@ function VueStats({locations}) {
          width:`${(n/maxB)*100}%`,borderRadius:2}}/>
        </div>
        <div style={{fontFamily:FM,fontSize:11,color:T.hop,
-        minWidth:28,textAlign:"right"}}>{n}Ã</div>
+        minWidth:28,textAlign:"right"}}>{n}×</div>
       </div>
      ))}
     </div>
@@ -4977,38 +4977,38 @@ function VueStats({locations}) {
 
 const BIERE_ALIASES = [
  ['blonde des papas', "La Blonde des Papas"],
- ["l'impÃ¨rtinente",   "L'ImpÃ¨rtinente"],
- ['impÃ¨rtinente',     "L'ImpÃ¨rtinente"],
- ['impertinente',     "L'ImpÃ¨rtinente"],
- ['pÃ¨rlimpinpin',     "La PÃ¨rlimpinpin"],
- ['perlimpinpin',     "La PÃ¨rlimpinpin"],
- ['pÃ¨rchÃ©e',          "La PÃ¨rchÃ©e"],
- ['perchee',          "La PÃ¨rchÃ©e"],
- ['pÃ¨rilleuse',       "La PÃ¨rilleuse"],
- ['perilleuse',       "La PÃ¨rilleuse"],
- ['mÃ¨rveilleuse',     "La MÃ¨rveilleuse"],
- ['mÃ¨rlimpinpin',     "La MÃ¨rlimpinpin"],
- ['supÃ¨re',           "La SupÃ¨re"],
- ['supere',           "La SupÃ¨re"],
+ ["l'impèrtinente",   "L'Impèrtinente"],
+ ['impèrtinente',     "L'Impèrtinente"],
+ ['impertinente',     "L'Impèrtinente"],
+ ['pèrlimpinpin',     "La Pèrlimpinpin"],
+ ['perlimpinpin',     "La Pèrlimpinpin"],
+ ['pèrchée',          "La Pèrchée"],
+ ['perchee',          "La Pèrchée"],
+ ['pèrilleuse',       "La Pèrilleuse"],
+ ['perilleuse',       "La Pèrilleuse"],
+ ['mèrveilleuse',     "La Mèrveilleuse"],
+ ['mèrlimpinpin',     "La Mèrlimpinpin"],
+ ['supère',           "La Supère"],
+ ['supere',           "La Supère"],
  ["mary'stout",       "La Mary'Stout"],
  ['mary stout',       "La Mary'Stout"],
  ['blonde',           "La Blonde des Papas"],
- ['blanche',          "La PÃ¨rchÃ©e"],
- ['ambrÃ©e',           "La PÃ¨rilleuse"],
- ['ambree',           "La PÃ¨rilleuse"],
- ['triple',           "La SupÃ¨re"],
- ['tripel',           "La SupÃ¨re"],
- ['neipa',            "La MÃ¨rveilleuse"],
+ ['blanche',          "La Pèrchée"],
+ ['ambrée',           "La Pèrilleuse"],
+ ['ambree',           "La Pèrilleuse"],
+ ['triple',           "La Supère"],
+ ['tripel',           "La Supère"],
+ ['neipa',            "La Mèrveilleuse"],
  ['stout',            "La Mary'Stout"],
  ['brune',            "La Mary'Stout"],
- ['apa',              "L'ImpÃ¨rtinente"],
- ['ipa',              "La PÃ¨rlimpinpin"],
+ ['apa',              "L'Impèrtinente"],
+ ['ipa',              "La Pèrlimpinpin"],
 ];
 
 function normStr(s){
  return (s||'').toLowerCase()
-  .replace(/[Ã¨ÃªÃ«]/g,'e').replace(/Ã©/g,'e').replace(/[Ã Ã¢]/g,'a')
-  .replace(/[Ã¯Ã®]/g,'i').replace(/[Ã¹Ã»]/g,'u')
+  .replace(/[èêë]/g,'e').replace(/é/g,'e').replace(/[àâ]/g,'a')
+  .replace(/[ïî]/g,'i').replace(/[ùû]/g,'u')
   .replace(/['\u2019]/g,' ').replace(/\s+/g,' ').trim();
 }
 
@@ -5085,9 +5085,9 @@ function parseTitrePapas(sum){
   cmd = (cmd.slice(0,gobM.index)+cmd.slice(gobM.index+gobM[0].length)).trim();
  }
 
- const tokensB = [...cmd.matchAll(/(\d{2,4})\s*[Ll]?\s+([A-Za-zÃ-Ã¿][A-Za-zÃ-Ã¿\s]*?)(?=\d+|$)/g)].filter(m=>parseInt(m[1])>=15&&parseInt(m[1])<=600);
+ const tokensB = [...cmd.matchAll(/(\d{2,4})\s*[Ll]?\s+([A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\s]*?)(?=\d+|$)/g)].filter(m=>parseInt(m[1])>=15&&parseInt(m[1])<=600);
 
- const tokensC = [...cmd.matchAll(/(\d+)\s*[*Ãx]\s*(20|30)\s+([A-Za-zÃ-Ã¿][A-Za-zÃ-Ã¿\s]*?)(?=\d+\s*[*Ãx]|\d+\s*[Ll]|$)/g)];
+ const tokensC = [...cmd.matchAll(/(\d+)\s*[*×x]\s*(20|30)\s+([A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\s]*?)(?=\d+\s*[*×x]|\d+\s*[Ll]|$)/g)];
 
  if(tokensC.length>0){
   tokensC.forEach(m=>{
@@ -5100,12 +5100,12 @@ function parseTitrePapas(sum){
    if(biere) repartirFuts(vol,biere).forEach(f=>result.futs.push(f));
   });
  } else {
-  const biereM = cmd.match(/([A-Za-zÃ-Ã¿][A-Za-zÃ-Ã¿\s']{2,})\s*$/);
+  const biereM = cmd.match(/([A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\s']{2,})\s*$/);
   const biere  = biereM ? biereM[1].trim() : '';
   const cmdVols= biereM ? cmd.slice(0,biereM.index) : cmd;
 
   const avecMult=[];
-  [...cmdVols.matchAll(/(\d+)\s*[*Ãx]\s*(20|30)/g)].forEach(m=>{
+  [...cmdVols.matchAll(/(\d+)\s*[*×x]\s*(20|30)/g)].forEach(m=>{
    avecMult.push({nb:parseInt(m[1]),vol:parseInt(m[2]),s:m.index,e:m.index+m[0].length});
   });
 
@@ -5223,9 +5223,9 @@ function parseDescFuts(desc){
   const gob25m=desc.match(/\+?(\d+)\s*(?:gobelets?|gob\.?)\s*(?:de\s+)?25/i)
               ||(!gob50m&&desc.match(/\+?(\d+)\s*(?:gobelets?|gob\.?)(?!\s*\d)/i));
   if(gob25m)gobelets25=parseInt(gob25m[1]);
-  const tarifm=desc.match(/(?:tarif|prix|total)\s*:?\s*(\d+)\s*â¬/i);
+  const tarifm=desc.match(/(?:tarif|prix|total)\s*:?\s*(\d+)\s*€/i);
   if(tarifm)tarif=parseInt(tarifm[1]);
-  const telm=desc.match(/(?:t[eÃ©]l(?:[eÃ©]phone)?|mobile)\s*[:\-.]?\s*([+\d][\d\s.\-]{7,})/i)
+  const telm=desc.match(/(?:t[eé]l(?:[eé]phone)?|mobile)\s*[:\-.]?\s*([+\d][\d\s.\-]{7,})/i)
             ||desc.match(/\b(0[1-9][\d\s.\-]{8,12})\b/);
   if(telm)tel=telm[1].replace(/[\s.\-]/g,'').trim();
   const contm=desc.match(/(?:contact|nom)\s*[:\-]\s*([^\n,]{2,40})/i);
@@ -5233,36 +5233,36 @@ function parseDescFuts(desc){
 
   const normalized = desc
     .replace(/\r/g,'')
-    .replace(/\s*,\s*/g,'\n')    // virgule â saut de ligne
-    .replace(/\s*\+\s*(?=\d)/g,'\n'); // + avant nombre â saut de ligne
+    .replace(/\s*,\s*/g,'\n')    // virgule → saut de ligne
+    .replace(/\s*\+\s*(?=\d)/g,'\n'); // + avant nombre → saut de ligne
 
-  const SKIP=/(?:gobelets?|gob\.|tarif|prix|dÃ©pÃ´t|contact|t[eÃ©]l|mobile|adresse|\d\s*â¬)/i;
+  const SKIP=/(?:gobelets?|gob\.|tarif|prix|dépôt|contact|t[eé]l|mobile|adresse|\d\s*€)/i;
 
   normalized.split('\n').forEach(rawLine=>{
-    let line=rawLine.replace(/^[â¢\-\*\+]\s*/,'').trim();
+    let line=rawLine.replace(/^[•\-\*\+]\s*/,'').trim();
     if(!line||SKIP.test(line))return;
 
-    for(const m of line.matchAll(/(\d+)\s*[ÃxX\*]\s*(20|30)\s*[Ll]\.?\s+([A-Za-zÃ-Ã¿][A-Za-zÃ-Ã¿\s']{1,30}?)(?=\d|$)/g))
+    for(const m of line.matchAll(/(\d+)\s*[×xX\*]\s*(20|30)\s*[Ll]\.?\s+([A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\s']{1,30}?)(?=\d|$)/g))
       addF(m[1],m[2],m[3].trim());
 
-    for(const m of line.matchAll(/([A-Za-zÃ-Ã¿][A-Za-zÃ-Ã¿\s']{1,25}?)\s*[-:â]\s*(\d+)\s*[ÃxX\*]\s*(20|30)\s*[Ll]/g))
+    for(const m of line.matchAll(/([A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\s']{1,25}?)\s*[-:–]\s*(\d+)\s*[×xX\*]\s*(20|30)\s*[Ll]/g))
       if(!SKIP.test(m[1]))addF(m[2],m[3],m[1].trim());
 
     const lineClean=line.replace(/\+?\d+\s*(?:gobelets?|gob\.?)[^\n]*/gi,'').trim();
-    for(const m of lineClean.matchAll(/(\d{2,4})\s*[Ll]?\s+([A-Za-zÃ-Ã¿][A-Za-zÃ-Ã¿']{2,25})/g)){
+    for(const m of lineClean.matchAll(/(\d{2,4})\s*[Ll]?\s+([A-Za-zÀ-ÿ][A-Za-zÀ-ÿ']{2,25})/g)){
       const vol=parseInt(m[1]),biere=m[2].trim();
       if(vol>=15&&vol<=600&&!SKIP.test(biere))addVol(vol,biere);
     }
 
-    for(const m of lineClean.matchAll(/([A-Za-zÃ-Ã¿][A-Za-zÃ-Ã¿']{2,25})\s+(\d{2,4})\s*[Ll](?!\s*[ÃxX])/g)){
+    for(const m of lineClean.matchAll(/([A-Za-zÀ-ÿ][A-Za-zÀ-ÿ']{2,25})\s+(\d{2,4})\s*[Ll](?!\s*[×xX])/g)){
       const biere=m[1].trim(),vol=parseInt(m[2]);
       if(vol>=15&&vol<=600&&!SKIP.test(biere))addVol(vol,biere);
     }
   });
 
-  const NOTE_STRIP=/tireuse|f[uÃ»]t|gobelet|gob\b|tarif|contact|t[eÃ©]l|\d+\s*[Ll]\b|\d+\s*[ÃxX]|\d+\s*â¬/i;
+  const NOTE_STRIP=/tireuse|f[uû]t|gobelet|gob\b|tarif|contact|t[eé]l|\d+\s*[Ll]\b|\d+\s*[×xX]|\d+\s*€/i;
   notes=desc.split('\n').map(l=>l.trim())
-    .filter(l=>l&&!NOTE_STRIP.test(l)&&!SKIP.test(l)).slice(0,3).join(' â ');
+    .filter(l=>l&&!NOTE_STRIP.test(l)&&!SKIP.test(l)).slice(0,3).join(' — ');
 
   return{futs,gobelets25,gobelets50,tarif,tel,contact,notes};
 }
@@ -5290,23 +5290,23 @@ function mapICS(evt,i){
    tel, dateDebut:evt.dateDebut, dateFin:evt.dateFin||evt.dateDebut,
    tireuses, typeTireuse:parsed.typeTireuse,
    futs, gobelets25, gobelets50, tarif,
-   statut:'confirmÃ©e', notes, icsUid:evt.uid,
+   statut:'confirmée', notes, icsUid:evt.uid,
   };
  }
 
- const client=sum.replace(/^[ð»ðð\s]*/,'')
-  .replace(/^(location|rÃ©servation|tireuse|loc\.?)[\s:\-]+/i,'')
-  .replace(/\s*[-â]\s*(tireuse|location)s?.*/i,'')
+ const client=sum.replace(/^[🍻🔔📅\s]*/,'')
+  .replace(/^(location|réservation|tireuse|loc\.?)[\s:\-]+/i,'')
+  .replace(/\s*[-–]\s*(tireuse|location)s?.*/i,'')
   .replace(/\s*[\[\(].*?[\]\)]/g,'').trim()||`Import ${i+1}`;
 
  const allTxt=sum+'\n'+desc;
- const mT=allTxt.match(/(\d+)\s*tireuse/i)||allTxt.match(/tireuses?\s*[Ãx]\s*(\d+)/i);
+ const mT=allTxt.match(/(\d+)\s*tireuse/i)||allTxt.match(/tireuses?\s*[×x]\s*(\d+)/i);
  const nb=mT?Math.min(parseInt(mT[1]),8):1;
  const mCon=desc.match(/(?:contact|nom)\s*[:\-]\s*([^\n,]+)/i);
 
  return {
   id:Date.now()+i, client,
-  contact:fromDesc.contact||(mCon?mCon[1].replace(/[\-â\|,].*/,'').trim():''),
+  contact:fromDesc.contact||(mCon?mCon[1].replace(/[\-–\|,].*/,'').trim():''),
   tel:fromDesc.tel,
   dateDebut:evt.dateDebut, dateFin:evt.dateFin||evt.dateDebut,
   tireuses:Array.from({length:nb},(_,j)=>j+1),
@@ -5314,7 +5314,7 @@ function mapICS(evt,i){
   gobelets25:fromDesc.gobelets25,
   gobelets50:fromDesc.gobelets50,
   tarif:fromDesc.tarif,
-  statut:'confirmÃ©e',
+  statut:'confirmée',
   notes:fromDesc.notes||'Import Google Agenda',
   icsUid:evt.uid,
  };
@@ -5348,11 +5348,11 @@ function VueImport({locations,setLocations,onDone}){
  const processICS = text => {
   setErr('');
   const evts = parseICS(text);
-  if(!evts.length){setErr('Aucun Ã©vÃ©nement trouvÃ©. VÃ©rifiez le format iCal.');return;}
+  if(!evts.length){setErr('Aucun événement trouvé. Vérifiez le format iCal.');return;}
   const mapped = evts
    .filter(e=>{ const s=(e.summary||'').toLowerCase();
     return /^(1bec|2bec|2bari|2bcf|2bcg)/.test(s)
-     ||/tireuse|location|r[eÃ©]servation|[eÃ©]v[eÃ©]n|f[eÃª]te|mariage|soiree|soirÃ©e|annivers/i.test(s+' '+(e.description||'')); })
+     ||/tireuse|location|r[eé]servation|[eé]v[eé]n|f[eê]te|mariage|soiree|soirée|annivers/i.test(s+' '+(e.description||'')); })
    .map((e,i)=>mapICS(e,i));
   const used   = new Set(locations.filter(l=>l.icsUid).map(l=>l.icsUid));
   const news = mapped.filter(e=>!used.has(e.icsUid));
@@ -5384,7 +5384,7 @@ function VueImport({locations,setLocations,onDone}){
    saveUrl(u);
    processICS(text);
   }catch(ex){
-   setErr(`Erreur : ${ex.message}. VÃ©rifiez que l'agenda Google est bien partagÃ© en public.`);
+   setErr(`Erreur : ${ex.message}. Vérifiez que l'agenda Google est bien partagé en public.`);
   }
   setLoading(false);
  };
@@ -5423,20 +5423,20 @@ function VueImport({locations,setLocations,onDone}){
 
  if(step==='done') return(
   <div style={{textAlign:'center',padding:'40px 16px'}}>
-   <div style={{fontSize:52,marginBottom:14}}>â</div>
+   <div style={{fontSize:52,marginBottom:14}}>✅</div>
    <div style={{fontFamily:FB,fontWeight:900,
     fontSize:22,color:T.greenL,letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>
-    Synchronisation rÃ©ussie
+    Synchronisation réussie
    </div>
    <div style={{fontSize:13,color:T.creamDim,marginBottom:6}}>
-    {nbNew} nouvelle(s) location Â· {nbUpd} mise(s) Ã  jour
+    {nbNew} nouvelle(s) location · {nbUpd} mise(s) à jour
    </div>
    {savedUrl&&<div style={{fontSize:10,color:T.amberL,fontFamily:FM,
     marginBottom:24,wordBreak:'break-all',padding:'6px 10px',
     background:T.bgMid,borderRadius:6,border:`1px solid ${T.amber}30`}}>
-    ð URL mÃ©morisÃ©e â
+    🔗 URL mémorisée ✓
    </div>}
-   <button onClick={onDone} style={btnPrim}>Voir les locations â</button>
+   <button onClick={onDone} style={btnPrim}>Voir les locations →</button>
   </div>
  );
 
@@ -5447,12 +5447,12 @@ function VueImport({locations,setLocations,onDone}){
      <div>
       <div style={{fontFamily:FB,fontWeight:900,
        fontSize:16,color:T.amber,letterSpacing:0.5}}>
-       {parsed.length} Ã©vÃ©nement{parsed.length>1?'s':''} trouvÃ©s
+       {parsed.length} événement{parsed.length>1?'s':''} trouvés
       </div>
       <div style={{fontSize:11,color:T.creamDim,marginTop:3,
        fontFamily:FM}}>
-       {parsed.filter(e=>!locations.some(l=>l.icsUid===e.icsUid)).length} nouveaux Â·{' '}
-       {parsed.filter(e=>locations.some(l=>l.icsUid===e.icsUid)).length} mises Ã  jour
+       {parsed.filter(e=>!locations.some(l=>l.icsUid===e.icsUid)).length} nouveaux ·{' '}
+       {parsed.filter(e=>locations.some(l=>l.icsUid===e.icsUid)).length} mises à jour
       </div>
      </div>
      <button onClick={()=>setSelected(parsed.map(e=>e.id))}
@@ -5487,7 +5487,7 @@ function VueImport({locations,setLocations,onDone}){
          background:sel?T.amber:'transparent',
          display:'flex',alignItems:'center',justifyContent:'center',
          fontSize:10,color:'#000',fontWeight:900}}>
-         {sel?'â':''}
+         {sel?'✓':''}
         </div>
         <div style={{flex:1,minWidth:0}}>
          <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:2}}>
@@ -5503,28 +5503,28 @@ function VueImport({locations,setLocations,onDone}){
          </div>
          <div style={{fontFamily:FM,fontSize:10,
           color:T.creamDim,marginBottom:4}}>
-          ð {e.dateDebut}{e.dateFin!==e.dateDebut?` â ${e.dateFin}`:''} Â· {duree}j
+          📅 {e.dateDebut}{e.dateFin!==e.dateDebut?` → ${e.dateFin}`:''} · {duree}j
          </div>
          <div style={{display:'flex',gap:5,flexWrap:'wrap'}}>
           {e.tireuses?.length>0&&<span style={{fontSize:9,color:T.amberL,
            background:T.bgDark,padding:'1px 6px',borderRadius:3,
            fontFamily:FM,border:`1px solid ${T.amber}20`}}>
-           ð» {e.tireuses.length} tireuse{e.tireuses.length>1?'s':''}
+           🍻 {e.tireuses.length} tireuse{e.tireuses.length>1?'s':''}
           </span>}
           {e.futs?.length>0&&<span style={{fontSize:9,color:T.creamDim,
            background:T.bgDark,padding:'1px 6px',borderRadius:3,
            fontFamily:FM}}>
-           ð¢ {e.futs.map(f=>f.nbFuts+'Ã'+f.typeFut).join(' ')}
+           🛢 {e.futs.map(f=>f.nbFuts+'×'+f.typeFut).join(' ')}
           </span>}
           {(e.gobelets25>0||e.gobelets50>0)&&<span style={{fontSize:9,color:T.greenL,
            background:T.bgDark,padding:'1px 6px',borderRadius:3,
            fontFamily:FM}}>
-           ð¥¤ {(e.gobelets25||0)+(e.gobelets50||0)} gob.
+           🥤 {(e.gobelets25||0)+(e.gobelets50||0)} gob.
           </span>}
           {e.tel&&<span style={{fontSize:9,color:T.creamDim,
            background:T.bgDark,padding:'1px 6px',borderRadius:3,
            fontFamily:FM}}>
-           ð {e.tel}
+           📞 {e.tel}
           </span>}
          </div>
         </div>
@@ -5536,11 +5536,11 @@ function VueImport({locations,setLocations,onDone}){
 
    <div style={{display:'flex',gap:8}}>
     <button onClick={()=>setStep('accueil')} style={{...btnSec,flex:1}}>
-     â Retour
+     ← Retour
     </button>
     <button onClick={doImport} disabled={selected.length===0}
      style={{...btnPrim,flex:2,opacity:selected.length===0?0.4:1}}>
-     Importer {selected.length} Ã©vÃ©nement{selected.length>1?'s':''}
+     Importer {selected.length} événement{selected.length>1?'s':''}
     </button>
    </div>
   </div>
@@ -5556,16 +5556,16 @@ function VueImport({locations,setLocations,onDone}){
       <div>
        <div style={{fontFamily:FB,fontWeight:900,
         fontSize:15,color:T.amber,letterSpacing:0.5,marginBottom:3}}>
-        ð Agenda mÃ©morisÃ©
+        🔗 Agenda mémorisé
        </div>
        <div style={{fontSize:9,color:T.creamDim,
         fontFamily:FM,wordBreak:'break-all',
         maxWidth:220,lineHeight:1.4}}>
-        {savedUrl.replace('https://calendar.google.com','gcal').slice(0,60)}â¦
+        {savedUrl.replace('https://calendar.google.com','gcal').slice(0,60)}…
        </div>
        {lastSync&&<div style={{fontSize:9,color:T.amberL,
         fontFamily:FM,marginTop:3}}>
-        DerniÃ¨re synchro : {lastSync.toLocaleDateString('fr-FR',
+        Dernière synchro : {lastSync.toLocaleDateString('fr-FR',
          {day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}
        </div>}
       </div>
@@ -5573,28 +5573,28 @@ function VueImport({locations,setLocations,onDone}){
        disabled={loading}
        style={{...btnPrim,width:'auto',padding:'8px 14px',fontSize:12,
         display:'flex',alignItems:'center',gap:6,minWidth:90}}>
-       {loading?'â¦':'ð Sync'}
+       {loading?'…':'🔄 Sync'}
       </button>
      </div>
      <button onClick={()=>{setSavedUrl('');setUrlInput('');
       try{localStorage.removeItem('ical_url_tireuses');}catch(e){}}}
       style={{fontSize:9,color:T.creamDim,background:'none',border:'none',
        cursor:'pointer',textDecoration:'underline',fontFamily:FM}}>
-      Supprimer l'URL mÃ©morisÃ©e
+      Supprimer l'URL mémorisée
      </button>
     </div>
    )}
 
    <div style={card}>
-    <Label>Option A â URL iCal Google Agenda</Label>
+    <Label>Option A — URL iCal Google Agenda</Label>
     <input value={urlInput} onChange={e=>setUrlInput(e.target.value)}
-     placeholder="https://calendar.google.com/calendar/ical/â¦"
+     placeholder="https://calendar.google.com/calendar/ical/…"
      style={{...iSt,marginBottom:8,fontSize:13,
       fontFamily:FM}}/>
     {err&&<div style={{fontSize:11,color:T.red,marginBottom:8,lineHeight:1.4}}>{err}</div>}
     <button onClick={()=>syncUrl()} disabled={loading}
      style={{...btnPrim,opacity:loading?0.6:1}}>
-     {loading?'Chargementâ¦':'ð Synchroniser maintenant'}
+     {loading?'Chargement…':'🔄 Synchroniser maintenant'}
     </button>
    </div>
 
@@ -5602,9 +5602,9 @@ function VueImport({locations,setLocations,onDone}){
     <Label>Comment obtenir l'URL iCal ?</Label>
     {[
      ['1','Ouvrez Google Agenda sur ordinateur'],
-     ['2','Dans le panneau gauche, cliquez â® Ã  cÃ´tÃ© de votre agenda "Tireuses"'],
-     ['3','SÃ©lectionnez "ParamÃ¨tres et partage"'],
-     ['4','Section "IntÃ©grer l\'agenda" â copiez l\'adresse iCal'],
+     ['2','Dans le panneau gauche, cliquez ⋮ à côté de votre agenda "Tireuses"'],
+     ['3','Sélectionnez "Paramètres et partage"'],
+     ['4','Section "Intégrer l\'agenda" → copiez l\'adresse iCal'],
      ['5','Collez l\'URL ci-dessus et cliquez Synchroniser'],
     ].map(([n,t])=>(
      <div key={n} style={{display:'flex',gap:10,alignItems:'flex-start',
@@ -5620,14 +5620,14 @@ function VueImport({locations,setLocations,onDone}){
     <div style={{marginTop:8,padding:'8px 10px',background:T.bgCard,
      borderRadius:6,border:`1px solid ${T.border}`,
      fontSize:10,color:T.amberL,fontFamily:FM,lineHeight:1.6}}>
-     â  L'agenda doit Ãªtre rÃ©glÃ© sur "Accessible au public" pour que l'URL fonctionne
+     ⚠ L'agenda doit être réglé sur "Accessible au public" pour que l'URL fonctionne
     </div>
    </div>
 
    <div style={card}>
-    <Label>Option B â Fichier .ics</Label>
+    <Label>Option B — Fichier .ics</Label>
     <div style={{fontSize:12,color:T.creamDim,marginBottom:10,lineHeight:1.5}}>
-     Dans Google Agenda â â ParamÃ¨tres â Importer/Exporter â Exporter
+     Dans Google Agenda → ⚙ Paramètres → Importer/Exporter → Exporter
     </div>
     <label style={{display:'flex',alignItems:'center',justifyContent:'center',
       width:'100%',minHeight:48,padding:'11px',boxSizing:'border-box',
@@ -5636,14 +5636,14 @@ function VueImport({locations,setLocations,onDone}){
      <input type="file" accept=".ics,text/calendar"
       style={{position:'absolute',opacity:0,pointerEvents:'none',width:0,height:0}}
       onChange={handleFile}/>
-     ð Choisir un fichier .ics
+     📂 Choisir un fichier .ics
     </label>
    </div>
 
    {locations.filter(l=>l.icsUid).length>0&&(
     <div style={{...card,background:T.bgDark}}>
      <div style={{fontSize:11,color:T.creamDim,fontFamily:FM}}>
-      ð {locations.filter(l=>l.icsUid).length} location{locations.filter(l=>l.icsUid).length>1?'s':''} importÃ©es depuis Google Agenda
+      📊 {locations.filter(l=>l.icsUid).length} location{locations.filter(l=>l.icsUid).length>1?'s':''} importées depuis Google Agenda
      </div>
     </div>
    )}
@@ -5657,9 +5657,9 @@ function ModuleTireuses({tireuses,setTireuses,locations,setLocations,stockCond,s
  const [editLoc,setEditLoc]   = useState(null);
  const [selLoc, setSelLoc]    = useState(null);
 
- const actives    = locations.filter(l=>l.statut!=='retournÃ©e'&&l.statut!=='annulÃ©e');
+ const actives    = locations.filter(l=>l.statut!=='retournée'&&l.statut!=='annulée');
  const dispos     = tireuses.filter(t=>!actives.some(l=>l.tireuses.includes(t.id))).length;
- const confirmees = locations.filter(l=>l.statut==='confirmÃ©e'||l.statut==='en cours').length;
+ const confirmees = locations.filter(l=>l.statut==='confirmée'||l.statut==='en cours').length;
 
  const openForm  = (loc=null) => { setEditLoc(loc); setShowForm(true); };
  const closeForm = ()         => { setShowForm(false); setEditLoc(null); };
@@ -5667,18 +5667,18 @@ function ModuleTireuses({tireuses,setTireuses,locations,setLocations,stockCond,s
  const handleSave = data => {
   const isNew = !editLoc;
   const loc   = {...data, id: editLoc?.id || Date.now()};
-  if(isNew && (loc.statut==='confirmÃ©e'||loc.statut==='en cours'))
-   setTireuses(prev => prev.map(t => loc.tireuses.includes(t.id) ? {...t,etat:'louÃ©e'} : t));
+  if(isNew && (loc.statut==='confirmée'||loc.statut==='en cours'))
+   setTireuses(prev => prev.map(t => loc.tireuses.includes(t.id) ? {...t,etat:'louée'} : t));
   setLocations(prev => isNew ? [loc,...prev] : prev.map(l => l.id===loc.id ? loc : l));
   closeForm();
  };
 
  const navT = [
-  {id:'planning',  label:'Planning',  icon:'ð'},
-  {id:'locations', label:'Locations', icon:'ð', badge:confirmees||null},
-  {id:'parc',      label:'Parc',      icon:'ð»'},
-  {id:'stats',     label:'Stats',     icon:'ð'},
-  {id:'import',    label:'Agenda',    icon:'ð'},
+  {id:'planning',  label:'Planning',  icon:'📅'},
+  {id:'locations', label:'Locations', icon:'📋', badge:confirmees||null},
+  {id:'parc',      label:'Parc',      icon:'🍻'},
+  {id:'stats',     label:'Stats',     icon:'📊'},
+  {id:'import',    label:'Agenda',    icon:'🔄'},
  ];
 
  return (
@@ -5690,14 +5690,14 @@ function ModuleTireuses({tireuses,setTireuses,locations,setLocations,stockCond,s
        Tireuses
       </div>
       <div style={{fontFamily:FM,fontSize:10,color:C.textLight,marginTop:2}}>
-       {dispos}/{tireuses.length} disponibles Â· {confirmees} en cours
+       {dispos}/{tireuses.length} disponibles · {confirmees} en cours
       </div>
      </div>
      <div style={{display:'flex',gap:8,alignItems:'center'}}>
       <button onClick={()=>exportICal(locations)}
        style={{background:'none',border:`1px solid ${C.border}`,borderRadius:8,
         padding:'6px 10px',fontSize:11,color:C.greenL,fontWeight:600,minHeight:36,
-        fontFamily:"'DM Sans',sans-serif"}}>ð¥ .ics</button>
+        fontFamily:"'DM Sans',sans-serif"}}>📥 .ics</button>
       <button onClick={()=>openForm()}
        style={{background:C.amber,color:'#fff',border:'none',borderRadius:8,
         padding:'8px 14px',fontWeight:700,fontSize:13,minHeight:40}}>
@@ -5738,7 +5738,7 @@ function ModuleTireuses({tireuses,setTireuses,locations,setLocations,stockCond,s
    </div>
 
    {showForm && (
-    <ModalT onClose={closeForm} title={editLoc ? 'Modifier la location' : 'Nouvelle location ð»'}>
+    <ModalT onClose={closeForm} title={editLoc ? 'Modifier la location' : 'Nouvelle location 🍻'}>
      <FormLocationT
       editLoc={editLoc}
       tireuses={tireuses}
@@ -5754,32 +5754,32 @@ function ModuleTireuses({tireuses,setTireuses,locations,setLocations,stockCond,s
 
 function ModulePlanification({brassins,setBrassins,condSessions,recettes,locations=[]}){
  const [vue,setVue]=useState('semaine'); // 'semaine' | 'mois' | 'liste'
- const [offset,setOffset]=useState(0);  // semaines ou mois de dÃ©calage
+ const [offset,setOffset]=useState(0);  // semaines ou mois de décalage
  const [showForm,setShowForm]=useState(false);
  const [formType,setFormType]=useState('brassage'); // 'brassage' | 'conditionnement'
  const [selEvent,setSelEvent]=useState(null);
  const today=new Date();
- const EF={recette:'',fermenteur:'',dateDebut:'',statut:'planifiÃ©',notes:'',type:'brassage',brassinRef:'',duree:1};
+ const EF={recette:'',fermenteur:'',dateDebut:'',statut:'planifié',notes:'',type:'brassage',brassinRef:'',duree:1};
  const [form,setForm]=useState(EF);
 
  const events=[
   ...brassins.map(b=>({
    id:`b-${b.id}`, type:'brassage', titre:b.recette, date:b.dateDebut,
    dateFin:b.dateCond||null, statut:b.statut, fermenteur:b.fermenteur,
-   color:({planifiÃ©:C.textLight,brassage:C.amber,fermentation:C.green,garde:"#2A6080",conditionnement:C.hop,terminÃ©:C.border})[b.statut]||C.textMid,
-   dot:STATUTS[b.statut]?.dot||'â¬', brassinId:b.id,
+   color:({planifié:C.textLight,brassage:C.amber,fermentation:C.green,garde:"#2A6080",conditionnement:C.hop,terminé:C.border})[b.statut]||C.textMid,
+   dot:STATUTS[b.statut]?.dot||'⬜', brassinId:b.id,
   })),
   ...condSessions.map(cs=>({
    id:`c-${cs.id}`, type:'conditionnement', titre:cs.brassinNom, date:cs.date,
-   dateFin:null, statut:'conditionnement', fermenteur:cs.operateur||'â',
-   color:C.hop, dot:'ð¾', condId:cs.id,
+   dateFin:null, statut:'conditionnement', fermenteur:cs.operateur||'—',
+   color:C.hop, dot:'🍾', condId:cs.id,
    sub:`${cs.lots.map(l=>`${l.contenants} ${l.type}`).join(' + ')}`,
   })),
-  ...(locations||[]).filter(l=>l.statut!=='annulÃ©e').map(l=>({
+  ...(locations||[]).filter(l=>l.statut!=='annulée').map(l=>({
    id:`loc-${l.id}`, type:'location', titre:l.client, date:l.dateDebut,
    dateFin:l.dateFin, statut:l.statut, fermenteur:`${l.tireuses?.length||0} tireuse${(l.tireuses?.length||0)>1?'s':''}`,
-   color:'#2A6080', dot:'ð»',
-   sub:l.futs?.map(f=>f.biere+' '+f.nbFuts+'Ã'+f.typeFut).join(', '),
+   color:'#2A6080', dot:'🍻',
+   sub:l.futs?.map(f=>f.biere+' '+f.nbFuts+'×'+f.typeFut).join(', '),
   })),
  ].filter(e=>e.date);
 
@@ -5799,7 +5799,7 @@ function ModulePlanification({brassins,setBrassins,condSessions,recettes,locatio
    ical+=`DTSTART;VALUE=DATE:${fmtICal(e.date)}\r\n`;
    if(e.dateFin)ical+=`DTEND;VALUE=DATE:${fmtICal(e.dateFin)}\r\n`;
    ical+=`SUMMARY:${escape(e.dot+' '+e.titre+(e.type==='conditionnement'?' (Conditionnement)':' ('+e.statut+')'))}\r\n`;
-   const desc=e.type==='conditionnement'?`Conditionnement: ${e.sub}\nOpÃ©rateur: ${e.fermenteur}`:`Statut: ${e.statut}\nFermenteur: ${e.fermenteur}`;
+   const desc=e.type==='conditionnement'?`Conditionnement: ${e.sub}\nOpérateur: ${e.fermenteur}`:`Statut: ${e.statut}\nFermenteur: ${e.fermenteur}`;
    ical+=`DESCRIPTION:${escape(desc)}\r\nCATEGORIES:${e.type==='brassage'?'Brassage':'Conditionnement'}\r\nEND:VEVENT\r\n`;
   });
   ical+="END:VCALENDAR";
@@ -5814,7 +5814,7 @@ function ModulePlanification({brassins,setBrassins,condSessions,recettes,locatio
   const pad=n=>String(n).padStart(2,'0');
   const fmt=d=>`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}`;
   const title=encodeURIComponent(`${e.dot} ${e.titre}${e.type==='conditionnement'?' (Conditionnement)':' ('+e.statut+')'}`);
-  const details=encodeURIComponent(e.type==='conditionnement'?`Conditionnement\n${e.sub}\nOpÃ©rateur: ${e.fermenteur}`:`Fermenteur: ${e.fermenteur}\nStatut: ${e.statut}`);
+  const details=encodeURIComponent(e.type==='conditionnement'?`Conditionnement\n${e.sub}\nOpérateur: ${e.fermenteur}`:`Fermenteur: ${e.fermenteur}\nStatut: ${e.statut}`);
   window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${fmt(dt)}/${fmt(dtf)}&details=${details}&location=Clisson,France`,'_blank');
  };
 
@@ -5840,7 +5840,7 @@ function ModulePlanification({brassins,setBrassins,condSessions,recettes,locatio
    <span style={{fontSize:compact?11:14,flexShrink:0}}>{e.dot}</span>
    <div style={{flex:1,minWidth:0}}>
     <div style={{fontSize:compact?10:13,fontWeight:700,color:C.text,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{e.titre}</div>
-    {!compact&&<div style={{fontSize:10,color:C.textLight,fontFamily:FM,marginTop:1}}>{e.fermenteur}{e.sub?` Â· ${e.sub}`:''}</div>}
+    {!compact&&<div style={{fontSize:10,color:C.textLight,fontFamily:FM,marginTop:1}}>{e.fermenteur}{e.sub?` · ${e.sub}`:''}</div>}
    </div>
    {e.type==='conditionnement'&&<span style={{fontSize:9,color:C.hop,fontWeight:700,flexShrink:0}}>COND</span>}
   </div>
@@ -5851,26 +5851,26 @@ function ModulePlanification({brassins,setBrassins,condSessions,recettes,locatio
    <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:14}}>
     <div>
      <h2 style={{fontFamily:FA,fontSize:'clamp(20px,5vw,26px)',color:C.text}}>Planification</h2>
-     <p style={{color:C.textLight,fontSize:12,fontFamily:FM,marginTop:2}}>{events.length} Ã©vÃ©nements planifiÃ©s</p>
+     <p style={{color:C.textLight,fontSize:12,fontFamily:FM,marginTop:2}}>{events.length} événements planifiés</p>
     </div>
     <div style={{display:'flex',gap:6}}>
-     <button onClick={exportICal} title="Exporter iCal (.ics) â compatible Google Calendar, Apple Calendar, Outlook" style={{background:C.greenPale,border:`1px solid ${C.green}40`,borderRadius:10,padding:'8px 12px',fontSize:12,color:C.green,fontWeight:700,minHeight:40,display:'flex',alignItems:'center',gap:5}}>
-      <span style={{fontSize:16}}>ð</span> .ics
+     <button onClick={exportICal} title="Exporter iCal (.ics) – compatible Google Calendar, Apple Calendar, Outlook" style={{background:C.greenPale,border:`1px solid ${C.green}40`,borderRadius:10,padding:'8px 12px',fontSize:12,color:C.green,fontWeight:700,minHeight:40,display:'flex',alignItems:'center',gap:5}}>
+      <span style={{fontSize:16}}>📅</span> .ics
      </button>
      <button onClick={()=>setShowForm(true)} style={{background:C.amber,color:'#fff',border:'none',borderRadius:10,padding:'8px 14px',fontWeight:700,fontSize:13,minHeight:40}}>+ Planifier</button>
     </div>
    </div>
 
    <div style={{background:C.greenPale,border:`1px solid ${C.green}30`,borderRadius:10,padding:'10px 14px',marginBottom:14,display:'flex',alignItems:'center',gap:10}}>
-    <span style={{fontSize:20}}>ð</span>
+    <span style={{fontSize:20}}>📅</span>
     <div style={{fontSize:12,color:C.textMid,flex:1}}>
      <strong style={{color:C.text}}>Partager sur Google Agenda</strong><br/>
-     TÃ©lÃ©chargez le fichier .ics puis importez-le dans Google Calendar, ou cliquez sur un Ã©vÃ©nement pour l'ajouter directement.
+     Téléchargez le fichier .ics puis importez-le dans Google Calendar, ou cliquez sur un événement pour l'ajouter directement.
     </div>
    </div>
 
    <div style={{display:'flex',gap:8,overflowX:'auto',paddingBottom:4,marginBottom:14,scrollbarWidth:'none'}}>
-    {[['semaine','ð Semaine'],['mois','ð Mois'],['liste','ð Liste']].map(([v,l])=>(
+    {[['semaine','📅 Semaine'],['mois','🗓 Mois'],['liste','📋 Liste']].map(([v,l])=>(
      <button key={v} onClick={()=>{setVue(v);setOffset(0);}} style={{flexShrink:0,padding:'7px 14px',borderRadius:20,border:`1.5px solid ${vue===v?C.amber:C.border}`,background:vue===v?C.amberPale:C.bgCard,color:vue===v?C.amber:C.textMid,fontWeight:600,fontSize:13,minHeight:36,whiteSpace:'nowrap'}}>{l}</button>
     ))}
    </div>
@@ -5878,12 +5878,12 @@ function ModulePlanification({brassins,setBrassins,condSessions,recettes,locatio
    {vue==='semaine'&&(
     <div>
      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}}>
-      <button onClick={()=>setOffset(o=>o-1)} style={{background:C.cream,border:`1px solid ${C.border}`,borderRadius:8,padding:'7px 14px',fontSize:18,minHeight:40}}>â¹</button>
+      <button onClick={()=>setOffset(o=>o-1)} style={{background:C.cream,border:`1px solid ${C.border}`,borderRadius:8,padding:'7px 14px',fontSize:18,minHeight:40}}>‹</button>
       <div style={{textAlign:'center'}}>
-       <div style={{fontFamily:FA,fontSize:15,color:C.text}}>{fmtJour(weekStart)} â {fmtJour(weekDays[6])}</div>
+       <div style={{fontFamily:FA,fontSize:15,color:C.text}}>{fmtJour(weekStart)} — {fmtJour(weekDays[6])}</div>
        {offset!==0&&<button onClick={()=>setOffset(0)} style={{background:'none',border:'none',fontSize:11,color:C.amber,cursor:'pointer',fontWeight:600}}>Aujourd'hui</button>}
       </div>
-      <button onClick={()=>setOffset(o=>o+1)} style={{background:C.cream,border:`1px solid ${C.border}`,borderRadius:8,padding:'7px 14px',fontSize:18,minHeight:40}}>âº</button>
+      <button onClick={()=>setOffset(o=>o+1)} style={{background:C.cream,border:`1px solid ${C.border}`,borderRadius:8,padding:'7px 14px',fontSize:18,minHeight:40}}>›</button>
      </div>
      <div style={{display:'flex',flexDirection:'column',gap:8}}>
       {weekDays.map(day=>{
@@ -5893,7 +5893,7 @@ function ModulePlanification({brassins,setBrassins,condSessions,recettes,locatio
          <div style={{padding:'8px 12px',background:isToday?C.amberPale:C.cream,display:'flex',justifyContent:'space-between',alignItems:'center'}}>
           <span style={{fontWeight:700,fontSize:13,color:isToday?C.amber:C.text,fontFamily:FM,textTransform:'capitalize'}}>{day.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'})}</span>
           {isToday&&<span style={{fontSize:9,fontWeight:700,color:C.amber,background:C.amberPale,border:`1px solid ${C.amber}`,borderRadius:8,padding:'1px 7px'}}>AUJOURD'HUI</span>}
-          {dayEvts.length===0&&<span style={{fontSize:11,color:C.textLight}}>â</span>}
+          {dayEvts.length===0&&<span style={{fontSize:11,color:C.textLight}}>—</span>}
          </div>
          {dayEvts.length>0&&<div style={{padding:'8px 10px'}}>{dayEvts.map(e=><EventChip key={e.id} e={e}/>)}</div>}
         </div>
@@ -5906,12 +5906,12 @@ function ModulePlanification({brassins,setBrassins,condSessions,recettes,locatio
    {vue==='mois'&&(
     <div>
      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}}>
-      <button onClick={()=>setOffset(o=>o-1)} style={{background:C.cream,border:`1px solid ${C.border}`,borderRadius:8,padding:'7px 14px',fontSize:18,minHeight:40}}>â¹</button>
+      <button onClick={()=>setOffset(o=>o-1)} style={{background:C.cream,border:`1px solid ${C.border}`,borderRadius:8,padding:'7px 14px',fontSize:18,minHeight:40}}>‹</button>
       <div style={{textAlign:'center'}}>
        <div style={{fontFamily:FA,fontSize:15,color:C.text,textTransform:'capitalize'}}>{fmtMoisAnn(monthStart)}</div>
        {offset!==0&&<button onClick={()=>setOffset(0)} style={{background:'none',border:'none',fontSize:11,color:C.amber,cursor:'pointer',fontWeight:600}}>Ce mois</button>}
       </div>
-      <button onClick={()=>setOffset(o=>o+1)} style={{background:C.cream,border:`1px solid ${C.border}`,borderRadius:8,padding:'7px 14px',fontSize:18,minHeight:40}}>âº</button>
+      <button onClick={()=>setOffset(o=>o+1)} style={{background:C.cream,border:`1px solid ${C.border}`,borderRadius:8,padding:'7px 14px',fontSize:18,minHeight:40}}>›</button>
      </div>
      <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',gap:2,marginBottom:4}}>
       {['Lu','Ma','Me','Je','Ve','Sa','Di'].map(j=><div key={j} style={{textAlign:'center',fontSize:10,fontWeight:700,color:C.textLight,padding:'4px 0',fontFamily:FM}}>{j}</div>)}
@@ -5947,7 +5947,7 @@ function ModulePlanification({brassins,setBrassins,condSessions,recettes,locatio
     <div>
      {futureEvents.length>0&&(
       <div style={{marginBottom:18}}>
-       <div style={{fontSize:11,fontWeight:700,color:C.text,textTransform:'uppercase',letterSpacing:1,marginBottom:8}}>Ã venir</div>
+       <div style={{fontSize:11,fontWeight:700,color:C.text,textTransform:'uppercase',letterSpacing:1,marginBottom:8}}>À venir</div>
        {futureEvents.map(e=>(
         <div key={e.id} onClick={()=>setSelEvent(e)} style={{display:'flex',alignItems:'flex-start',gap:10,padding:'11px 12px',borderRadius:12,border:`1px solid ${C.border}`,background:C.bgCard,marginBottom:7,cursor:'pointer',borderLeft:`4px solid ${e.color}`}}>
          <div style={{flexShrink:0,textAlign:'center',minWidth:40}}>
@@ -5956,17 +5956,17 @@ function ModulePlanification({brassins,setBrassins,condSessions,recettes,locatio
          </div>
          <div style={{flex:1,minWidth:0}}>
           <div style={{fontWeight:700,color:C.text,fontSize:14,marginBottom:3}}>{e.dot} {e.titre}</div>
-          <div style={{fontSize:11,color:C.textLight,fontFamily:FM}}>{e.fermenteur}{e.sub?` Â· ${e.sub}`:''}</div>
-          {e.dateFin&&<div style={{fontSize:10,color:C.textMid,marginTop:2}}>â Fin: {fmtDate(e.dateFin)}</div>}
+          <div style={{fontSize:11,color:C.textLight,fontFamily:FM}}>{e.fermenteur}{e.sub?` · ${e.sub}`:''}</div>
+          {e.dateFin&&<div style={{fontSize:10,color:C.textMid,marginTop:2}}>→ Fin: {fmtDate(e.dateFin)}</div>}
          </div>
-         <button onClick={ev=>{ev.stopPropagation();openGCal(e);}} title="Ajouter Ã  Google Calendar" style={{background:C.greenPale,border:`1px solid ${C.green}30`,borderRadius:8,padding:'5px 8px',fontSize:11,color:C.green,fontWeight:700,flexShrink:0,minHeight:32}}>G+</button>
+         <button onClick={ev=>{ev.stopPropagation();openGCal(e);}} title="Ajouter à Google Calendar" style={{background:C.greenPale,border:`1px solid ${C.green}30`,borderRadius:8,padding:'5px 8px',fontSize:11,color:C.green,fontWeight:700,flexShrink:0,minHeight:32}}>G+</button>
         </div>
        ))}
       </div>
      )}
      {pastEvents.length>0&&(
       <div>
-       <div style={{fontSize:11,fontWeight:700,color:C.textLight,textTransform:'uppercase',letterSpacing:1,marginBottom:8}}>RÃ©cents</div>
+       <div style={{fontSize:11,fontWeight:700,color:C.textLight,textTransform:'uppercase',letterSpacing:1,marginBottom:8}}>Récents</div>
        {pastEvents.map(e=>(
         <div key={e.id} style={{display:'flex',alignItems:'center',gap:10,padding:'9px 12px',borderRadius:10,border:`1px solid ${C.border}`,background:C.bg,marginBottom:5,opacity:0.75}}>
          <span style={{fontSize:16}}>{e.dot}</span>
@@ -5978,7 +5978,7 @@ function ModulePlanification({brassins,setBrassins,condSessions,recettes,locatio
        ))}
       </div>
      )}
-     {events.length===0&&<div style={{textAlign:'center',padding:'40px 0',color:C.textLight}}><div style={{fontSize:36,marginBottom:8}}>ð</div><p style={{fontSize:14}}>Aucun Ã©vÃ©nement planifiÃ©</p></div>}
+     {events.length===0&&<div style={{textAlign:'center',padding:'40px 0',color:C.textLight}}><div style={{fontSize:36,marginBottom:8}}>📅</div><p style={{fontSize:14}}>Aucun événement planifié</p></div>}
     </div>
    )}
 
@@ -5986,12 +5986,12 @@ function ModulePlanification({brassins,setBrassins,condSessions,recettes,locatio
     <Modal onClose={()=>setSelEvent(null)} wide>
      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:14}}>
       <div>
-       <div style={{fontSize:11,fontWeight:700,color:selEvent.color,textTransform:'uppercase',letterSpacing:1,marginBottom:4}}>{selEvent.type==='conditionnement'?'Conditionnement':'Brassage'} Â· {fmtDate(selEvent.date)}</div>
+       <div style={{fontSize:11,fontWeight:700,color:selEvent.color,textTransform:'uppercase',letterSpacing:1,marginBottom:4}}>{selEvent.type==='conditionnement'?'Conditionnement':'Brassage'} · {fmtDate(selEvent.date)}</div>
        <h3 style={{fontFamily:FA,fontSize:20,color:C.text}}>{selEvent.dot} {selEvent.titre}</h3>
       </div>
-      <button onClick={()=>setSelEvent(null)} style={{background:'none',border:`1px solid ${C.border}`,borderRadius:8,padding:'6px 12px',fontSize:16,color:C.textMid}}>â</button>
+      <button onClick={()=>setSelEvent(null)} style={{background:'none',border:`1px solid ${C.border}`,borderRadius:8,padding:'6px 12px',fontSize:16,color:C.textMid}}>✕</button>
      </div>
-     {[['Fermenteur / OpÃ©rateur',selEvent.fermenteur],['Statut',selEvent.statut],['Date dÃ©but',fmtDate(selEvent.date)],selEvent.dateFin&&['Date fin',fmtDate(selEvent.dateFin)],selEvent.sub&&['Conditionnement',selEvent.sub]].filter(Boolean).map(([l,v])=>(
+     {[['Fermenteur / Opérateur',selEvent.fermenteur],['Statut',selEvent.statut],['Date début',fmtDate(selEvent.date)],selEvent.dateFin&&['Date fin',fmtDate(selEvent.dateFin)],selEvent.sub&&['Conditionnement',selEvent.sub]].filter(Boolean).map(([l,v])=>(
       <div key={l} style={{display:'flex',justifyContent:'space-between',padding:'8px 12px',background:C.bg,borderRadius:8,marginBottom:5,fontSize:13}}>
        <span style={{color:C.textLight,fontSize:11,textTransform:'uppercase',fontWeight:700}}>{l}</span>
        <span style={{color:C.text}}>{v}</span>
@@ -5999,10 +5999,10 @@ function ModulePlanification({brassins,setBrassins,condSessions,recettes,locatio
      ))}
      <div style={{display:'flex',gap:8,marginTop:16,flexWrap:'wrap'}}>
       <button onClick={()=>openGCal(selEvent)} style={{flex:1,background:'#4285F4',color:'#fff',border:'none',borderRadius:10,padding:'11px 16px',fontWeight:700,fontSize:13,minHeight:44,display:'flex',alignItems:'center',justifyContent:'center',gap:8}}>
-       <span style={{fontSize:18}}>ð</span> Ajouter Ã  Google Calendar
+       <span style={{fontSize:18}}>📅</span> Ajouter à Google Calendar
       </button>
       <button onClick={()=>{exportICal();}} style={{background:C.greenPale,border:`1px solid ${C.green}40`,borderRadius:10,padding:'11px 16px',fontWeight:700,fontSize:13,color:C.green,minHeight:44,display:'flex',alignItems:'center',gap:6}}>
-       <span>ð¥</span> .ics
+       <span>📥</span> .ics
       </button>
      </div>
     </Modal>
@@ -6015,7 +6015,7 @@ function ModulePlanification({brassins,setBrassins,condSessions,recettes,locatio
      {selEvent.evts.map(e=>(
       <div key={e.id} onClick={()=>setSelEvent(e)} style={{padding:'10px 12px',borderRadius:10,border:`1px solid ${e.color}40`,background:`${e.color}12`,marginBottom:8,cursor:'pointer'}}>
        <div style={{fontWeight:700,color:C.text,fontSize:14}}>{e.dot} {e.titre}</div>
-       <div style={{fontSize:11,color:C.textLight,fontFamily:FM,marginTop:2}}>{e.fermenteur}{e.sub?` Â· ${e.sub}`:''}</div>
+       <div style={{fontSize:11,color:C.textLight,fontFamily:FM,marginTop:2}}>{e.fermenteur}{e.sub?` · ${e.sub}`:''}</div>
       </div>
      ))}
     </Modal>
@@ -6023,19 +6023,19 @@ function ModulePlanification({brassins,setBrassins,condSessions,recettes,locatio
 
    {showForm&&(
     <Modal onClose={()=>{setShowForm(false);setForm(EF);}} wide>
-     <h3 style={{fontFamily:FA,fontSize:20,color:C.text,marginBottom:14}}>Planifier un Ã©vÃ©nement</h3>
+     <h3 style={{fontFamily:FA,fontSize:20,color:C.text,marginBottom:14}}>Planifier un événement</h3>
      <div style={{display:'flex',gap:8,marginBottom:14}}>
-      {[['brassage','âï¸ Brassage'],['conditionnement','ð¾ Conditionnement']].map(([t,l])=>(
+      {[['brassage','⚗️ Brassage'],['conditionnement','🍾 Conditionnement']].map(([t,l])=>(
        <button key={t} onClick={()=>setFormType(t)} style={{flex:1,padding:'9px',borderRadius:10,border:`1.5px solid ${formType===t?C.amber:C.border}`,background:formType===t?C.amberPale:C.bgCard,color:formType===t?C.amber:C.textMid,fontWeight:700,fontSize:13,minHeight:40}}>{l}</button>
       ))}
      </div>
      <div style={{display:'flex',flexDirection:'column',gap:10}}>
-      <div><Label t="Recette / BiÃ¨re"/><select value={form.recette} onChange={e=>setForm({...form,recette:e.target.value})} style={iSt}><option value="">â Choisir â</option>{recettes.map(r=><option key={r.id} value={r.nom}>{r.nom}</option>)}<option value="Autre">Autreâ¦</option></select></div>
+      <div><Label t="Recette / Bière"/><select value={form.recette} onChange={e=>setForm({...form,recette:e.target.value})} style={iSt}><option value="">— Choisir —</option>{recettes.map(r=><option key={r.id} value={r.nom}>{r.nom}</option>)}<option value="Autre">Autre…</option></select></div>
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
        <div><Label t="Date"/><input type="date" value={form.dateDebut} onChange={e=>setForm({...form,dateDebut:e.target.value})} style={iSt}/></div>
        {formType==='brassage'
         ?<div><Label t="Fermenteur"/><input value={form.fermenteur} onChange={e=>setForm({...form,fermenteur:e.target.value})} placeholder="FV-01" style={iSt}/></div>
-        :<div><Label t="OpÃ©rateur"/><input value={form.fermenteur} onChange={e=>setForm({...form,fermenteur:e.target.value})} placeholder="PrÃ©nom" style={iSt}/></div>
+        :<div><Label t="Opérateur"/><input value={form.fermenteur} onChange={e=>setForm({...form,fermenteur:e.target.value})} placeholder="Prénom" style={iSt}/></div>
        }
        {formType==='brassage'&&<div style={{gridColumn:'1/-1'}}><Label t="Statut initial"/><select value={form.statut} onChange={e=>setForm({...form,statut:e.target.value})} style={iSt}>{Object.entries(STATUTS).map(([k,s])=><option key={k} value={k}>{s.label}</option>)}</select></div>}
       </div>
@@ -6053,14 +6053,14 @@ function ModulePlanification({brassins,setBrassins,condSessions,recettes,locatio
 
 function ModuleStockPF({condSessions,recettes,stockCond,stockPF,setStockPF}){
  const [view,setView]   = useState('stock');   // 'stock' | 'valorisation'
- const [filtre,setFiltre] = useState('Tous');   // biÃ¨re ou 'Tous'
+ const [filtre,setFiltre] = useState('Tous');   // bière ou 'Tous'
  const [q,setQ]           = useState('');
- const [editLot,setEditLot] = useState(null);   // lot en cours d'Ã©dition
+ const [editLot,setEditLot] = useState(null);   // lot en cours d'édition
  const [adjVal,setAdjVal]   = useState('');     // valeur d'ajustement
 
  const pCond = calcPrixCond(stockCond);
- const fmtKey = {'Bouteille 33cl':'b33','Bouteille 75cl':'b75','FÃ»t 20L':'f20','FÃ»t 30L':'f30'};
- const fmtVol = {'Bouteille 33cl':0.33,'Bouteille 75cl':0.75,'FÃ»t 20L':20,'FÃ»t 30L':30};
+ const fmtKey = {'Bouteille 33cl':'b33','Bouteille 75cl':'b75','Fût 20L':'f20','Fût 30L':'f30'};
+ const fmtVol = {'Bouteille 33cl':0.33,'Bouteille 75cl':0.75,'Fût 20L':20,'Fût 30L':30};
 
  const recetteFor = brassinNom => recettes.find(r=>
   brassinNom.includes(r.nom)||r.nom===brassinNom.split(' (')[0]
@@ -6159,10 +6159,10 @@ function ModuleStockPF({condSessions,recettes,stockCond,stockPF,setStockPF}){
 
  const couleurType = t => ({
   'Bouteille 33cl':'#2A6080','Bouteille 75cl':'#4A6741',
-  'FÃ»t 20L':C.amber,'FÃ»t 30L':C.brick,
+  'Fût 20L':C.amber,'Fût 30L':C.brick,
  }[t]||C.textMid);
 
- const iconeType = t => ({'Bouteille 33cl':'ðº','Bouteille 75cl':'ð¾','FÃ»t 20L':'ð¢','FÃ»t 30L':'ð¢'}[t]||'ð¦');
+ const iconeType = t => ({'Bouteille 33cl':'🍺','Bouteille 75cl':'🍾','Fût 20L':'🛢','Fût 30L':'🛢'}[t]||'📦');
 
  const PctBar = ({val,max,color}) => (
   <div style={{height:4,background:C.border,borderRadius:2,overflow:'hidden',marginTop:3}}>
@@ -6178,16 +6178,16 @@ function ModuleStockPF({condSessions,recettes,stockCond,stockPF,setStockPF}){
      Produits finis
     </h2>
     <p style={{fontSize:12,color:C.textLight,marginTop:2}}>
-     Stock issu du conditionnement Â· valorisation temps rÃ©el
+     Stock issu du conditionnement · valorisation temps réel
     </p>
    </div>
 
    <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:10,marginBottom:16}}>
     {[
-     {label:'En stock',     val:kpis.qte.toLocaleString('fr'),  icon:'ð¦', color:C.amber,  sub:`${kpis.vendu.toLocaleString('fr')} vendus`},
-     {label:'Valeur stock', val:`${kpis.ca.toLocaleString('fr')}â¬`, icon:'ð°', color:C.ok, sub:`au prix de vente`},
-     {label:'CoÃ»t embal.',  val:`${kpis.cout.toLocaleString('fr')}â¬`,icon:'ð·', color:C.hop,  sub:`emballage seul`},
-     {label:'Marge brute',  val:`${kpis.marge}%`,               icon:'ð', color:kpis.marge>=55?C.ok:kpis.marge>=40?C.warn:C.alert, sub:`sur prix vente`},
+     {label:'En stock',     val:kpis.qte.toLocaleString('fr'),  icon:'📦', color:C.amber,  sub:`${kpis.vendu.toLocaleString('fr')} vendus`},
+     {label:'Valeur stock', val:`${kpis.ca.toLocaleString('fr')}€`, icon:'💰', color:C.ok, sub:`au prix de vente`},
+     {label:'Coût embal.',  val:`${kpis.cout.toLocaleString('fr')}€`,icon:'🏷', color:C.hop,  sub:`emballage seul`},
+     {label:'Marge brute',  val:`${kpis.marge}%`,               icon:'📈', color:kpis.marge>=55?C.ok:kpis.marge>=40?C.warn:C.alert, sub:`sur prix vente`},
     ].map(({label,val,icon,color,sub})=>(
      <div key={label} style={{background:C.bgCard,borderRadius:12,padding:'12px 14px',
       border:`1px solid ${C.border}`,position:'relative',overflow:'hidden'}}>
@@ -6204,7 +6204,7 @@ function ModuleStockPF({condSessions,recettes,stockCond,stockPF,setStockPF}){
    </div>
 
    <div style={{display:'flex',gap:8,marginBottom:14}}>
-    {[['stock','ð Lots & stock'],['valorisation','ð Valorisation']].map(([v,l])=>(
+    {[['stock','📋 Lots & stock'],['valorisation','📊 Valorisation']].map(([v,l])=>(
      <button key={v} onClick={()=>setView(v)}
       style={{flexShrink:0,padding:'8px 14px',borderRadius:20,
        border:`1.5px solid ${view===v?C.amber:C.border}`,
@@ -6215,7 +6215,7 @@ function ModuleStockPF({condSessions,recettes,stockCond,stockPF,setStockPF}){
     ))}
    </div>
 
-   <SearchBar value={q} onChange={setQ} placeholder="BiÃ¨re, lot, formatâ¦"/>
+   <SearchBar value={q} onChange={setQ} placeholder="Bière, lot, format…"/>
    <div style={{display:'flex',gap:6,overflowX:'auto',paddingBottom:6,
     marginBottom:14,scrollbarWidth:'none'}}>
     {bieres.map(b=>(
@@ -6231,9 +6231,9 @@ function ModuleStockPF({condSessions,recettes,stockCond,stockPF,setStockPF}){
 
    {filtered.length===0&&(
     <div style={{textAlign:'center',padding:'60px 20px',color:C.textLight}}>
-     <div style={{fontSize:40,marginBottom:10}}>ð¾</div>
-     <div style={{fontWeight:600,marginBottom:6}}>Aucun lot conditionnÃ©</div>
-     <div style={{fontSize:12}}>Les lots apparaissent aprÃ¨s une session de conditionnement</div>
+     <div style={{fontSize:40,marginBottom:10}}>🍾</div>
+     <div style={{fontWeight:600,marginBottom:6}}>Aucun lot conditionné</div>
+     <div style={{fontSize:12}}>Les lots apparaissent après une session de conditionnement</div>
     </div>
    )}
 
@@ -6273,7 +6273,7 @@ function ModuleStockPF({condSessions,recettes,stockCond,stockPF,setStockPF}){
           {lot.qteDispo.toLocaleString('fr')}
          </div>
          <div style={{fontSize:10,color:C.textLight}}>
-          / {lot.qteInit.toLocaleString('fr')} {lot.type.includes('FÃ»t')?'fÃ»ts':'btl'}
+          / {lot.qteInit.toLocaleString('fr')} {lot.type.includes('Fût')?'fûts':'btl'}
          </div>
         </div>
        </div>
@@ -6284,9 +6284,9 @@ function ModuleStockPF({condSessions,recettes,stockCond,stockPF,setStockPF}){
        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',
         gap:8,marginTop:10}}>
         {[
-         ['Prix vente', pv>0?`${pv}â¬`:'â', C.amber],
-         ['CoÃ»t embal.',cr>0?`${cr.toFixed(2)}â¬`:'â', C.hop],
-         ['Valeur dispo', pv>0?(lot.qteDispo*pv).toLocaleString('fr')+'â¬':'â', C.ok],
+         ['Prix vente', pv>0?`${pv}€`:'—', C.amber],
+         ['Coût embal.',cr>0?`${cr.toFixed(2)}€`:'—', C.hop],
+         ['Valeur dispo', pv>0?(lot.qteDispo*pv).toLocaleString('fr')+'€':'—', C.ok],
         ].map(([l,v,col])=>(
          <div key={l} style={{background:C.bg,borderRadius:8,padding:'6px 8px',
           textAlign:'center',border:`1px solid ${C.border}`}}>
@@ -6308,7 +6308,7 @@ function ModuleStockPF({condSessions,recettes,stockCond,stockPF,setStockPF}){
          {[...(lot.sorties||[])].reverse().slice(0,3).map((s,i)=>(
           <div key={`k${i}`} style={{display:'flex',justifyContent:'space-between',
            fontSize:11,color:C.textMid,marginBottom:2}}>
-           <span>{fmtDate(s.date)} â {s.motif}</span>
+           <span>{fmtDate(s.date)} — {s.motif}</span>
            <span style={{fontFamily:FM,fontWeight:700,
             color:C.alert}}>-{s.qte}</span>
           </div>
@@ -6325,12 +6325,12 @@ function ModuleStockPF({condSessions,recettes,stockCond,stockPF,setStockPF}){
          </div>
          <div style={{display:'flex',gap:8,marginBottom:8}}>
           <input type="number" min="1" max={lot.qteDispo}
-           value={adjVal} placeholder={`QtÃ© (max ${lot.qteDispo})`}
+           value={adjVal} placeholder={`Qté (max ${lot.qteDispo})`}
            onChange={e=>setAdjVal(e.target.value)}
            style={{...iSt,flex:1,fontSize:14}}/>
          </div>
          <div style={{display:'flex',gap:6,flexWrap:'wrap',marginBottom:8}}>
-          {['Vente directe','Vente CHR','ÃvÃ©nement','DÃ©gustation','Casse/Perte'].map(m=>(
+          {['Vente directe','Vente CHR','Événement','Dégustation','Casse/Perte'].map(m=>(
            <button key={m} onClick={()=>appliquerSortie(lot,adjVal,m)}
             style={{padding:'5px 10px',borderRadius:8,fontSize:11,fontWeight:600,
              border:`1px solid ${C.amber}40`,background:C.bgCard,color:C.amber,
@@ -6350,7 +6350,7 @@ function ModuleStockPF({condSessions,recettes,stockCond,stockPF,setStockPF}){
          style={{marginTop:10,width:'100%',padding:'7px',borderRadius:8,
           border:`1.5px dashed ${C.amber}60`,background:'transparent',
           color:C.amber,fontSize:12,fontWeight:600,minHeight:36}}>
-         â Enregistrer une sortie
+         − Enregistrer une sortie
         </button>
        )}
       </div>
@@ -6397,12 +6397,12 @@ function ModuleStockPF({condSessions,recettes,stockCond,stockPF,setStockPF}){
       <div style={{background:C.bgCard,borderRadius:14,padding:'14px 16px',
        marginBottom:16,border:`1px solid ${C.border}`}}>
        <div style={{fontFamily:FA,fontSize:16,
-        color:C.text,marginBottom:12}}>RÃ©capitulatif financier</div>
+        color:C.text,marginBottom:12}}>Récapitulatif financier</div>
        {[
-        ['CA gÃ©nÃ©rÃ© (vendu)',    `${totVendu.toLocaleString('fr')}â¬`,   C.ok],
-        ['Valeur stock restant', `${totCA.toLocaleString('fr')}â¬`,      C.amber],
-        ['CoÃ»t emballage stock', `${totCout.toLocaleString('fr')}â¬`,    C.hop],
-        ['Marge brute stock',    totCA>0?`${Math.round((totCA-totCout)/totCA*100)}%`:'â', C.ok],
+        ['CA généré (vendu)',    `${totVendu.toLocaleString('fr')}€`,   C.ok],
+        ['Valeur stock restant', `${totCA.toLocaleString('fr')}€`,      C.amber],
+        ['Coût emballage stock', `${totCout.toLocaleString('fr')}€`,    C.hop],
+        ['Marge brute stock',    totCA>0?`${Math.round((totCA-totCout)/totCA*100)}%`:'—', C.ok],
        ].map(([l,v,col])=>(
         <div key={l} style={{display:'flex',justifyContent:'space-between',
          alignItems:'center',padding:'8px 10px',borderRadius:8,
@@ -6415,8 +6415,8 @@ function ModuleStockPF({condSessions,recettes,stockCond,stockPF,setStockPF}){
        <div style={{marginTop:8,padding:'8px 12px',borderRadius:8,
         background:C.greenPale,border:`1px solid ${C.green}30`,
         fontSize:11,color:C.textLight,lineHeight:1.5}}>
-        ð¡ <strong style={{color:C.text}}>Note :</strong> la marge inclut l'emballage.
-        Le coÃ»t de brassage (matiÃ¨res premiÃ¨res) est visible dans l'onglet Recettes.
+        💡 <strong style={{color:C.text}}>Note :</strong> la marge inclut l'emballage.
+        Le coût de brassage (matières premières) est visible dans l'onglet Recettes.
        </div>
       </div>
 
@@ -6448,10 +6448,10 @@ function ModuleStockPF({condSessions,recettes,stockCond,stockPF,setStockPF}){
 
          <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:8,marginBottom:8}}>
           {[
-           ['Initial conditionnÃ©', l.qteInit.toLocaleString('fr'), C.textMid],
+           ['Initial conditionné', l.qteInit.toLocaleString('fr'), C.textMid],
            ['Encore disponible',   l.qteDispo.toLocaleString('fr'), l.qteDispo>0?C.amber:C.textLight],
            ['Vendus/sortis',        l.vendu.toLocaleString('fr'),    C.ok],
-           ['CA sorties',           l.caVendu>0?`${l.caVendu.toLocaleString('fr')}â¬`:'â', C.ok],
+           ['CA sorties',           l.caVendu>0?`${l.caVendu.toLocaleString('fr')}€`:'—', C.ok],
           ].map(([lab,val,color])=>(
            <div key={lab} style={{background:C.bg,borderRadius:8,
             padding:'8px 10px',border:`1px solid ${C.border}`}}>
@@ -6467,18 +6467,18 @@ function ModuleStockPF({condSessions,recettes,stockCond,stockPF,setStockPF}){
           color:C.textMid,flexWrap:'wrap',padding:'6px 8px',
           background:C.bg,borderRadius:8,border:`1px solid ${C.border}`}}>
           <span>Prix vente : <strong style={{color:C.amber,fontFamily:FM}}>
-           {l.pv>0?`${l.pv}â¬`:'â'}</strong></span>
-          <span>CoÃ»t embal. : <strong style={{color:C.hop,fontFamily:FM}}>
-           {l.cr>0?`${l.cr.toFixed(2)}â¬`:'â'}</strong></span>
+           {l.pv>0?`${l.pv}€`:'—'}</strong></span>
+          <span>Coût embal. : <strong style={{color:C.hop,fontFamily:FM}}>
+           {l.cr>0?`${l.cr.toFixed(2)}€`:'—'}</strong></span>
           <span>Stock : <strong style={{color:C.amber,fontFamily:FM}}>
-           {l.valDispo>0?`${l.valDispo.toLocaleString('fr')}â¬`:'â'}</strong></span>
+           {l.valDispo>0?`${l.valDispo.toLocaleString('fr')}€`:'—'}</strong></span>
          </div>
 
          {l.qteInit>0&&(
           <div style={{marginTop:8}}>
            <div style={{display:'flex',justifyContent:'space-between',
             fontSize:10,color:C.textLight,marginBottom:2}}>
-            <span>Ãcoulement</span>
+            <span>Écoulement</span>
             <span style={{fontFamily:FM}}>
              {Math.round((l.qteInit-l.qteDispo)/l.qteInit*100)}%
             </span>
@@ -6496,12 +6496,12 @@ function ModuleStockPF({condSessions,recettes,stockCond,stockPF,setStockPF}){
  );
 }
 
-const BEER_IMAGES = {};  // Images retirÃ©es pour performance
+const BEER_IMAGES = {};  // Images retirées pour performance
 const FERM_JOURS = {
- "L'ImpÃ¨rtinente":22,"La PÃ¨rchÃ©e":25,"La PÃ¨rilleuse":17,"La PÃ¨rlimpinpin":21,
- "La SupÃ¨re":26,"La Blonde des Papas":20,"La MÃ¨rveilleuse":29,"La MÃ¨rlimpinpin":22,
- "La Mary'Stout":28,"La Mamagascar":26,"La Papa Poule":59,"FarmÃ¨re":35,
- "La MÃ¨rcure":24,"Single Hop Idaho7":20,
+ "L'Impèrtinente":22,"La Pèrchée":25,"La Pèrilleuse":17,"La Pèrlimpinpin":21,
+ "La Supère":26,"La Blonde des Papas":20,"La Mèrveilleuse":29,"La Mèrlimpinpin":22,
+ "La Mary'Stout":28,"La Mamagascar":26,"La Papa Poule":59,"Farmère":35,
+ "La Mèrcure":24,"Single Hop Idaho7":20,
 };
 
 function ModuleCatalogue({recettes,setRecettes,brassins,stockPF,condSessions}){
@@ -6569,7 +6569,7 @@ function ModuleCatalogue({recettes,setRecettes,brassins,stockPF,condSessions}){
      <div>
       <div style={{fontFamily:"'Bebas Neue',sans-serif",
        fontSize:38,color:C.amber,lineHeight:0.9,letterSpacing:2}}>
-       NOS BIÃRES
+       NOS BIÈRES
       </div>
       <div style={{fontFamily:"'Bebas Neue',sans-serif",
        fontSize:38,color:C.cream,lineHeight:0.9,letterSpacing:2}}>
@@ -6578,7 +6578,7 @@ function ModuleCatalogue({recettes,setRecettes,brassins,stockPF,condSessions}){
       <div style={{fontFamily:FM,
        fontSize:9,color:C.textLight,letterSpacing:3,marginTop:6,
        textTransform:'uppercase'}}>
-       Brasserie Â· Clisson 44 Â· ð¿ CertifiÃ© Bio
+       Brasserie · Clisson 44 · 🌿 Certifié Bio
       </div>
      </div>
      <img src="https://static.wixstatic.com/media/6083cc_b88b212595ea479f8951c9804107e28e~mv2.png"
@@ -6590,7 +6590,7 @@ function ModuleCatalogue({recettes,setRecettes,brassins,stockPF,condSessions}){
     <div style={{display:'flex',gap:6,paddingBottom:14}}>
      {[['Toutes',filtered.length],
       ['Permanentes',recettes.filter(r=>r.permanent).length],
-      ['ÃphÃ©mÃ¨res',recettes.filter(r=>!r.permanent).length]
+      ['Éphémères',recettes.filter(r=>!r.permanent).length]
      ].map(([f,n])=>(
       <button key={f} onClick={()=>setFiltre(f)}
        style={{padding:'5px 14px',borderRadius:4,fontSize:11,fontWeight:700,
@@ -6634,7 +6634,7 @@ function ModuleCatalogue({recettes,setRecettes,brassins,stockPF,condSessions}){
        {!img&&(
         <div style={{position:'absolute',inset:0,background:C.bgCard,
          display:'flex',alignItems:'center',justifyContent:'center'}}>
-         <span style={{fontSize:60,opacity:0.2}}>ðº</span>
+         <span style={{fontSize:60,opacity:0.2}}>🍺</span>
         </div>
        )}
 
@@ -6649,7 +6649,7 @@ function ModuleCatalogue({recettes,setRecettes,brassins,stockPF,condSessions}){
         justifyContent:'center',padding:'20px 20px 20px 12px'}}>
         <div style={{fontFamily:FM,fontSize:8,
          letterSpacing:3,color:srm,textTransform:'uppercase',marginBottom:6}}>
-         {r.style} Â· {r.permanent?'Permanente':'ÃphÃ©mÃ¨re'}
+         {r.style} · {r.permanent?'Permanente':'Éphémère'}
         </div>
         <div style={{fontFamily:"'Bebas Neue',sans-serif",
          fontSize:32,color:C.cream,lineHeight:0.95,letterSpacing:1,
@@ -6665,7 +6665,7 @@ function ModuleCatalogue({recettes,setRecettes,brassins,stockPF,condSessions}){
          {[
           [`${r.abv}%`,C.amber],
           [`IBU ${r.ibu}`,amerCol(r.ibu)],
-          ...(px.b33?[`${px.b33}â¬ / 33cl`,C.cream]:[]),
+          ...(px.b33?[`${px.b33}€ / 33cl`,C.cream]:[]),
          ].map(([v,col],i)=>(
           <span key={`k${i}`} style={{fontFamily:FM,
            fontSize:10,fontWeight:700,color:col,
@@ -6676,14 +6676,14 @@ function ModuleCatalogue({recettes,setRecettes,brassins,stockPF,condSessions}){
         </div>
         {dispo>0&&<div style={{fontFamily:FM,
          fontSize:9,color:C.greenL,letterSpacing:1}}>
-         â {dispo.toLocaleString('fr')} disponibles
+         ● {dispo.toLocaleString('fr')} disponibles
         </div>}
        </div>
 
        <div style={{position:'absolute',bottom:16,right:20,
         fontFamily:"'Bebas Neue',sans-serif",fontSize:22,
         color:C.amber,opacity:hoverId===r.id?1:0.5,
-        transition:'opacity 0.2s'}}>â</div>
+        transition:'opacity 0.2s'}}>→</div>
       </div>
      );
     })()}
@@ -6697,7 +6697,7 @@ function ModuleCatalogue({recettes,setRecettes,brassins,stockPF,condSessions}){
       const dispo = stock.reduce((s,x)=>s+x.dispo,0);
       const dernier = dernierBrassin(r.nom);
       const px = r.prix||{};
-      const enBrassage = dernier&&dernier.statut!=='terminÃ©';
+      const enBrassage = dernier&&dernier.statut!=='terminé';
       const isHov = hoverId===r.id;
 
       return (
@@ -6720,7 +6720,7 @@ function ModuleCatalogue({recettes,setRecettes,brassins,stockPF,condSessions}){
         {!img&&(
          <div style={{position:'absolute',inset:0,
           display:'flex',alignItems:'center',justifyContent:'center'}}>
-          <span style={{fontSize:44,opacity:0.12}}>ðº</span>
+          <span style={{fontSize:44,opacity:0.12}}>🍺</span>
          </div>
         )}
 
@@ -6744,22 +6744,22 @@ function ModuleCatalogue({recettes,setRecettes,brassins,stockPF,condSessions}){
            fontSize:9,fontWeight:700,color:C.amber}}>
            {r.abv}%
           </span>
-          <span style={{color:C.border,fontSize:8}}>Â·</span>
+          <span style={{color:C.border,fontSize:8}}>·</span>
           <span style={{fontFamily:FM,
            fontSize:9,color:amerCol(r.ibu)}}>
            IBU {r.ibu}
           </span>
           {px.b33&&<>
-           <span style={{color:C.border,fontSize:8}}>Â·</span>
+           <span style={{color:C.border,fontSize:8}}>·</span>
            <span style={{fontFamily:FM,
-            fontSize:9,color:C.textMid}}>{px.b33}â¬</span>
+            fontSize:9,color:C.textMid}}>{px.b33}€</span>
           </>}
          </div>
          <div style={{marginTop:5,fontFamily:FM,
           fontSize:8,letterSpacing:0.5,
           color:dispo>0?C.greenL:enBrassage?C.amber:C.textLight}}>
-          {dispo>0?`â ${dispo.toLocaleString('fr')} dispo`
-           :enBrassage?'â En brassage':''}
+          {dispo>0?`● ${dispo.toLocaleString('fr')} dispo`
+           :enBrassage?'⚗ En brassage':''}
          </div>
         </div>
 
@@ -6767,7 +6767,7 @@ function ModuleCatalogue({recettes,setRecettes,brassins,stockPF,condSessions}){
          fontFamily:FM,fontSize:7,fontWeight:700,
          color:r.permanent?C.amber:C.hop,letterSpacing:1,
          textTransform:'uppercase'}}>
-         {r.permanent?'â PERM.':'â ÃPHÃM.'}
+         {r.permanent?'★ PERM.':'◇ ÉPHÉM.'}
         </div>
        </div>
       );
@@ -6794,7 +6794,7 @@ function ModuleCatalogue({recettes,setRecettes,brassins,stockPF,condSessions}){
         style={{display:'flex',alignItems:'center',gap:5,background:'none',
          border:'none',color:C.textMid,fontSize:12,fontWeight:700,
          fontFamily:FM,letterSpacing:0.5,padding:0}}>
-        â RETOUR
+        ← RETOUR
        </button>
        {hasNext&&(
         <div style={{display:'flex',gap:8,alignItems:'center'}}>
@@ -6802,7 +6802,7 @@ function ModuleCatalogue({recettes,setRecettes,brassins,stockPF,condSessions}){
           style={{width:28,height:28,borderRadius:4,
            border:`1px solid ${C.border}`,background:C.bgCard,
            color:C.textMid,fontSize:14,display:'flex',
-           alignItems:'center',justifyContent:'center',fontWeight:700}}>â¹</button>
+           alignItems:'center',justifyContent:'center',fontWeight:700}}>‹</button>
          <span style={{fontFamily:FM,fontSize:9,
           color:C.textLight,letterSpacing:1}}>
           {selIdx+1} / {filtered.length}
@@ -6811,7 +6811,7 @@ function ModuleCatalogue({recettes,setRecettes,brassins,stockPF,condSessions}){
           style={{width:28,height:28,borderRadius:4,
            border:`1px solid ${C.border}`,background:C.bgCard,
            color:C.textMid,fontSize:14,display:'flex',
-           alignItems:'center',justifyContent:'center',fontWeight:700}}>âº</button>
+           alignItems:'center',justifyContent:'center',fontWeight:700}}>›</button>
         </div>
        )}
       </div>
@@ -6827,7 +6827,7 @@ function ModuleCatalogue({recettes,setRecettes,brassins,stockPF,condSessions}){
          onError={e=>e.target.style.display='none'}/>
        ):(
         <div style={{height:'100%',display:'flex',alignItems:'center',
-         justifyContent:'center',fontSize:60,opacity:0.15}}>ðº</div>
+         justifyContent:'center',fontSize:60,opacity:0.15}}>🍺</div>
        )}
        <div style={{position:'absolute',inset:0,
         background:'linear-gradient(90deg,rgba(13,11,9,0) 0%,rgba(13,11,9,0.9) 55%)'}}/>
@@ -6845,7 +6845,7 @@ function ModuleCatalogue({recettes,setRecettes,brassins,stockPF,condSessions}){
         </div>
         <div style={{fontFamily:FM,fontSize:9,
          color:C.textMid,marginTop:6,letterSpacing:0.5}}>
-         {r.abv}% vol Â· IBU {r.ibu}
+         {r.abv}% vol · IBU {r.ibu}
         </div>
        </div>
 
@@ -6855,7 +6855,7 @@ function ModuleCatalogue({recettes,setRecettes,brassins,stockPF,condSessions}){
          color:C.amber,background:'rgba(0,0,0,0.5)',
          border:`1px solid ${C.amber}40`,
          borderRadius:4,padding:'4px 10px',letterSpacing:0.5}}>
-        ð· {img?'CHANGER':'AJOUTER'}
+        📷 {img?'CHANGER':'AJOUTER'}
        </button>
       </div>
 
@@ -6865,7 +6865,7 @@ function ModuleCatalogue({recettes,setRecettes,brassins,stockPF,condSessions}){
         <Tag text={r.style} color={r.permanent?C.amber:C.hop}
          bg={r.permanent?C.amberPale:C.hopPale}/>
         <Tag text={`${r.abv}% vol`} color={C.textMid} bg={C.bgCard}/>
-        <Tag text={r.permanent?'Permanente':'ÃphÃ©mÃ¨re'}
+        <Tag text={r.permanent?'Permanente':'Éphémère'}
          color={r.permanent?C.amber:C.hop} bg={C.bgCard}/>
        </div>
 
@@ -6874,7 +6874,7 @@ function ModuleCatalogue({recettes,setRecettes,brassins,stockPF,condSessions}){
 
        <p style={{color:C.textMid,fontSize:13,lineHeight:1.7,
         marginBottom:16,fontStyle:'italic'}}>
-        Â« {r.description} Â»
+        « {r.description} »
        </p>
 
        <div style={{display:'grid',gridTemplateColumns:'repeat(5,1fr)',
@@ -6883,7 +6883,7 @@ function ModuleCatalogue({recettes,setRecettes,brassins,stockPF,condSessions}){
          ['IBU',r.ibu,amerCol(r.ibu)],
          ['SRM',r.srm,srm],
          ['DI',r.og,C.textMid],
-         ['DF',r.fg||'â',C.textLight]
+         ['DF',r.fg||'—',C.textLight]
         ].map(([l,v,col])=>(
          <div key={l} style={{textAlign:'center',background:C.bgDark,
           borderRadius:6,padding:'10px 2px',
@@ -6926,15 +6926,15 @@ function ModuleCatalogue({recettes,setRecettes,brassins,stockPF,condSessions}){
           letterSpacing:2,color:C.textLight,textTransform:'uppercase',
           marginBottom:8}}>Tarifs</div>
          <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:6}}>
-          {[['ðº','33cl',px.b33],['ð¾','75cl',px.b75],
-           ['ð¢','FÃ»t 20L',px.f20],['ð¢','FÃ»t 30L',px.f30]
+          {[['🍺','33cl',px.b33],['🍾','75cl',px.b75],
+           ['🛢','Fût 20L',px.f20],['🛢','Fût 30L',px.f30]
           ].map(([ico,l,p])=>p?(
            <div key={l} style={{background:C.bgDark,borderRadius:6,
             padding:'10px 6px',textAlign:'center',
             borderBottom:`2px solid ${C.amber}50`}}>
             <div style={{fontSize:16,marginBottom:4}}>{ico}</div>
             <div style={{fontFamily:"'Bebas Neue',sans-serif",
-             fontSize:20,color:C.amber,lineHeight:1}}>{p}â¬</div>
+             fontSize:20,color:C.amber,lineHeight:1}}>{p}€</div>
             <div style={{fontFamily:FM,
              fontSize:8,color:C.textLight,marginTop:3,
              letterSpacing:0.5}}>{l}</div>
@@ -6971,7 +6971,7 @@ function ModuleCatalogue({recettes,setRecettes,brassins,stockPF,condSessions}){
          color:C.textMid,fontFamily:FM,
          fontSize:11,fontWeight:700,letterSpacing:1,
          textTransform:'uppercase'}}>
-        â RETOUR AU CATALOGUE
+        ← RETOUR AU CATALOGUE
        </button>
       </div>
      </Modal>
@@ -6986,7 +6986,7 @@ function ModulePL({brassins,recettes,condSessions,stockPF,locations,stock,stockC
 
  const pCond = calcPrixCond(stockCond);
 
- const fmtKey = {'Bouteille 33cl':'b33','Bouteille 75cl':'b75','FÃ»t 20L':'f20','FÃ»t 30L':'f30'};
+ const fmtKey = {'Bouteille 33cl':'b33','Bouteille 75cl':'b75','Fût 20L':'f20','Fût 30L':'f30'};
 
  const now = new Date();
  const filterDate = d => {
@@ -7016,7 +7016,7 @@ function ModulePL({brassins,recettes,condSessions,stockPF,locations,stock,stockC
  });
 
  const locsFiltered = locations.filter(l=>
-  l.statut==='retournÃ©e'&&filterDate(l.dateDebut));
+  l.statut==='retournée'&&filterDate(l.dateDebut));
  const caLocations  = locsFiltered.reduce((s,l)=>{
   const futCA = (l.futs||[]).reduce((a,f)=>{
    const prixFut = parseFloat(f.prixFut)||0;
@@ -7025,10 +7025,10 @@ function ModulePL({brassins,recettes,condSessions,stockPF,locations,stock,stockC
   return s + futCA;
  },0);
  const consignesEnCours = locations
-  .filter(l=>l.statut==='confirmÃ©e'||l.statut==='en cours')
+  .filter(l=>l.statut==='confirmée'||l.statut==='en cours')
   .reduce((s,l)=>(s+(l.gobelets25||0)+(l.gobelets50||0)),0);
 
- const brassinsFiltered = brassins.filter(b=>b.statut==='terminÃ©'&&filterDate(b.dateDebut));
+ const brassinsFiltered = brassins.filter(b=>b.statut==='terminé'&&filterDate(b.dateDebut));
  let coutBrassage = 0;
  brassinsFiltered.forEach(b=>{
   const rec = recettes.find(r=>r.nom===b.recette);
@@ -7081,7 +7081,7 @@ function ModulePL({brassins,recettes,condSessions,stockPF,locations,stock,stockC
    <h2 style={{fontFamily:FA,fontSize:'clamp(20px,5vw,26px)',
     color:C.text,marginBottom:4}}>P&L Brasserie</h2>
    <p style={{fontSize:12,color:C.textLight,fontFamily:FM,
-    marginBottom:14}}>Compte de rÃ©sultat consolidÃ©</p>
+    marginBottom:14}}>Compte de résultat consolidé</p>
 
    <div style={{display:'flex',gap:6,overflowX:'auto',marginBottom:18,
     paddingBottom:4,scrollbarWidth:'none'}}>
@@ -7099,15 +7099,15 @@ function ModulePL({brassins,recettes,condSessions,stockPF,locations,stock,stockC
 
    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:18}}>
     {[
-     {label:'CA rÃ©alisÃ©',val:`${caTotal.toLocaleString('fr')}â¬`,
-     color:C.ok,icon:'ð°',sub:`ventes + locations`},
+     {label:'CA réalisé',val:`${caTotal.toLocaleString('fr')}€`,
+     color:C.ok,icon:'💰',sub:`ventes + locations`},
      {label:'Marge brute',val:`${margeGrossP}%`,
      color:margeGrossP>=50?C.ok:margeGrossP>=30?C.warn:C.alert,
-     icon:'ð',sub:`${margeGrossE.toLocaleString('fr')}â¬`},
-     {label:'Valeur stock PF',val:`${valStock.toLocaleString('fr')}â¬`,
-     color:C.amber,icon:'ð¦',sub:'produits finis dispo'},
-     {label:'Consignes gobelets',val:`${consignesEnCours.toLocaleString('fr')}â¬`,
-     color:C.brick,icon:'ð',sub:'Ã  rÃ©cupÃ©rer'},
+     icon:'📈',sub:`${margeGrossE.toLocaleString('fr')}€`},
+     {label:'Valeur stock PF',val:`${valStock.toLocaleString('fr')}€`,
+     color:C.amber,icon:'📦',sub:'produits finis dispo'},
+     {label:'Consignes gobelets',val:`${consignesEnCours.toLocaleString('fr')}€`,
+     color:C.brick,icon:'🔒',sub:'à récupérer'},
     ].map(({label,val,color,icon,sub})=>(
      <StatCard key={label} label={label} value={val} color={color} icon={icon} sub={sub}/>
     ))}
@@ -7116,28 +7116,28 @@ function ModulePL({brassins,recettes,condSessions,stockPF,locations,stock,stockC
    <div style={{background:C.bgCard,borderRadius:14,padding:'16px',
     border:`1px solid ${C.border}`,marginBottom:14}}>
     <div style={{fontFamily:FA,fontSize:16,
-     color:C.text,marginBottom:12}}>DÃ©tail des revenus</div>
-    <Row label="Ventes bouteilles & fÃ»ts"
-     value={`${caVentes.toLocaleString('fr')}â¬`} color={C.ok}
+     color:C.text,marginBottom:12}}>Détail des revenus</div>
+    <Row label="Ventes bouteilles & fûts"
+     value={`${caVentes.toLocaleString('fr')}€`} color={C.ok}
      sub={`${sessionsFiltered.length} sessions conditionnement`}/>
-    <Row label="Locations tireuses (fÃ»ts facturÃ©s)"
-     value={`${caLocations.toLocaleString('fr')}â¬`} color={C.ok}
-     sub={`${locsFiltered.length} locations retournÃ©es`}/>
-    <Row label="CA TOTAL" value={`${caTotal.toLocaleString('fr')}â¬`}
+    <Row label="Locations tireuses (fûts facturés)"
+     value={`${caLocations.toLocaleString('fr')}€`} color={C.ok}
+     sub={`${locsFiltered.length} locations retournées`}/>
+    <Row label="CA TOTAL" value={`${caTotal.toLocaleString('fr')}€`}
      color={C.ok} bold/>
    </div>
 
    <div style={{background:C.bgCard,borderRadius:14,padding:'16px',
     border:`1px solid ${C.border}`,marginBottom:14}}>
     <div style={{fontFamily:FA,fontSize:16,
-     color:C.text,marginBottom:12}}>DÃ©tail des coÃ»ts</div>
-    <Row label="MatiÃ¨res premiÃ¨res brassage"
-     value={`-${coutBrassage.toLocaleString('fr')}â¬`} color={C.alert}
-     sub={`${brassinsFiltered.length} brassins terminÃ©s`}/>
-    <Row label="Emballage (bouteilles conditionnÃ©es)"
-     value={`-${coutVentes.toLocaleString('fr')}â¬`} color={C.alert}
-     sub="bouteilles+capsules+Ã©tiquettes vendues"/>
-    <Row label="COÃT TOTAL" value={`-${coutTotal.toLocaleString('fr')}â¬`}
+     color:C.text,marginBottom:12}}>Détail des coûts</div>
+    <Row label="Matières premières brassage"
+     value={`-${coutBrassage.toLocaleString('fr')}€`} color={C.alert}
+     sub={`${brassinsFiltered.length} brassins terminés`}/>
+    <Row label="Emballage (bouteilles conditionnées)"
+     value={`-${coutVentes.toLocaleString('fr')}€`} color={C.alert}
+     sub="bouteilles+capsules+étiquettes vendues"/>
+    <Row label="COÛT TOTAL" value={`-${coutTotal.toLocaleString('fr')}€`}
      color={C.alert} bold/>
    </div>
 
@@ -7145,11 +7145,11 @@ function ModulePL({brassins,recettes,condSessions,stockPF,locations,stock,stockC
     borderRadius:14,padding:'16px',
     border:`1px solid ${margeGrossP>=50?C.green:margeGrossP>=30?C.amber:C.brick}`}}>
     <Row label="MARGE BRUTE"
-     value={`${margeGrossE.toLocaleString('fr')}â¬ (${margeGrossP}%)`}
+     value={`${margeGrossE.toLocaleString('fr')}€ (${margeGrossP}%)`}
      color={margeGrossP>=50?C.ok:margeGrossP>=30?C.amber:C.alert} bold/>
     <div style={{fontSize:11,color:C.textLight,marginTop:8,lineHeight:1.6}}>
-     ð¡ Non inclus : charges fixes (loyer, Ã©nergie, salaires, amortissements).
-     Cette marge brute reprÃ©sente la rentabilitÃ© sur les seules matiÃ¨res.
+     💡 Non inclus : charges fixes (loyer, énergie, salaires, amortissements).
+     Cette marge brute représente la rentabilité sur les seules matières.
     </div>
    </div>
   </div>
@@ -7160,10 +7160,10 @@ function ModuleEncaissement({locations,setLocations}){
  const [filtre,setFiltre] = useState('en_attente');
 
  const enAttente = locations.filter(l=>
-  l.statut==='retournÃ©e'&&!(l.encaisse));
+  l.statut==='retournée'&&!(l.encaisse));
  const encaisses = locations.filter(l=>l.encaisse);
  const actives   = locations.filter(l=>
-  l.statut==='confirmÃ©e'||l.statut==='en cours');
+  l.statut==='confirmée'||l.statut==='en cours');
 
  const displayed = filtre==='en_attente'?enAttente
   :filtre==='encaisses'?encaisses:actives;
@@ -7204,17 +7204,17 @@ function ModuleEncaissement({locations,setLocations}){
         whiteSpace:'nowrap'}}>{l.client}</div>
        <div style={{fontSize:11,color:C.textLight,
         fontFamily:FM,marginTop:2}}>
-        {fmtDate(l.dateDebut)} Â· {l.tireuses.length} tireuse{l.tireuses.length>1?'s':''}
-        {l.tel&&` Â· ${l.tel}`}
+        {fmtDate(l.dateDebut)} · {l.tireuses.length} tireuse{l.tireuses.length>1?'s':''}
+        {l.tel&&` · ${l.tel}`}
        </div>
       </div>
       <div style={{textAlign:'right',flexShrink:0,marginLeft:10}}>
        <div style={{fontFamily:FA,fontSize:20,
         color:l.encaisse?C.ok:C.amber,lineHeight:1}}>
-        {total.toLocaleString('fr')}â¬
+        {total.toLocaleString('fr')}€
        </div>
        {l.encaisse&&<div style={{fontSize:10,color:C.ok,
-        fontFamily:FM}}>â EncaissÃ©</div>}
+        fontFamily:FM}}>✓ Encaissé</div>}
       </div>
      </div>
 
@@ -7223,26 +7223,26 @@ function ModuleEncaissement({locations,setLocations}){
        <span key={`k${i}`} style={{background:C.bgCard,borderRadius:6,
         padding:'3px 9px',fontSize:10,color:C.amber,
         fontFamily:FM,border:`1px solid ${C.border}`}}>
-        ð¢ {f.nbFuts}Ã{f.typeFut} = {((parseFloat(f.prixFut)||0)*(f.nbFuts||1)).toFixed(0)}â¬
+        🛢 {f.nbFuts}×{f.typeFut} = {((parseFloat(f.prixFut)||0)*(f.nbFuts||1)).toFixed(0)}€
        </span>
       ))}
       {gobConsigne>0&&(
        <span style={{background:C.bgCard,borderRadius:6,
         padding:'3px 9px',fontSize:10,color:C.hop,
         fontFamily:FM,border:`1px solid ${C.border}`}}>
-        ð¥¤ Gobelets {gobConsigne}â¬
+        🥤 Gobelets {gobConsigne}€
        </span>
       )}
      </div>
 
      {l.encaisse&&l.dateEncaissement&&(
       <div style={{fontSize:11,color:C.textLight,fontFamily:FM}}>
-       EncaissÃ© le {fmtDate(l.dateEncaissement)}
-       {l.noteEncaissement&&` Â· ${l.noteEncaissement}`}
+       Encaissé le {fmtDate(l.dateEncaissement)}
+       {l.noteEncaissement&&` · ${l.noteEncaissement}`}
       </div>
      )}
 
-     {!l.encaisse&&l.statut==='retournÃ©e'&&(
+     {!l.encaisse&&l.statut==='retournée'&&(
       isEdit?(
        <div style={{marginTop:10,padding:'10px 12px',borderRadius:10,
         background:C.amberPale,border:`1px solid ${C.amber}40`}}>
@@ -7254,7 +7254,7 @@ function ModuleEncaissement({locations,setLocations}){
          <div>
           <label style={{fontSize:10,color:C.textLight,
            textTransform:'uppercase',letterSpacing:0.8,
-           display:'block',marginBottom:4}}>Montant (â¬)</label>
+           display:'block',marginBottom:4}}>Montant (€)</label>
           <input type="number" value={montant}
            onChange={e=>setMontant(e.target.value)}
            placeholder={String(total)}
@@ -7266,9 +7266,9 @@ function ModuleEncaissement({locations,setLocations}){
            display:'block',marginBottom:4}}>Mode</label>
           <select value={note} onChange={e=>setNote(e.target.value)}
            style={iSt}>
-           <option value="">ChÃ¨que</option>
+           <option value="">Chèque</option>
            <option>Virement</option>
-           <option>EspÃ¨ces</option>
+           <option>Espèces</option>
            <option>CB</option>
            <option>Partiel</option>
           </select>
@@ -7281,11 +7281,11 @@ function ModuleEncaissement({locations,setLocations}){
            color:C.textMid,fontSize:12,fontWeight:600}}>
           Annuler
          </button>
-         <button onClick={()=>{encaisser(l,montant||total,note||'ChÃ¨que');setEditLoc(null);}}
+         <button onClick={()=>{encaisser(l,montant||total,note||'Chèque');setEditLoc(null);}}
           style={{flex:2,padding:'9px',borderRadius:8,border:'none',
            background:C.ok,
            color:'#fff',fontSize:13,fontWeight:700}}>
-          â Confirmer {(parseFloat(montant)||total).toLocaleString('fr')}â¬
+          ✓ Confirmer {(parseFloat(montant)||total).toLocaleString('fr')}€
          </button>
         </div>
        </div>
@@ -7294,7 +7294,7 @@ function ModuleEncaissement({locations,setLocations}){
         style={{marginTop:8,width:'100%',padding:'9px',borderRadius:8,
          border:`1.5px dashed ${C.amber}80`,background:'transparent',
          color:C.amber,fontSize:12,fontWeight:600}}>
-        ð° Enregistrer l'encaissement
+        💰 Enregistrer l'encaissement
        </button>
       )
      )}
@@ -7311,21 +7311,21 @@ function ModuleEncaissement({locations,setLocations}){
    </h2>
 
    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:16}}>
-    <StatCard label="Ã encaisser" icon="â³"
-     value={`${totalAttente.toLocaleString('fr')}â¬`}
+    <StatCard label="À encaisser" icon="⏳"
+     value={`${totalAttente.toLocaleString('fr')}€`}
      color={totalAttente>0?C.alert:C.ok}
      sub={`${enAttente.length} location${enAttente.length>1?'s':''}`}/>
-    <StatCard label="EncaissÃ©" icon="â"
-     value={`${encaisses.reduce((s,l)=>s+(l.montantEncaisse||0),0).toLocaleString('fr')}â¬`}
+    <StatCard label="Encaissé" icon="✅"
+     value={`${encaisses.reduce((s,l)=>s+(l.montantEncaisse||0),0).toLocaleString('fr')}€`}
      color={C.ok}
      sub={`${encaisses.length} location${encaisses.length>1?'s':''}`}/>
    </div>
 
    <div style={{display:'flex',gap:6,marginBottom:14}}>
     {[
-     {id:'en_attente',label:`â³ Ã encaisser (${enAttente.length})`},
-     {id:'actives',label:`ð En cours (${actives.length})`},
-     {id:'encaisses',label:`â SoldÃ©es (${encaisses.length})`},
+     {id:'en_attente',label:`⏳ À encaisser (${enAttente.length})`},
+     {id:'actives',label:`📋 En cours (${actives.length})`},
+     {id:'encaisses',label:`✅ Soldées (${encaisses.length})`},
     ].map(f=>(
      <button key={f.id} onClick={()=>setFiltre(f.id)}
       style={{flexShrink:0,padding:'6px 12px',borderRadius:20,
@@ -7341,10 +7341,10 @@ function ModuleEncaissement({locations,setLocations}){
    {displayed.length===0&&(
     <div style={{textAlign:'center',padding:'40px 0',color:C.textLight}}>
      <div style={{fontSize:36,marginBottom:8}}>
-      {filtre==='en_attente'?'ð':'ð'}
+      {filtre==='en_attente'?'🎉':'📋'}
      </div>
      <div style={{fontWeight:600}}>
-      {filtre==='en_attente'?'Tout est encaissÃ© !':'Aucune location ici'}
+      {filtre==='en_attente'?'Tout est encaissé !':'Aucune location ici'}
      </div>
     </div>
    )}
@@ -7358,10 +7358,10 @@ function ModuleSimulation({recettes,setRecettes,stock,stockCond,condSessions,sto
  const [mode,setMode]      = useState('prix');
  const [recSel,setRecSel]  = useState(recettes[0]?.id||1);
  const [delta,setDelta]    = useState({b33:0,b75:0,f20:0,f30:0});
- const [matDelta,setMatDelta] = useState(0); // % variation coÃ»t matiÃ¨res
+ const [matDelta,setMatDelta] = useState(0); // % variation coût matières
 
  const pCond = calcPrixCond(stockCond);
- const fmtKey = {'Bouteille 33cl':'b33','Bouteille 75cl':'b75','FÃ»t 20L':'f20','FÃ»t 30L':'f30'};
+ const fmtKey = {'Bouteille 33cl':'b33','Bouteille 75cl':'b75','Fût 20L':'f20','Fût 30L':'f30'};
  const fmtVol = {'b33':0.33,'b75':0.75,'f20':20,'f30':30};
 
  const rec = recettes.find(r=>r.id===recSel)||recettes[0];
@@ -7406,7 +7406,7 @@ function ModuleSimulation({recettes,setRecettes,stock,stockCond,condSessions,sto
  };
 
  const fmts    = ['b33','b75','f20','f30'];
- const labels  = {'b33':'33cl','b75':'75cl','f20':'FÃ»t 20L','f30':'FÃ»t 30L'};
+ const labels  = {'b33':'33cl','b75':'75cl','f20':'Fût 20L','f30':'Fût 30L'};
  const impacts = Object.fromEntries(fmts.map(f=>[f,impact(f)]));
  const totalDiffCA = fmts.reduce((s,f)=>s+impacts[f].diffCA,0);
 
@@ -7427,23 +7427,23 @@ function ModuleSimulation({recettes,setRecettes,stock,stockCond,condSessions,sto
     Simulation
    </h2>
    <p style={{fontSize:12,color:C.textLight,fontFamily:FM,
-    marginBottom:14}}>Testez l'impact de vos dÃ©cisions tarifaires</p>
+    marginBottom:14}}>Testez l'impact de vos décisions tarifaires</p>
 
    <div style={{marginBottom:14}}>
     <label style={{fontSize:10,fontWeight:700,color:C.textLight,
      textTransform:'uppercase',letterSpacing:1,display:'block',marginBottom:6}}>
-     Recette Ã  simuler
+     Recette à simuler
     </label>
     <select value={recSel} onChange={e=>setRecSel(parseInt(e.target.value))}
      style={iSt}>
      {recettes.map(r=>(
-      <option key={r.id} value={r.id}>{r.nom} â {r.style}</option>
+      <option key={r.id} value={r.id}>{r.nom} — {r.style}</option>
      ))}
     </select>
    </div>
 
    <div style={{display:'flex',gap:8,marginBottom:16}}>
-    {[['prix','ð Prix de vente'],['cout','ð¸ CoÃ»t matiÃ¨res']].map(([v,l])=>(
+    {[['prix','📈 Prix de vente'],['cout','💸 Coût matières']].map(([v,l])=>(
      <button key={v} onClick={()=>setMode(v)}
       style={{flex:1,padding:'8px',borderRadius:20,
        border:`1.5px solid ${mode===v?C.amber:C.border}`,
@@ -7470,15 +7470,15 @@ function ModuleSimulation({recettes,setRecettes,stock,stockCond,condSessions,sto
           </div>
           <div style={{fontSize:11,color:C.textLight,
            fontFamily:FM,marginTop:1}}>
-           {imp.vol.toLocaleString('fr')} vendus Â· coÃ»t {imp.cr.toFixed(2)}â¬
+           {imp.vol.toLocaleString('fr')} vendus · coût {imp.cr.toFixed(2)}€
           </div>
          </div>
          <div style={{textAlign:'right'}}>
           <div style={{fontFamily:FA,fontSize:20,
-           color:C.amber}}>{(imp.pvNew).toFixed(2)}â¬</div>
+           color:C.amber}}>{(imp.pvNew).toFixed(2)}€</div>
           {delta[f]!==0&&<div style={{fontSize:11,
            color:delta[f]>0?C.ok:C.alert,fontFamily:FM}}>
-           {delta[f]>0?'+':''}{delta[f]}â¬
+           {delta[f]>0?'+':''}{delta[f]}€
           </div>}
          </div>
         </div>
@@ -7494,7 +7494,7 @@ function ModuleSimulation({recettes,setRecettes,stock,stockCond,condSessions,sto
           ['Marge base',`${imp.mgBase}%`,C.textMid],
           ['Marge new', `${imp.mgNew}%`,
            (imp.mgNew||0)>=(imp.mgBase||0)?C.ok:C.alert],
-          ['Impact CA', `${imp.diffCA>=0?'+':''}${imp.diffCA.toFixed(0)}â¬`,
+          ['Impact CA', `${imp.diffCA>=0?'+':''}${imp.diffCA.toFixed(0)}€`,
            imp.diffCA>=0?C.ok:C.alert],
          ].map(([l,v,col])=>(
           <div key={l} style={{background:C.bgCard,borderRadius:6,
@@ -7516,7 +7516,7 @@ function ModuleSimulation({recettes,setRecettes,stock,stockCond,condSessions,sto
        <div style={{fontWeight:700,color:C.text}}>Impact total sur CA historique</div>
        <div style={{fontFamily:FA,fontSize:22,
         color:totalDiffCA>=0?C.ok:C.alert}}>
-        {totalDiffCA>=0?'+':''}{totalDiffCA.toFixed(0)}â¬
+        {totalDiffCA>=0?'+':''}{totalDiffCA.toFixed(0)}€
        </div>
       </div>
      </div>
@@ -7526,7 +7526,7 @@ function ModuleSimulation({recettes,setRecettes,stock,stockCond,condSessions,sto
        style={{width:'100%',padding:'13px',borderRadius:10,border:'none',
         background:C.amber,
         color:'#fff',fontWeight:700,fontSize:14,marginBottom:10}}>
-       â Appliquer ces nouveaux prix
+       ✓ Appliquer ces nouveaux prix
       </button>
      )}
     </>
@@ -7537,10 +7537,10 @@ function ModuleSimulation({recettes,setRecettes,stock,stockCond,condSessions,sto
      <div style={{background:C.bgCard,borderRadius:12,padding:'14px',
       marginBottom:14,border:`1px solid ${C.border}`}}>
       <div style={{fontWeight:700,color:C.text,marginBottom:12}}>
-       Variation du coÃ»t matiÃ¨res
+       Variation du coût matières
       </div>
       <div style={{display:'flex',justifyContent:'space-between',marginBottom:8}}>
-       <span style={{color:C.textMid,fontSize:13}}>Hausse / baisse des ingrÃ©dients</span>
+       <span style={{color:C.textMid,fontSize:13}}>Hausse / baisse des ingrédients</span>
        <span style={{fontFamily:FM,fontWeight:700,
         fontSize:15,color:matDelta>0?C.alert:matDelta<0?C.ok:C.textMid}}>
         {matDelta>0?'+':''}{matDelta}%
@@ -7560,9 +7560,9 @@ function ModuleSimulation({recettes,setRecettes,stock,stockCond,condSessions,sto
            marginBottom:4}}>{labels[f]}</div>
           <div style={{display:'flex',justifyContent:'space-between',
            fontSize:12,color:C.textMid}}>
-           <span>CoÃ»t revient</span>
+           <span>Coût revient</span>
            <span style={{fontFamily:FM,
-            color:C.alert}}>{imp.cr.toFixed(2)}â¬</span>
+            color:C.alert}}>{imp.cr.toFixed(2)}€</span>
           </div>
           <div style={{display:'flex',justifyContent:'space-between',
            fontSize:12,color:C.textMid}}>
@@ -7579,8 +7579,8 @@ function ModuleSimulation({recettes,setRecettes,stock,stockCond,condSessions,sto
 
      <div style={{background:C.amberPale,borderRadius:10,padding:'12px 14px',
       border:`1px solid ${C.amber}30`,fontSize:12,color:C.textMid,lineHeight:1.6}}>
-      ð¡ Utilisez ce simulateur pour anticiper l'impact d'une hausse de matiÃ¨res
-      (houblon, malt) sur vos marges et dÃ©cider si un ajustement de prix est nÃ©cessaire.
+      💡 Utilisez ce simulateur pour anticiper l'impact d'une hausse de matières
+      (houblon, malt) sur vos marges et décider si un ajustement de prix est nécessaire.
      </div>
     </>
    )}
@@ -7589,7 +7589,7 @@ function ModuleSimulation({recettes,setRecettes,stock,stockCond,condSessions,sto
 }
 
 function ModulePrediction({brassins,recettes}){
- const actifs = brassins.filter(b=>b.statut!=='terminÃ©'&&b.statut!=='planifiÃ©');
+ const actifs = brassins.filter(b=>b.statut!=='terminé'&&b.statut!=='planifié');
 
  const predire = b => {
   const duree = FERM_JOURS[b.recette] || 21;
@@ -7604,14 +7604,14 @@ function ModulePrediction({brassins,recettes}){
  };
 
  const statusColor = jr => jr<=0?C.ok:jr<=3?C.warn:jr<=7?C.amber:C.textLight;
- const statusLabel = jr => jr<=0?'ð¢ PRÃTE':jr<=3?'ð¶ TrÃ¨s bientÃ´t':`ð ${jr}j restants`;
+ const statusLabel = jr => jr<=0?'🟢 PRÊTE':jr<=3?'🔶 Très bientôt':`📅 ${jr}j restants`;
 
  if(actifs.length===0) return (
   <div style={{padding:'16px',paddingBottom:80}}>
    <h2 style={{fontFamily:FA,fontSize:'clamp(20px,5vw,26px)',
-    color:C.text,marginBottom:14}}>PrÃ©dictions</h2>
+    color:C.text,marginBottom:14}}>Prédictions</h2>
    <div style={{textAlign:'center',padding:'60px 20px',color:C.textLight}}>
-    <div style={{fontSize:40,marginBottom:10}}>âï¸</div>
+    <div style={{fontSize:40,marginBottom:10}}>⚗️</div>
     <div style={{fontWeight:600}}>Aucun brassin en cours</div>
    </div>
   </div>
@@ -7621,11 +7621,11 @@ function ModulePrediction({brassins,recettes}){
   <div style={{padding:'16px',paddingBottom:80}}>
    <h2 style={{fontFamily:FA,
     fontSize:'clamp(20px,5vw,26px)',color:C.text,marginBottom:4}}>
-    PrÃ©dictions
+    Prédictions
    </h2>
    <p style={{fontSize:12,color:C.textLight,fontFamily:FM,
     marginBottom:16}}>
-    Dates estimÃ©es basÃ©es sur l'historique rÃ©el de chaque recette
+    Dates estimées basées sur l'historique réel de chaque recette
    </p>
 
    {actifs.map(b=>{
@@ -7648,7 +7648,7 @@ function ModulePrediction({brassins,recettes}){
         {img?(
          <img src={img} style={{width:52,height:52,objectFit:'contain'}}
           onError={e=>e.target.style.display='none'}/>
-        ):<span style={{fontSize:28}}>âï¸</span>}
+        ):<span style={{fontSize:28}}>⚗️</span>}
        </div>
 
        <div style={{flex:1,minWidth:0}}>
@@ -7656,7 +7656,7 @@ function ModulePrediction({brassins,recettes}){
          color:C.text,lineHeight:1.1}}>{b.recette}</div>
         <div style={{fontSize:11,color:C.textLight,
          fontFamily:FM,marginTop:2}}>
-         {b.fermenteur} Â· dÃ©marrÃ© {fmtDate(b.dateDebut)} Â· J+{joursEcoules}
+         {b.fermenteur} · démarré {fmtDate(b.dateDebut)} · J+{joursEcoules}
         </div>
         <div style={{marginTop:4,fontSize:12,fontWeight:700,
          color:statusColor(joursRestants)}}>
@@ -7673,7 +7673,7 @@ function ModulePrediction({brassins,recettes}){
          {datePrete.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'})}
         </div>
         <div style={{fontSize:8,color:C.textLight,marginTop:1,
-         textTransform:'uppercase',letterSpacing:0.5}}>estimÃ©e</div>
+         textTransform:'uppercase',letterSpacing:0.5}}>estimée</div>
        </div>
       </div>
 
@@ -7683,7 +7683,7 @@ function ModulePrediction({brassins,recettes}){
         fontFamily:FM}}>
         <span>Brassage</span>
         <span style={{color:statusColor(joursRestants),fontWeight:700}}>
-         {pct}% Â· {joursEcoules}j / {duree}j estimÃ©s
+         {pct}% · {joursEcoules}j / {duree}j estimés
         </span>
         <span>Conditionnement</span>
        </div>
@@ -7707,7 +7707,7 @@ function ModulePrediction({brassins,recettes}){
           alignItems:'center',marginBottom:6}}>
           <div style={{fontSize:10,fontWeight:700,color:C.textLight,
            textTransform:'uppercase',letterSpacing:0.8}}>
-           Progression densitÃ©
+           Progression densité
           </div>
           {attenuation!=null&&(
            <span style={{fontSize:10,fontWeight:700,
@@ -7761,7 +7761,7 @@ function ModulePrediction({brassins,recettes}){
     border:`1px solid ${C.border}`}}>
     <div style={{fontSize:10,fontWeight:700,color:C.textLight,
      textTransform:'uppercase',letterSpacing:1,marginBottom:8}}>
-     DurÃ©es moyennes (historique rÃ©el)
+     Durées moyennes (historique réel)
     </div>
     <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
      {Object.entries(FERM_JOURS).map(([nom,j])=>(
@@ -7779,13 +7779,13 @@ function ModulePrediction({brassins,recettes}){
 
 function detectEventType(evt){
  const txt = ((evt.summary||'')+(evt.description||'')).toLowerCase();
- if(/tireuse|location |rÃ©servation|reservation|Ã©vÃ©n|fÃªte|fete|fest|mariage|soirÃ©e|anniversaire|repas/i.test(txt))
+ if(/tireuse|location |réservation|reservation|évén|fête|fete|fest|mariage|soirée|anniversaire|repas/i.test(txt))
   return 'location';
- if(/brassin|brassage|brew|ferment|cuvÃ©e|cuve|mash|empatage|conditionnement|mise en bouteille|enfutage/i.test(txt))
+ if(/brassin|brassage|brew|ferment|cuvée|cuve|mash|empatage|conditionnement|mise en bouteille|enfutage/i.test(txt))
   return 'brassin';
  if(/livraison|commande|order|achat|fournisseur|delivery|malts?|houblons?/i.test(txt))
   return 'achat';
- return 'location';  // calendar group â probablement des locations
+ return 'location';  // calendar group → probablement des locations
 }
 
 function mapICSBrassin(evt, recettes, i){
@@ -7797,7 +7797,7 @@ function mapICSBrassin(evt, recettes, i){
   id:         Date.now()+i,
   recette:    rec?.nom || sum.replace(/brassin|brassage/gi,'').trim() || `Import ${i+1}`,
   volume:     rec?.volume||0,
-  statut:     'planifiÃ©',
+  statut:     'planifié',
   dateDebut:  evt.dateDebut,
   dateCond:   null,
   fermenteur: '',
@@ -7852,7 +7852,7 @@ function ModuleAgendaImport({locations,setLocations,brassins,setBrassins,recette
  const processICS = (text, sourceKey) => {
   setErr('');
   const evts = parseICS(text);
-  if(!evts.length){ setErr('Aucun Ã©vÃ©nement trouvÃ© dans ce calendrier.'); return; }
+  if(!evts.length){ setErr('Aucun événement trouvé dans ce calendrier.'); return; }
 
   const cats = {location:[],brassin:[],autre:[]};
   evts.forEach((evt,i)=>{
@@ -7896,7 +7896,7 @@ function ModuleAgendaImport({locations,setLocations,brassins,setBrassins,recette
    saveUrl(key, url);
    processICS(text, key);
   } catch(ex){
-   setErr(`Erreur : ${ex.message}. VÃ©rifiez que l'agenda est public.`);
+   setErr(`Erreur : ${ex.message}. Vérifiez que l'agenda est public.`);
   }
   setLoading(false);
  };
@@ -7961,34 +7961,34 @@ function ModuleAgendaImport({locations,setLocations,brassins,setBrassins,recette
  if(step==='done'&&importStats) return(
   <div style={{padding:'16px',paddingBottom:80}}>
    <div style={{textAlign:'center',padding:'40px 20px'}}>
-    <div style={{fontSize:52,marginBottom:14}}>â</div>
+    <div style={{fontSize:52,marginBottom:14}}>✅</div>
     <div style={{fontFamily:FA,fontSize:22,
-     color:C.ok,marginBottom:10}}>Synchronisation rÃ©ussie</div>
+     color:C.ok,marginBottom:10}}>Synchronisation réussie</div>
     <div style={{display:'flex',flexDirection:'column',gap:8,maxWidth:260,margin:'0 auto'}}>
      {importStats.nLoc>0&&<div style={{background:C.bgCard,borderRadius:8,padding:'10px 14px',
       border:`1px solid ${C.border}`,fontSize:13,color:C.textMid,textAlign:'left'}}>
-      ð» {importStats.nLoc} nouvelle{importStats.nLoc>1?'s':''} location{importStats.nLoc>1?'s':''}
+      🍻 {importStats.nLoc} nouvelle{importStats.nLoc>1?'s':''} location{importStats.nLoc>1?'s':''}
      </div>}
      {importStats.uLoc>0&&<div style={{background:C.bgCard,borderRadius:8,padding:'10px 14px',
       border:`1px solid ${C.border}`,fontSize:13,color:C.textMid,textAlign:'left'}}>
-      ð {importStats.uLoc} location{importStats.uLoc>1?'s':''} mise{importStats.uLoc>1?'s':''} Ã  jour
+      🔄 {importStats.uLoc} location{importStats.uLoc>1?'s':''} mise{importStats.uLoc>1?'s':''} à jour
      </div>}
      {importStats.nBras>0&&<div style={{background:C.bgCard,borderRadius:8,padding:'10px 14px',
       border:`1px solid ${C.border}`,fontSize:13,color:C.textMid,textAlign:'left'}}>
-      âï¸ {importStats.nBras} nouveau{importStats.nBras>1?'x':''} brassin{importStats.nBras>1?'s':''}
+      ⚗️ {importStats.nBras} nouveau{importStats.nBras>1?'x':''} brassin{importStats.nBras>1?'s':''}
      </div>}
      {importStats.uBras>0&&<div style={{background:C.bgCard,borderRadius:8,padding:'10px 14px',
       border:`1px solid ${C.border}`,fontSize:13,color:C.textMid,textAlign:'left'}}>
-      ð {importStats.uBras} brassin{importStats.uBras>1?'s':''} mis Ã  jour
+      🔄 {importStats.uBras} brassin{importStats.uBras>1?'s':''} mis à jour
      </div>}
      {!importStats.nLoc&&!importStats.uLoc&&!importStats.nBras&&!importStats.uBras&&(
-      <div style={{fontSize:13,color:C.textLight}}>Aucun Ã©lÃ©ment importÃ©</div>
+      <div style={{fontSize:13,color:C.textLight}}>Aucun élément importé</div>
      )}
     </div>
     <button onClick={()=>{setStep('accueil');setParsed({location:[],brassin:[],autre:[]});}}
      style={{marginTop:24,padding:'11px 28px',borderRadius:8,border:'none',
       background:C.amber,color:C.bgDark,fontWeight:700,fontSize:14,cursor:'pointer'}}>
-     â Retour
+     ← Retour
     </button>
    </div>
   </div>
@@ -8000,18 +8000,18 @@ function ModuleAgendaImport({locations,setLocations,brassins,setBrassins,recette
     <button onClick={()=>setStep('accueil')}
      style={{background:'none',border:`1px solid ${C.border}`,borderRadius:20,
       padding:'6px 12px',fontSize:12,fontWeight:700,color:C.textMid,cursor:'pointer'}}>
-     â Retour
+     ← Retour
     </button>
     <h2 style={{fontFamily:FA,fontSize:18,color:C.text,flex:1}}>
-     AperÃ§u â {totalNew} nouveaux Â· {totalUpd} MAJ
+     Aperçu — {totalNew} nouveaux · {totalUpd} MAJ
     </h2>
    </div>
 
    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginBottom:14}}>
     {[
-     {icon:'ð»',label:'Locations',count:parsed.location.length,
+     {icon:'🍻',label:'Locations',count:parsed.location.length,
      color:C.green,key:'location'},
-     {icon:'âï¸',label:'Brassins',count:parsed.brassin.length,
+     {icon:'⚗️',label:'Brassins',count:parsed.brassin.length,
      color:C.amber,key:'brassin'},
     ].map(cat=>(
      <div key={cat.key} style={{background:C.bgCard,borderRadius:10,
@@ -8028,9 +8028,9 @@ function ModuleAgendaImport({locations,setLocations,brassins,setBrassins,recette
    </div>
 
    {[
-    {key:'location',icon:'ð»',label:'Locations tireuses',
+    {key:'location',icon:'🍻',label:'Locations tireuses',
     selKey:'location',color:C.green},
-    {key:'brassin', icon:'âï¸',label:'Brassins planifiÃ©s',
+    {key:'brassin', icon:'⚗️',label:'Brassins planifiés',
     selKey:'brassin',color:C.amber},
    ].map(cat=>parsed[cat.key].length>0&&(
     <div key={cat.key} style={{marginBottom:14}}>
@@ -8047,7 +8047,7 @@ function ModuleAgendaImport({locations,setLocations,brassins,setBrassins,recette
        style={{fontSize:10,color:C.textMid,background:'none',
         border:`1px solid ${C.border}`,borderRadius:6,
         padding:'3px 8px',cursor:'pointer'}}>
-       Tout {selected[cat.selKey].length===parsed[cat.key].length?'dÃ©sÃ©lect.':'cocher'}
+       Tout {selected[cat.selKey].length===parsed[cat.key].length?'désélect.':'cocher'}
       </button>
      </div>
      {parsed[cat.key].map(evt=>{
@@ -8069,7 +8069,7 @@ function ModuleAgendaImport({locations,setLocations,brassins,setBrassins,recette
          background:sel?C.amber:'transparent',
          display:'flex',alignItems:'center',justifyContent:'center',
          fontSize:10,color:C.bgDark,fontWeight:900}}>
-         {sel?'â':''}
+         {sel?'✓':''}
         </div>
         <div style={{flex:1,minWidth:0}}>
          <div style={{display:'flex',gap:6,alignItems:'center',marginBottom:2}}>
@@ -8084,10 +8084,10 @@ function ModuleAgendaImport({locations,setLocations,brassins,setBrassins,recette
          </div>
          <div style={{fontFamily:FM,fontSize:9,
           color:C.textLight}}>
-          ð {evt.dateDebut}{evt.dateFin&&evt.dateFin!==evt.dateDebut?` â ${evt.dateFin}`:''}
+          📅 {evt.dateDebut}{evt.dateFin&&evt.dateFin!==evt.dateDebut?` → ${evt.dateFin}`:''}
           {cat.key==='location'&&evt.tireuses?.length>0&&
-           ` Â· ${evt.tireuses.length} tireuse${evt.tireuses.length>1?'s':''}`}
-          {cat.key==='brassin'&&evt.volume>0&&` Â· ${evt.volume}L`}
+           ` · ${evt.tireuses.length} tireuse${evt.tireuses.length>1?'s':''}`}
+          {cat.key==='brassin'&&evt.volume>0&&` · ${evt.volume}L`}
          </div>
         </div>
        </div>
@@ -8100,7 +8100,7 @@ function ModuleAgendaImport({locations,setLocations,brassins,setBrassins,recette
     <div style={{background:C.bgDark,borderRadius:8,padding:'10px 14px',
      marginBottom:14,border:`1px solid ${C.border}`}}>
      <div style={{fontSize:10,color:C.textLight,fontFamily:FM}}>
-      ð {parsed.autre.length} Ã©vÃ©nement{parsed.autre.length>1?'s':''} non reconnu{parsed.autre.length>1?'s':''} (ignorÃ©{parsed.autre.length>1?'s':''})
+      📋 {parsed.autre.length} événement{parsed.autre.length>1?'s':''} non reconnu{parsed.autre.length>1?'s':''} (ignoré{parsed.autre.length>1?'s':''})
      </div>
     </div>
    )}
@@ -8110,7 +8110,7 @@ function ModuleAgendaImport({locations,setLocations,brassins,setBrassins,recette
     style={{width:'100%',padding:'13px',borderRadius:10,border:'none',
      background:C.amber,color:C.bgDark,fontWeight:700,fontSize:14,cursor:'pointer',
      opacity:(!selected.location.length&&!selected.brassin.length)?0.4:1}}>
-    â Importer ({selected.location.length+selected.brassin.length} Ã©lÃ©ments)
+    ✓ Importer ({selected.location.length+selected.brassin.length} éléments)
    </button>
   </div>
  );
@@ -8128,8 +8128,8 @@ function ModuleAgendaImport({locations,setLocations,brassins,setBrassins,recette
 
    <div style={{display:'flex',gap:6,marginBottom:14}}>
     {[
-     {key:'tireuses', label:'ð» Tireuses / ÃvÃ©nements',color:C.green},
-     {key:'brasserie',label:'âï¸ Brasserie / Production',color:C.amber},
+     {key:'tireuses', label:'🍻 Tireuses / Événements',color:C.green},
+     {key:'brasserie',label:'⚗️ Brasserie / Production',color:C.amber},
     ].map(opt=>(
      <button key={opt.key} onClick={()=>{setActiveKey(opt.key);setErr('');}}
       style={{flex:1,padding:'8px 6px',borderRadius:8,fontWeight:600,fontSize:11,
@@ -8146,10 +8146,10 @@ function ModuleAgendaImport({locations,setLocations,brassins,setBrassins,recette
      <div style={{display:'flex',justifyContent:'space-between',
       alignItems:'flex-start',marginBottom:6}}>
       <div style={{flex:1,minWidth:0}}>
-       <Lbl>Agenda mÃ©morisÃ© â {activeKey==='tireuses'?'Locations':'Brasserie'}</Lbl>
+       <Lbl>Agenda mémorisé — {activeKey==='tireuses'?'Locations':'Brasserie'}</Lbl>
        <div style={{fontSize:9,color:C.textMid,fontFamily:FM,
         wordBreak:'break-all',lineHeight:1.4,maxWidth:220}}>
-        {urls[activeKey].replace('https://calendar.google.com','gcal').slice(0,60)}â¦
+        {urls[activeKey].replace('https://calendar.google.com','gcal').slice(0,60)}…
        </div>
        {lastSyncs[activeKey]&&<div style={{fontSize:9,color:C.amberL,
         fontFamily:FM,marginTop:3}}>
@@ -8161,7 +8161,7 @@ function ModuleAgendaImport({locations,setLocations,brassins,setBrassins,recette
        style={{flexShrink:0,padding:'8px 14px',borderRadius:8,border:'none',
         background:C.amber,color:C.bgDark,fontWeight:700,fontSize:12,
         cursor:'pointer',minWidth:80}}>
-       {loading?'â¦':'ð Sync'}
+       {loading?'…':'🔄 Sync'}
       </button>
      </div>
      <button onClick={()=>{
@@ -8180,14 +8180,14 @@ function ModuleAgendaImport({locations,setLocations,brassins,setBrassins,recette
     <Lbl>URL iCal Google Agenda</Lbl>
     <input value={urls[activeKey]||''}
      onChange={e=>setUrls(prev=>({...prev,[activeKey]:e.target.value}))}
-     placeholder="https://calendar.google.com/calendar/ical/â¦"
+     placeholder="https://calendar.google.com/calendar/ical/…"
      style={{...iSt,marginBottom:8,fontSize:12,fontFamily:FM}}/>
     {err&&<div style={{fontSize:11,color:C.alert,marginBottom:8,lineHeight:1.4}}>{err}</div>}
     <button onClick={()=>syncUrl(activeKey)} disabled={loading}
      style={{width:'100%',padding:'11px',borderRadius:8,border:'none',
       background:C.amber,color:C.bgDark,fontWeight:700,fontSize:13,cursor:'pointer',
       opacity:loading?0.6:1}}>
-     {loading?'Chargementâ¦':'ð Synchroniser'}
+     {loading?'Chargement…':'🔄 Synchroniser'}
     </button>
    </Card>
 
@@ -8195,8 +8195,8 @@ function ModuleAgendaImport({locations,setLocations,brassins,setBrassins,recette
     <Lbl>Comment obtenir l'URL iCal ?</Lbl>
     {[
      ['1','Ouvrez Google Agenda sur ordinateur (pas mobile)'],
-     ['2','â® Ã  cÃ´tÃ© de votre agenda â "ParamÃ¨tres et partage"'],
-     ['3','Descendez jusqu\'Ã  "IntÃ©grer l\'agenda"'],
+     ['2','⋮ à côté de votre agenda → "Paramètres et partage"'],
+     ['3','Descendez jusqu\'à "Intégrer l\'agenda"'],
      ['4','Copiez l\'adresse iCal (lien en .ics)'],
      ['5','Collez l\'URL ci-dessus et cliquez Synchroniser'],
     ].map(([n,t])=>(
@@ -8211,20 +8211,20 @@ function ModuleAgendaImport({locations,setLocations,brassins,setBrassins,recette
     <div style={{marginTop:8,padding:'8px 10px',background:C.bgCard,borderRadius:6,
      border:`1px solid ${C.border}`,fontSize:10,color:C.amber,
      fontFamily:FM,lineHeight:1.6}}>
-     â  L'agenda doit Ãªtre "Accessible au public" pour que l'URL fonctionne
+     ⚠ L'agenda doit être "Accessible au public" pour que l'URL fonctionne
     </div>
     <div style={{marginTop:6,padding:'8px 10px',background:C.bgCard,borderRadius:6,
      border:`1px solid ${C.border}`,fontSize:10,color:C.textLight,lineHeight:1.6}}>
-     ð¡ DÃ©tection automatique : les Ã©vÃ©nements contenant "tireuse", "location",
-     "rÃ©servation" sont importÃ©s comme locations. Ceux avec "brassin", "brassage"
-     ou un nom de recette sont importÃ©s comme brassins planifiÃ©s.
+     💡 Détection automatique : les événements contenant "tireuse", "location",
+     "réservation" sont importés comme locations. Ceux avec "brassin", "brassage"
+     ou un nom de recette sont importés comme brassins planifiés.
     </div>
    </Card>
 
    <Card>
     <Lbl>Ou importer un fichier .ics</Lbl>
     <div style={{fontSize:12,color:C.textMid,marginBottom:8,lineHeight:1.5}}>
-     Google Agenda â â ParamÃ¨tres â Importer/Exporter â Exporter
+     Google Agenda → ⚙ Paramètres → Importer/Exporter → Exporter
     </div>
     <label style={{display:'flex',alignItems:'center',justifyContent:'center',
       width:'100%',minHeight:48,padding:'11px',boxSizing:'border-box',
@@ -8233,16 +8233,16 @@ function ModuleAgendaImport({locations,setLocations,brassins,setBrassins,recette
      <input type="file" accept=".ics,text/calendar"
       style={{position:'absolute',opacity:0,pointerEvents:'none',width:0,height:0}}
       onChange={handleFile}/>
-     ð Choisir un fichier .ics
+     📂 Choisir un fichier .ics
     </label>
    </Card>
 
    {(locations.filter(l=>l.icsUid).length>0||brassins.filter(b=>b.icsUid).length>0)&&(
     <Card style={{background:C.bgDark}}>
      <div style={{fontSize:11,color:C.textMid,fontFamily:FM}}>
-      ð {locations.filter(l=>l.icsUid).length} location{locations.filter(l=>l.icsUid).length!==1?'s':''} Â·{' '}
+      📊 {locations.filter(l=>l.icsUid).length} location{locations.filter(l=>l.icsUid).length!==1?'s':''} ·{' '}
       {brassins.filter(b=>b.icsUid).length} brassin{brassins.filter(b=>b.icsUid).length!==1?'s':''}{' '}
-      importÃ©s depuis Google Agenda
+      importés depuis Google Agenda
      </div>
     </Card>
    )}
@@ -8258,7 +8258,7 @@ function ModuleAnticipation({brassins,setBrassins,recettes,locations,stock,stock
  const fmtD    = d => d.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'});
 
  const locsAVenir = locations.filter(l=>{
-  if(['retournÃ©e','annulÃ©e'].includes(l.statut)) return false;
+  if(['retournée','annulée'].includes(l.statut)) return false;
   const fin = new Date(l.dateFin+'T23:59');
   return fin >= today && fin <= addW(horizon);
  });
@@ -8272,7 +8272,7 @@ function ModuleAnticipation({brassins,setBrassins,recettes,locations,stock,stock
  });
 
  const stockBieres = {};
- brassins.filter(b=>b.statut==='terminÃ©'&&b.volume>0).forEach(b=>{
+ brassins.filter(b=>b.statut==='terminé'&&b.volume>0).forEach(b=>{
   if(!stockBieres[b.recette]) stockBieres[b.recette]=0;
   stockBieres[b.recette] += b.volume;
  });
@@ -8289,12 +8289,12 @@ function ModuleAnticipation({brassins,setBrassins,recettes,locations,stock,stock
  });
 
  const FERM_JOURS_DEFAUT = {
-  "L'ImpÃ¨rtinente":22,"La PÃ¨rchÃ©e":18,"La PÃ¨rilleuse":17,"La PÃ¨rlimpinpin":21,
-  "La SupÃ¨re":28,"La Blonde des Papas":14,"La MÃ¨rveilleuse":18,"La MÃ¨rlimpinpin":21,
+  "L'Impèrtinente":22,"La Pèrchée":18,"La Pèrilleuse":17,"La Pèrlimpinpin":21,
+  "La Supère":28,"La Blonde des Papas":14,"La Mèrveilleuse":18,"La Mèrlimpinpin":21,
   "La Mary'Stout":18,"La Mamagascar":20,"La Chromamatik":18,"La Cold IPA":20,
-  "La DaarÃ¸nn":10,"La Daddy Cool Gose":18,"La Habemouss Papa":12,
-  "La Mamagascard":20,"La MÃ¨rcure":14,"La Papa Poule":14,
-  "La Queen Bee":16,"La TÃ©mÃ¨raire":18,
+  "La Daarønn":10,"La Daddy Cool Gose":18,"La Habemouss Papa":12,
+  "La Mamagascard":20,"La Mèrcure":14,"La Papa Poule":14,
+  "La Queen Bee":16,"La Témèraire":18,
  };
  const fermJours = b => FERM_JOURS_DEFAUT[b]||16;
 
@@ -8335,14 +8335,14 @@ function ModuleAnticipation({brassins,setBrassins,recettes,locations,stock,stock
    id:        Date.now(),
    recette:   sug.biere,
    volume:    sug.volBrassin,
-   statut:    'planifiÃ©',
+   statut:    'planifié',
    dateDebut: dateStr,
    fermenteur:'',
    og:        sug.rec.og||null,
    fg:        sug.rec.fg||null,
    abv:       sug.rec.abv||null,
    mesures:   [],
-   notes:     `PlanifiÃ© auto â besoin location ${sug.locProche?.client||'Ã  venir'}`,
+   notes:     `Planifié auto — besoin location ${sug.locProche?.client||'à venir'}`,
    paliersMash:[],houblonsDetail:[],resucrage:{},
   };
   setBrassins(prev=>[newB,...prev]);
@@ -8385,10 +8385,10 @@ function ModuleAnticipation({brassins,setBrassins,recettes,locations,stock,stock
 
    <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:10,marginBottom:20}}>
     {[
-     ['Locations Ã  venir', locsTotal,    C.green,  'ðº'],
-     ['BiÃ¨res concernÃ©es', Object.keys(besoinsLoc).length, C.amber, 'ð¢'],
-     ['Volume manquant',   `${totalManque}L`, totalManque>0?C.alert:C.ok, 'â '],
-     ['Brassins Ã  planifier', totalSugg, totalSugg>0?C.alert:C.ok, 'âï¸'],
+     ['Locations à venir', locsTotal,    C.green,  '🍺'],
+     ['Bières concernées', Object.keys(besoinsLoc).length, C.amber, '🛢'],
+     ['Volume manquant',   `${totalManque}L`, totalManque>0?C.alert:C.ok, '⚠'],
+     ['Brassins à planifier', totalSugg, totalSugg>0?C.alert:C.ok, '⚗️'],
     ].map(([l,v,col,icon])=>(
      <div key={l} style={{background:C.bgCard,borderRadius:10,padding:'12px',
       border:`1px solid ${C.border}`,borderTop:`3px solid ${col}`,textAlign:'center'}}>
@@ -8403,7 +8403,7 @@ function ModuleAnticipation({brassins,setBrassins,recettes,locations,stock,stock
 
    {suggestions.length>0&&(
     <div style={cardS}>
-     <Lbl color={C.alert}>âï¸ Brassins Ã  planifier ({suggestions.length})</Lbl>
+     <Lbl color={C.alert}>⚗️ Brassins à planifier ({suggestions.length})</Lbl>
      <div style={{display:'flex',flexDirection:'column',gap:8}}>
       {suggestions.map((s,i)=>(
        <div key={`k${i}`} style={{background:s.enRetard?C.alert+'15':s.urgent?C.amberPale:C.bgDark,
@@ -8417,7 +8417,7 @@ function ModuleAnticipation({brassins,setBrassins,recettes,locations,stock,stock
            color:C.text,marginBottom:3}}>{s.biere}</div>
           <div style={{fontSize:11,color:C.textLight,
            fontFamily:FM}}>
-           {s.locProche&&`Pour : ${s.locProche.client} â ${fmtD(new Date(s.locProche.dateDebut+'T00:00'))}`}
+           {s.locProche&&`Pour : ${s.locProche.client} — ${fmtD(new Date(s.locProche.dateDebut+'T00:00'))}`}
           </div>
          </div>
          <div style={{display:'flex',gap:6,alignItems:'center'}}>
@@ -8438,7 +8438,7 @@ function ModuleAnticipation({brassins,setBrassins,recettes,locations,stock,stock
          gap:8,marginBottom:12}}>
          {[
           ['Brasser avant', fmtD(s.dateBrassage), s.enRetard?C.alert:C.amber],
-          ['Volume suggÃ©rÃ©', `${s.volBrassin}L`, C.amber],
+          ['Volume suggéré', `${s.volBrassin}L`, C.amber],
           ['Manque actuel', `${s.manque}L`, C.alert],
           ['Fermentation', `~${s.joursFerm}j`, C.textMid],
          ].map(([l,v,col])=>(
@@ -8465,7 +8465,7 @@ function ModuleAnticipation({brassins,setBrassins,recettes,locations,stock,stock
           background:C.bgCard,border:`1px solid ${C.border}`}}>
           <div style={{fontSize:9,color:C.textLight,fontFamily:FM,
            textTransform:'uppercase',letterSpacing:1,marginBottom:5}}>
-           IngrÃ©dients clÃ©s (pour {s.volBrassin}L)
+           Ingrédients clés (pour {s.volBrassin}L)
           </div>
           <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
            {(s.rec.ingredients||[]).filter(ing=>['kg'].includes(ing.u)&&ing.qte>0).slice(0,6).map((ing,ii)=>{
@@ -8479,7 +8479,7 @@ function ModuleAnticipation({brassins,setBrassins,recettes,locations,stock,stock
               border:`1px solid ${ok?C.green:C.alert}`,
               borderRadius:5,padding:'2px 7px',fontSize:9,
               fontFamily:FM}}>
-              <span style={{color:ok?C.ok:C.alert}}>{ok?'â':'â '}</span>
+              <span style={{color:ok?C.ok:C.alert}}>{ok?'✓':'⚠'}</span>
               <span style={{color:C.textMid}}>{ing.nom}</span>
               <span style={{color:ok?C.ok:C.alert,fontWeight:700}}>{qteN}kg</span>
              </div>
@@ -8494,7 +8494,7 @@ function ModuleAnticipation({brassins,setBrassins,recettes,locations,stock,stock
           background:s.enRetard?C.alert:C.amber,color:C.bgDark,
           fontWeight:700,fontSize:13,cursor:'pointer',
           fontFamily:FB,letterSpacing:0.5}}>
-         â CrÃ©er ce brassin ({s.volBrassin}L â {fmtD(s.dateBrassage)})
+         ⚗ Créer ce brassin ({s.volBrassin}L — {fmtD(s.dateBrassage)})
         </button>
        </div>
       ))}
@@ -8505,20 +8505,20 @@ function ModuleAnticipation({brassins,setBrassins,recettes,locations,stock,stock
    {suggestions.length===0&&manques.length>0&&(
     <div style={{...cardS,background:C.greenPale,border:`1px solid ${C.green}`,
      textAlign:'center',padding:'24px'}}>
-     <div style={{fontSize:36,marginBottom:8}}>â</div>
+     <div style={{fontSize:36,marginBottom:8}}>✅</div>
      <div style={{fontFamily:FB,fontWeight:700,
       fontSize:18,color:C.ok}}>
       Tous les besoins sont couverts
      </div>
      <div style={{fontSize:12,color:C.textMid,marginTop:4}}>
-      Les brassins en cours couvrent toutes les locations Ã  venir
+      Les brassins en cours couvrent toutes les locations à venir
      </div>
     </div>
    )}
 
    {manques.length>0&&(
     <div style={cardS}>
-     <Lbl>Besoins par biÃ¨re â {horizon} semaines</Lbl>
+     <Lbl>Besoins par bière — {horizon} semaines</Lbl>
      {manques.map((m,i)=>{
       const pctDispo = m.volNecessaire>0 ? Math.min(100,Math.round(m.dispo/m.volNecessaire*100)) : 100;
       const pctCours = m.volNecessaire>0 ? Math.min(100-pctDispo,Math.round(m.volEnCours/m.volNecessaire*100)) : 0;
@@ -8530,19 +8530,19 @@ function ModuleAnticipation({brassins,setBrassins,recettes,locations,stock,stock
          <div>
           <div style={{fontWeight:600,color:C.text,fontSize:13}}>{m.biere}</div>
           <div style={{fontSize:10,color:C.textLight,fontFamily:FM,marginTop:1}}>
-           Besoin : {m.volNecessaire}L Â· Dispo : {m.dispo}L
-           {m.volEnCours>0&&` Â· En fermentation : ${m.volEnCours}L`}
+           Besoin : {m.volNecessaire}L · Dispo : {m.dispo}L
+           {m.volEnCours>0&&` · En fermentation : ${m.volEnCours}L`}
           </div>
          </div>
          <div style={{textAlign:'right'}}>
           {m.manque>0?(
            <div style={{fontSize:12,fontWeight:700,color:m.couvert?C.ok:C.alert,
             fontFamily:FM}}>
-            {m.couvert?'â Couvert':`â  â${m.manque}L`}
+            {m.couvert?'✓ Couvert':`⚠ −${m.manque}L`}
            </div>
           ):(
            <div style={{fontSize:12,fontWeight:700,color:C.ok,
-            fontFamily:FM}}>â OK</div>
+            fontFamily:FM}}>✓ OK</div>
           )}
          </div>
         </div>
@@ -8573,7 +8573,7 @@ function ModuleAnticipation({brassins,setBrassins,recettes,locations,stock,stock
    )}
 
    <div style={cardS}>
-    <Lbl>Timeline â {horizon} semaines Ã  venir</Lbl>
+    <Lbl>Timeline — {horizon} semaines à venir</Lbl>
     <div style={{display:'flex',flexDirection:'column',gap:6}}>
      {semaines.map(({i,debut,fin,locs,sug})=>{
       if(locs.length===0&&sug.length===0) return null;
@@ -8585,7 +8585,7 @@ function ModuleAnticipation({brassins,setBrassins,recettes,locations,stock,stock
          fontSize:9,color:C.textLight,fontFamily:FM,
          lineHeight:1.4,paddingTop:2}}>
          <div style={{fontWeight:700,color:C.cream}}>
-          {fmtD(debut)} â
+          {fmtD(debut)} →
          </div>
          <div>{fmtD(fin)}</div>
         </div>
@@ -8595,10 +8595,10 @@ function ModuleAnticipation({brassins,setBrassins,recettes,locations,stock,stock
            marginBottom:4,padding:'4px 8px',borderRadius:6,
            background:s.enRetard?C.alert+'20':C.amberPale,
            border:`1px solid ${s.enRetard?C.alert:C.amber}`}}>
-           <span style={{fontSize:12}}>âï¸</span>
+           <span style={{fontSize:12}}>⚗️</span>
            <span style={{fontSize:11,fontWeight:700,
             color:s.enRetard?C.alert:C.amber}}>
-            Brasser {s.biere} â {s.volBrassin}L
+            Brasser {s.biere} — {s.volBrassin}L
            </span>
           </div>
          ))}
@@ -8606,13 +8606,13 @@ function ModuleAnticipation({brassins,setBrassins,recettes,locations,stock,stock
           <div key={li} style={{display:'flex',alignItems:'center',gap:6,
            marginBottom:3,padding:'3px 8px',borderRadius:6,
            background:C.greenPale,border:`1px solid ${C.green}30`}}>
-           <span style={{fontSize:11}}>ðº</span>
+           <span style={{fontSize:11}}>🍺</span>
            <span style={{fontSize:11,color:C.greenL,fontWeight:600}}>
             {l.client}
            </span>
            <span style={{fontSize:9,color:C.textLight,
             fontFamily:FM}}>
-            {(l.futs||[]).map(f=>`${f.nbFuts}Ã${f.typeFut} ${f.biere}`).join(' + ')}
+            {(l.futs||[]).map(f=>`${f.nbFuts}×${f.typeFut} ${f.biere}`).join(' + ')}
            </span>
           </div>
          ))}
@@ -8625,8 +8625,8 @@ function ModuleAnticipation({brassins,setBrassins,recettes,locations,stock,stock
 
    {locsAVenir.length===0&&(
     <div style={{textAlign:'center',padding:'60px 0',color:C.textLight}}>
-     <div style={{fontSize:48,marginBottom:12}}>ð</div>
-     <div style={{fontSize:16,fontWeight:600}}>Aucune location prÃ©vue</div>
+     <div style={{fontSize:48,marginBottom:12}}>🗓</div>
+     <div style={{fontSize:16,fontWeight:600}}>Aucune location prévue</div>
      <div style={{fontSize:12,marginTop:6}}>
       Ajoutez des locations de tireuses pour voir les besoins
      </div>
@@ -8639,7 +8639,7 @@ function ModuleAnticipation({brassins,setBrassins,recettes,locations,stock,stock
 
 function App() {
 
-  /* ── 9 variables d'état principales ── */
+  /*    9 variables d'�tat principales    */
   const [stock,        setStock]        = useState(typeof STOCK_INIT        !== 'undefined' ? STOCK_INIT        : []);
   const [recettes,     setRecettes]     = useState(typeof RECETTES_INIT     !== 'undefined' ? RECETTES_INIT     : []);
   const [brassins,     setBrassins]     = useState(typeof PRODUCTION_INIT   !== 'undefined' ? PRODUCTION_INIT   : []);
@@ -8651,12 +8651,12 @@ function App() {
   const [stockPF,      setStockPF]      = useState([]);
   const [module,       setModule]       = useState('dashboard');
 
-  /* ── Contrôle Firebase ── */
+  /*    Contr�le Firebase    */
   const [fbReady,     setFbReady]     = useState(false);
   const saveTimerRef                  = useRef(null);
   const firstLoadRef                  = useRef(true);
 
-  /* ── Chargement initial depuis Firestore ── */
+  /*    Chargement initial depuis Firestore    */
   useEffect(() => {
     const splash = document.getElementById('splash');
     const root   = document.getElementById('root');
@@ -8687,7 +8687,7 @@ function App() {
     return () => unsub();
   }, []);
 
-  /* ── Sauvegarde automatique (debounce 1,5 s) ── */
+  /*    Sauvegarde automatique (debounce 1,5 s)    */
   useEffect(() => {
     if (!fbReady) return;
     const db = window._db;
@@ -8707,11 +8707,11 @@ function App() {
 
  const alerts=stock.filter(s=>s.qte<=s.seuil).length;
  const alertsCond=stockCond.filter(s=>s.qte<=s.seuil).length;
- const actifs=brassins.filter(b=>b.statut!=='terminÃ©').length;
+ const actifs=brassins.filter(b=>b.statut!=='terminé').length;
 
- const locActives   = locations.filter(l=>l.statut==='confirmÃ©e'||l.statut==='en cours').length;
- const aEncaisser   = locations.filter(l=>l.statut==='retournÃ©e'&&!l.encaisse).length;
- const brassinsActifs = brassins.filter(b=>b.statut!=='terminÃ©'&&b.statut!=='planifiÃ©');
+ const locActives   = locations.filter(l=>l.statut==='confirmée'||l.statut==='en cours').length;
+ const aEncaisser   = locations.filter(l=>l.statut==='retournée'&&!l.encaisse).length;
+ const brassinsActifs = brassins.filter(b=>b.statut!=='terminé'&&b.statut!=='planifié');
  const brassinsPrets  = brassinsActifs.filter(b=>{
   const debut=new Date(b.dateDebut+'T00:00');
   const duree=(FERM_JOURS&&FERM_JOURS[b.recette])||21;
@@ -8721,48 +8721,48 @@ function App() {
 
  const FAMILLES = [
   {
-   id:'accueil', label:'Accueil', icon:'ð ',
-   modules:[{id:'dashboard',label:'Tableau de bord',icon:'ð '}],
+   id:'accueil', label:'Accueil', icon:'🏠',
+   modules:[{id:'dashboard',label:'Tableau de bord',icon:'🏠'}],
   },
   {
-   id:'brasserie', label:'Brasserie', icon:'âï¸',
+   id:'brasserie', label:'Brasserie', icon:'⚗️',
    badge: (actifs||0)+(brassinsPrets||0)||null,
    bc: brassinsPrets>0?C.ok:C.amber,
    modules:[
-    {id:'production',     label:'Brassins',     icon:'âï¸', badge:actifs||null,        bc:C.amber},
-    {id:'conditionnement',label:'Conditionnement',icon:'ð¾',badge:alertsCond||null,   bc:alertsCond>0?C.alert:C.amber},
-    {id:'recettes',       label:'Recettes',     icon:'ð'},
-    {id:'prediction',     label:'PrÃ©dictions',  icon:'ð®', badge:brassinsPrets||null, bc:C.ok},
-    {id:'historique',     label:'Historique',   icon:'ð'},
-    {id:'agenda',         label:'Agenda',       icon:'ð'},
-    {id:'anticipation',   label:'Anticipation', icon:'ð®'},
+    {id:'production',     label:'Brassins',     icon:'⚗️', badge:actifs||null,        bc:C.amber},
+    {id:'conditionnement',label:'Conditionnement',icon:'🍾',badge:alertsCond||null,   bc:alertsCond>0?C.alert:C.amber},
+    {id:'recettes',       label:'Recettes',     icon:'📋'},
+    {id:'prediction',     label:'Prédictions',  icon:'🔮', badge:brassinsPrets||null, bc:C.ok},
+    {id:'historique',     label:'Historique',   icon:'📊'},
+    {id:'agenda',         label:'Agenda',       icon:'🔄'},
+    {id:'anticipation',   label:'Anticipation', icon:'🔮'},
    ],
   },
   {
-   id:'locations', label:'Locations', icon:'ð»',
+   id:'locations', label:'Locations', icon:'🍻',
    badge: (locActives||0)+(aEncaisser||0)||null,
    bc: aEncaisser>0?C.alert:C.green,
    modules:[
-    {id:'tireuses',      label:'Planning',      icon:'ð'},
-    {id:'encaissement',  label:'Encaissements', icon:'ð³', badge:aEncaisser||null, bc:C.alert},
+    {id:'tireuses',      label:'Planning',      icon:'📅'},
+    {id:'encaissement',  label:'Encaissements', icon:'💳', badge:aEncaisser||null, bc:C.alert},
    ],
   },
   {
-   id:'ventes', label:'Ventes', icon:'ð',
+   id:'ventes', label:'Ventes', icon:'🛒',
    modules:[
-    {id:'catalogue',  label:'Catalogue',    icon:'ðº'},
-    {id:'stockpf',    label:'Prod. finis',  icon:'ð¦'},
-    {id:'pl',         label:'P&L',          icon:'ð°'},
-    {id:'simulation', label:'Simulation',   icon:'ð'},
+    {id:'catalogue',  label:'Catalogue',    icon:'🍺'},
+    {id:'stockpf',    label:'Prod. finis',  icon:'📦'},
+    {id:'pl',         label:'P&L',          icon:'💰'},
+    {id:'simulation', label:'Simulation',   icon:'📈'},
    ],
   },
   {
-   id:'achats', label:'Achats', icon:'ð¦',
+   id:'achats', label:'Achats', icon:'📦',
    badge: alerts||null, bc: alerts>0?C.alert:C.amber,
    modules:[
-    {id:'stocks',       label:'Stock matiÃ¨res', icon:'ð¾', badge:alerts||null, bc:alerts>0?C.alert:C.amber},
-    {id:'fournisseurs', label:'Fournisseurs',   icon:'ð­'},
-    {id:'planification',label:'Agenda',         icon:'ð'},
+    {id:'stocks',       label:'Stock matières', icon:'🌾', badge:alerts||null, bc:alerts>0?C.alert:C.amber},
+    {id:'fournisseurs', label:'Fournisseurs',   icon:'🏭'},
+    {id:'planification',label:'Agenda',         icon:'📅'},
    ],
   },
  ];
@@ -8786,10 +8786,10 @@ function App() {
      <div style={{display:'flex',gap:5}}>
       <span style={{background:C.greenPale,color:C.greenL,fontSize:9,
        padding:'2px 8px',borderRadius:4,fontFamily:FM,
-       fontWeight:700,letterSpacing:0.5}}>ð¿ BIO</span>
+       fontWeight:700,letterSpacing:0.5}}>🌿 BIO</span>
       {actifs>0&&<span style={{background:C.amberPale,color:C.amberL,fontSize:9,
        padding:'2px 8px',borderRadius:4,fontFamily:FM,
-       fontWeight:700}}>âï¸ {actifs}</span>}
+       fontWeight:700}}>⚗️ {actifs}</span>}
      </div>
     </div>
     {sousMods.length>1&&(
