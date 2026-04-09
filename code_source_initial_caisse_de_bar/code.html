@@ -637,7 +637,10 @@
                             return(
                               <button key={p.id} onClick={()=>addToCart(p)} style={{...card(),border:`2px solid ${inCart?C.amber:'transparent'}`,padding:'0.8rem 0.4rem',display:'flex',flexDirection:'column',alignItems:'center',gap:'0.3rem',cursor:'pointer',position:'relative',fontFamily:"'Outfit',sans-serif",background:inCart?C.amber+'0a':C.surface,transition:'all 0.1s',boxShadow:inCart?`0 0 0 3px ${C.amber}25,0 2px 8px rgba(0,0,0,0.08)`:'0 1px 3px rgba(0,0,0,0.07)'}}>
                                 {inCart&&<span style={{position:'absolute',top:'5px',right:'6px',background:C.amber,color:'#fff',borderRadius:'8px',fontSize:'0.58rem',padding:'1px 5px',fontWeight:'700',lineHeight:'1.7'}}>{inCart.qty}</span>}
-                                <span style={{fontSize:'1.6rem'}}>{p.emoji}</span>
+                                {p.photo
+                                  ?<img src={p.photo} alt={p.name} style={{width:'48px',height:'48px',objectFit:'cover',borderRadius:'8px',flexShrink:0}}/>
+                                  :<span style={{fontSize:'1.6rem'}}>{p.emoji}</span>
+                                }
                                 <span style={{fontSize:'0.7rem',fontWeight:'600',textAlign:'center',color:C.text,lineHeight:1.2}}>{p.name}</span>
                                 <span style={{fontSize:'0.75rem',fontWeight:'700',color:C.amber,fontFamily:"'DM Mono',monospace"}}>{fmt(p.price)}</span>
                               </button>
@@ -1199,17 +1202,36 @@
     /* ── CATALOGUE VIEW ──────────────────────────────────────────────── */
     function CatalogueView({products,setProducts,categories}) {
       const [editProd,setEditProd]=useState(null);
-      const [form,setForm]=useState({name:'',price:'',cat:'Bière Maison',emoji:'🍺'});
+      const [form,setForm]=useState({name:'',price:'',cat:'Bière Maison',emoji:'🍺',photo:''});
       const [dragIdx,setDragIdx]=useState(null);
       const [overIdx,setOverIdx]=useState(null);
-      const openNew=()=>{setForm({name:'',price:'',cat:categories[0]||'Bière Maison',emoji:'🍺'});setEditProd('new');};
-      const openEdit=p=>{setForm({name:p.name,price:String(p.price),cat:p.cat,emoji:p.emoji});setEditProd(p);};
+      const photoInputRef=React.useRef(null);
+      const openNew=()=>{setForm({name:'',price:'',cat:categories[0]||'Bière Maison',emoji:'🍺',photo:''});setEditProd('new');};
+      const openEdit=p=>{setForm({name:p.name,price:String(p.price),cat:p.cat,emoji:p.emoji,photo:p.photo||''});setEditProd(p);};
       const save=()=>{
         if(!form.name||!form.price)return;
         const price=parseFloat(form.price.replace(',','.'));
-        if(editProd==='new')setProducts(prev=>[...prev,{id:'p'+Date.now(),name:form.name,price,cat:form.cat,emoji:form.emoji||'🍺'}]);
-        else setProducts(prev=>prev.map(p=>p.id===editProd.id?{...p,name:form.name,price,cat:form.cat,emoji:form.emoji}:p));
+        if(editProd==='new')setProducts(prev=>[...prev,{id:'p'+Date.now(),name:form.name,price,cat:form.cat,emoji:form.emoji||'🍺',photo:form.photo}]);
+        else setProducts(prev=>prev.map(p=>p.id===editProd.id?{...p,name:form.name,price,cat:form.cat,emoji:form.emoji,photo:form.photo}:p));
         setEditProd(null);
+      };
+      const capturePhoto=(file)=>{
+        if(!file)return;
+        const reader=new FileReader();
+        reader.onload=e=>{
+          const img=new Image();
+          img.onload=()=>{
+            const SIZE=160;
+            const ratio=Math.min(SIZE/img.width,SIZE/img.height);
+            const canvas=document.createElement('canvas');
+            canvas.width=Math.round(img.width*ratio);
+            canvas.height=Math.round(img.height*ratio);
+            canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+            setForm(p=>({...p,photo:canvas.toDataURL('image/jpeg',0.8)}));
+          };
+          img.src=e.target.result;
+        };
+        reader.readAsDataURL(file);
       };
       const del=id=>{if(window.confirm('Supprimer ce produit ?')){setProducts(prev=>prev.filter(p=>p.id!==id));setEditProd(null);}};
       const onDragStart=i=>setDragIdx(i);
@@ -1233,7 +1255,10 @@
                 style={{...card(),padding:'0.8rem 0.45rem',display:'flex',flexDirection:'column',alignItems:'center',gap:'0.28rem',cursor:'grab',position:'relative',opacity:dragIdx===i?0.35:1,transform:dragIdx===i?'scale(0.95)':'scale(1)',outline:overIdx===i&&dragIdx!==i?`2px solid ${C.amber}`:'none',transition:'all 0.12s'}}>
                 <div style={{position:'absolute',top:'5px',left:'7px',color:C.textMuted,fontSize:'0.6rem',opacity:0.35}}>⠿</div>
                 <button onClick={()=>openEdit(p)} style={{position:'absolute',top:'4px',right:'5px',background:'none',border:'none',cursor:'pointer',color:C.textMuted,fontSize:'0.78rem',padding:'2px'}}>✏️</button>
-                <span style={{fontSize:'1.55rem',marginTop:'0.3rem'}}>{p.emoji}</span>
+                {p.photo
+                  ?<img src={p.photo} alt={p.name} style={{width:'52px',height:'52px',objectFit:'cover',borderRadius:'8px',marginTop:'0.3rem',flexShrink:0}}/>
+                  :<span style={{fontSize:'1.55rem',marginTop:'0.3rem'}}>{p.emoji}</span>
+                }
                 <span style={{fontSize:'0.7rem',fontWeight:'600',textAlign:'center',lineHeight:1.2,color:C.text}}>{p.name}</span>
                 <span style={{fontSize:'0.75rem',fontWeight:'700',color:C.amber,fontFamily:"'DM Mono',monospace"}}>{fmt(p.price)}</span>
                 <span style={{fontSize:'0.58rem',color:C.textMuted,background:C.bg,padding:'1px 6px',borderRadius:'4px'}}>{p.cat}</span>
@@ -1247,8 +1272,22 @@
                   <h2 style={{fontSize:'1rem',fontWeight:'800'}}>{editProd==='new'?'Nouveau produit':'Modifier produit'}</h2>
                   {editProd!=='new'&&<button onClick={()=>del(editProd.id)} style={{background:'#fff0f0',border:'none',color:C.red,borderRadius:'8px',padding:'0.35rem 0.7rem',cursor:'pointer',fontSize:'0.75rem',fontWeight:'600'}}>🗑 Suppr.</button>}
                 </div>
+                {/* ── PHOTO ── */}
+                <div style={{marginBottom:'0.85rem'}}>
+                  <label style={{display:'block',fontSize:'0.65rem',fontWeight:'700',color:C.textMuted,textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.35rem'}}>Photo</label>
+                  <input ref={photoInputRef} type="file" accept="image/*" style={{display:'none'}} onChange={e=>capturePhoto(e.target.files[0])}/>
+                  <div style={{display:'flex',gap:'0.5rem',alignItems:'center'}}>
+                    {form.photo&&<img src={form.photo} alt="aperçu" style={{width:'60px',height:'60px',objectFit:'cover',borderRadius:'8px',flexShrink:0}}/>}
+                    <button type="button" onClick={()=>photoInputRef.current.click()}
+                      style={{flex:1,background:C.bg,border:`2px dashed ${C.border}`,borderRadius:'8px',padding:'0.7rem',cursor:'pointer',color:C.textMuted,fontSize:'0.8rem',fontFamily:"'Outfit',sans-serif",display:'flex',alignItems:'center',justifyContent:'center',gap:'0.4rem'}}>
+                      📷 {form.photo?'Changer la photo':'Prendre une photo'}
+                    </button>
+                    {form.photo&&<button type="button" onClick={()=>setForm(p=>({...p,photo:''}))}
+                      style={{background:'#fff0f0',border:'none',borderRadius:'8px',padding:'0.5rem',cursor:'pointer',color:C.red,fontSize:'0.75rem'}}>✕</button>}
+                  </div>
+                </div>
                 {[
-                  {lbl:'Emoji',name:'emoji',type:'text',val:form.emoji,max:2,style:{textAlign:'center',fontSize:'1.6rem'}},
+                  {lbl:'Emoji (si pas de photo)',name:'emoji',type:'text',val:form.emoji,max:2,style:{textAlign:'center',fontSize:'1.6rem'}},
                   {lbl:'Nom du produit',name:'name',type:'text',val:form.name,ph:'Ex : IPA Session'},
                   {lbl:'Prix (€)',name:'price',type:'number',val:form.price,ph:'0.00',step:'0.5'},
                 ].map(f=>(
