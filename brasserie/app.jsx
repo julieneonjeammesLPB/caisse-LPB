@@ -6191,12 +6191,85 @@ function ModulePlanification({brassins,setBrassins,condSessions,recettes,locatio
  );
 }
 
+// ── Mapping DGSYS article → {brassinNom, type} ───────────────────────────
+// Clé = Article (col A) en majuscules normalisé, ou Sous-famille (col D)
+const DGSYS_MAP = {
+ // Cave — Bouteilles 33cl
+ 'PERCHE 33CL':       {brassinNom:"La Pèrchée",          type:"Bouteille 33cl"},
+ 'PERCHEE 33CL':      {brassinNom:"La Pèrchée",          type:"Bouteille 33cl"},
+ 'IMPERTINENTE 33CL': {brassinNom:"L'Impèrtinente",      type:"Bouteille 33cl"},
+ 'PERLIMPINPIN 33CL': {brassinNom:"La Pèrlimpinpin",     type:"Bouteille 33cl"},
+ 'SUPERE 33CL':       {brassinNom:"La Supère",           type:"Bouteille 33cl"},
+ 'PERILLEUSE 33CL':   {brassinNom:"La Pèrilleuse",       type:"Bouteille 33cl"},
+ 'MERVEILLEUSE 33CL': {brassinNom:"La Mèrveilleuse",     type:"Bouteille 33cl"},
+ 'BLONDE 33CL':       {brassinNom:"La Blonde des Papas", type:"Bouteille 33cl"},
+ 'BLONDE DES P 33CL': {brassinNom:"La Blonde des Papas", type:"Bouteille 33cl"},
+ 'MARY STOUT 33CL':   {brassinNom:"La Mary'Stout",       type:"Bouteille 33cl"},
+ 'MAMAGASCAR 33CL':   {brassinNom:"La Mamagascar",       type:"Bouteille 33cl"},
+ 'BCDC 33CL':         {brassinNom:"BCDC",                type:"Bouteille 33cl"},
+ 'CHROMAMATIK 33CL':  {brassinNom:"Chromamatik",         type:"Bouteille 33cl"},
+ // Cave — Bouteilles 75cl
+ 'PERCHE 75CL':       {brassinNom:"La Pèrchée",          type:"Bouteille 75cl"},
+ 'PERCHEE 75CL':      {brassinNom:"La Pèrchée",          type:"Bouteille 75cl"},
+ 'IMPERTINENTE 75CL': {brassinNom:"L'Impèrtinente",      type:"Bouteille 75cl"},
+ 'PERLIMPINPIN 75CL': {brassinNom:"La Pèrlimpinpin",     type:"Bouteille 75cl"},
+ 'SUPERE 75CL':       {brassinNom:"La Supère",           type:"Bouteille 75cl"},
+ 'PERILLEUSE 75CL':   {brassinNom:"La Pèrilleuse",       type:"Bouteille 75cl"},
+ 'MERVEILLEUSE 75CL': {brassinNom:"La Mèrveilleuse",     type:"Bouteille 75cl"},
+ 'BLONDE 75CL':       {brassinNom:"La Blonde des Papas", type:"Bouteille 75cl"},
+ 'MARY STOUT 75CL':   {brassinNom:"La Mary'Stout",       type:"Bouteille 75cl"},
+};
+
+// Normalise un nom d'article DGSYS : supprime accents, met en majuscules
+function normDGSYS(s){
+ if(!s) return '';
+ return String(s).toUpperCase()
+  .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+  .replace(/['\u2019]/g,"'").replace(/\s+/g,' ').trim();
+}
+
+function parseDGSYSSheet(data){
+ // data = tableau de tableaux (XLSX.utils.sheet_to_json argsRaw:true)
+ // Cherche ligne d'en-tête : col A='Article'
+ let headerRow = -1;
+ for(let i=0;i<Math.min(data.length,10);i++){
+  const row=data[i];
+  if(row&&String(row[0]||'').toLowerCase().includes('article')){headerRow=i;break;}
+ }
+ if(headerRow<0) return [];
+
+ const rows = data.slice(headerRow+1);
+ const result=[];
+ rows.forEach(row=>{
+  if(!row||!row[0]) return;
+  const article = normDGSYS(row[0]);  // col A
+  const type    = String(row[1]||''); // col B
+  const qte     = parseFloat(row[4])||0; // col E = Qté
+  if(qte<=0) return;
+  // Cherche dans DGSYS_MAP par nom exact puis par début de chaîne
+  let match = DGSYS_MAP[article];
+  if(!match){
+   const key = Object.keys(DGSYS_MAP).find(k=>article.startsWith(k)||k.startsWith(article.slice(0,8)));
+   if(key) match = DGSYS_MAP[key];
+  }
+  if(match){
+   result.push({article:row[0],brassinNom:match.brassinNom,type:match.type,qte,typeDGSYS:type});
+  }
+ });
+ return result;
+}
+
 function ModuleStockPF({condSessions,recettes,stockCond,stockPF,setStockPF}){
- const [view,setView]   = useState('stock');   // 'stock' | 'valorisation'
+ const [view,setView]   = useState('stock');   // 'stock' | 'valorisation' | 'import'
  const [filtre,setFiltre] = useState('Tous');   // bière ou 'Tous'
  const [q,setQ]           = useState('');
  const [editLot,setEditLot] = useState(null);   // lot en cours d'édition
  const [adjVal,setAdjVal]   = useState('');     // valeur d'ajustement
+ // Import DGSYS
+ const [importLines,setImportLines] = useState(null); // lignes parsées
+ const [importMeta,setImportMeta]   = useState(null); // {fileName, date}
+ const [importDone,setImportDone]   = useState(false);
+ const fileInputRef = useRef();
 
  const pCond = calcPrixCond(stockCond);
  const fmtKey = {'Bouteille 33cl':'b33','Bouteille 75cl':'b75','Fût 20L':'f20','Fût 30L':'f30'};
@@ -6297,6 +6370,59 @@ function ModuleStockPF({condSessions,recettes,stockCond,stockPF,setStockPF}){
   setEditLot(null); setAdjVal('');
  };
 
+ const handleImportFile = (e) => {
+  const file = e.target.files?.[0];
+  if(!file) return;
+  setImportDone(false);
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+   try {
+    const wb = XLSX.read(ev.target.result, {type:'array'});
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const data = XLSX.utils.sheet_to_json(ws, {header:1, defval:''});
+    const lines = parseDGSYSSheet(data);
+    setImportLines(lines);
+    setImportMeta({fileName:file.name, date:new Date().toISOString().split('T')[0]});
+   } catch(err) {
+    alert('Erreur lecture fichier : ' + err.message);
+   }
+  };
+  reader.readAsArrayBuffer(file);
+  e.target.value='';
+ };
+
+ const confirmerImport = () => {
+  if(!importLines?.length) return;
+  const date = importMeta?.date || new Date().toISOString().split('T')[0];
+  const motif = `Vente DGSYS — ${importMeta?.fileName||'import'}`;
+  // Pour chaque ligne, répartir sur les lots FIFO (plus ancien en premier)
+  setStockPF(prev => {
+   let next = [...prev];
+   importLines.forEach(line => {
+    let restant = line.qte;
+    // lots correspondants triés par date de cond (FIFO)
+    const lots = allLots
+     .filter(l => l.brassinNom===line.brassinNom && l.type===line.type && l.qteDispo>0)
+     .sort((a,b)=>a.dateCond<b.dateCond?-1:1);
+    lots.forEach(lot => {
+     if(restant<=0) return;
+     const deduit = Math.min(restant, lot.qteDispo);
+     restant -= deduit;
+     const sortie = {date, qte:deduit, motif};
+     const idx = next.findIndex(x=>x.lotId===lot.lotId);
+     if(idx>=0){
+      next[idx] = {...next[idx], qteDispo:next[idx].qteDispo-deduit, sorties:[...(next[idx].sorties||[]),sortie]};
+     } else {
+      next.push({...lot, qteDispo:lot.qteDispo-deduit, sorties:[sortie]});
+     }
+    });
+   });
+   return next;
+  });
+  setImportDone(true);
+  setImportLines(null);
+ };
+
  const couleurType = t => ({
   'Bouteille 33cl':'#2A6080','Bouteille 75cl':'#4A6741',
   'Fût 20L':C.amber,'Fût 30L':C.brick,
@@ -6343,20 +6469,163 @@ function ModuleStockPF({condSessions,recettes,stockCond,stockPF,setStockPF}){
     ))}
    </div>
 
-   <div style={{display:'flex',gap:8,marginBottom:14}}>
-    {[['stock','📋 Lots & stock'],['valorisation','📊 Valorisation']].map(([v,l])=>(
-     <button key={v} onClick={()=>setView(v)}
+   <div style={{display:'flex',gap:8,marginBottom:14,overflowX:'auto',scrollbarWidth:'none'}}>
+    {[['stock','📋 Lots & stock'],['valorisation','📊 Valorisation'],['import','⬇ Import DGSYS']].map(([v,l])=>(
+     <button key={v} onClick={()=>{setView(v);setImportLines(null);setImportDone(false);}}
       style={{flexShrink:0,padding:'8px 14px',borderRadius:20,
        border:`1.5px solid ${view===v?C.amber:C.border}`,
        background:view===v?C.amberPale:C.bgCard,
-       color:view===v?C.amber:C.textMid,fontWeight:600,fontSize:13,minHeight:40}}>
+       color:view===v?C.amber:C.textMid,fontWeight:600,fontSize:13,minHeight:40,whiteSpace:'nowrap'}}>
       {l}
      </button>
     ))}
    </div>
 
-   <SearchBar value={q} onChange={setQ} placeholder="Bière, lot, format…"/>
-   <div style={{display:'flex',gap:6,overflowX:'auto',paddingBottom:6,
+   {view==='import'&&(
+    <div>
+     {/* Zone upload */}
+     <input ref={fileInputRef} type="file" accept=".xlsx,.xls,.csv"
+      style={{display:'none'}} onChange={handleImportFile}/>
+
+     {!importLines&&!importDone&&(
+      <div>
+       <div style={{background:C.bgCard,border:`1.5px dashed ${C.amber}`,borderRadius:14,
+        padding:'32px 20px',textAlign:'center',marginBottom:16,cursor:'pointer'}}
+        onClick={()=>fileInputRef.current?.click()}>
+        <div style={{fontSize:36,marginBottom:10}}>📂</div>
+        <div style={{fontFamily:FA,fontSize:17,color:C.text,marginBottom:6}}>
+         Importer un export DGSYS
+        </div>
+        <div style={{fontSize:12,color:C.textLight,marginBottom:14,lineHeight:1.6}}>
+         Fichier Excel (.xlsx / .xls) exporté depuis DGSYS<br/>
+         Colonnes attendues : <strong style={{color:C.text}}>A=Article · B=Type · E=Qté</strong>
+        </div>
+        <div style={{display:'inline-block',background:C.amber,color:'#000',
+         borderRadius:8,padding:'10px 24px',fontWeight:700,fontSize:14}}>
+         Choisir le fichier
+        </div>
+       </div>
+
+       {/* Mapping de référence */}
+       <div style={{background:C.bgCard,border:`1px solid ${C.border}`,borderRadius:12,padding:'14px 16px'}}>
+        <div style={{fontFamily:FM,fontSize:11,fontWeight:700,color:C.textLight,
+         textTransform:'uppercase',letterSpacing:1,marginBottom:10}}>
+         Correspondances DGSYS → Brasserie
+        </div>
+        <div style={{display:'flex',flexDirection:'column',gap:4}}>
+         {Object.entries(DGSYS_MAP).map(([k,v])=>(
+          <div key={k} style={{display:'flex',justifyContent:'space-between',
+           alignItems:'center',padding:'5px 8px',borderRadius:6,
+           background:C.bg,fontSize:11}}>
+           <span style={{fontFamily:FM,color:C.textMid,minWidth:160}}>{k}</span>
+           <span style={{color:C.amber,fontWeight:600}}>→</span>
+           <span style={{color:C.text,textAlign:'right',flex:1,marginLeft:8,fontSize:11}}>
+            {v.brassinNom} · {v.type}
+           </span>
+          </div>
+         ))}
+        </div>
+        <div style={{marginTop:10,padding:'8px 12px',borderRadius:8,
+         background:C.amberPale,border:`1px solid ${C.amber}30`,
+         fontSize:11,color:C.amberL}}>
+         💡 Un article non trouvé dans ce tableau sera ignoré. Contactez si besoin d'ajouter un article.
+        </div>
+       </div>
+      </div>
+     )}
+
+     {importLines&&(
+      <div>
+       <div style={{background:C.bgCard,border:`1.5px solid ${C.amber}`,borderRadius:12,
+        padding:'14px 16px',marginBottom:14}}>
+        <div style={{fontFamily:FM,fontSize:11,fontWeight:700,color:C.amber,
+         textTransform:'uppercase',letterSpacing:1,marginBottom:4}}>
+         Aperçu — {importMeta?.fileName}
+        </div>
+        <div style={{fontSize:12,color:C.textLight}}>
+         {importLines.length} article{importLines.length>1?'s':''} reconnu{importLines.length>1?'s':''} sur cet export
+        </div>
+       </div>
+
+       {importLines.length===0&&(
+        <div style={{textAlign:'center',padding:'32px',color:C.textLight}}>
+         <div style={{fontSize:32,marginBottom:8}}>🔍</div>
+         <div style={{fontWeight:600}}>Aucun article Cave reconnu</div>
+         <div style={{fontSize:12,marginTop:4}}>Vérifiez que le fichier est bien un export DGSYS complet</div>
+        </div>
+       )}
+
+       {importLines.map((line,i)=>{
+        const lots = allLots
+         .filter(l=>l.brassinNom===line.brassinNom&&l.type===line.type&&l.qteDispo>0)
+         .sort((a,b)=>a.dateCond<b.dateCond?-1:1);
+        const dispo = lots.reduce((s,l)=>s+l.qteDispo,0);
+        const ok = dispo >= line.qte;
+        return(
+         <div key={i} style={{background:C.bgCard,borderRadius:10,padding:'12px 14px',
+          marginBottom:8,border:`1.5px solid ${ok?C.border:C.alert}`,
+          borderLeft:`4px solid ${ok?C.green:C.alert}`}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:6}}>
+           <div>
+            <div style={{fontWeight:700,color:C.text,fontSize:14}}>{line.brassinNom}</div>
+            <Tag text={line.type} color={couleurType(line.type)} bg={`${couleurType(line.type)}15`}/>
+           </div>
+           <div style={{textAlign:'right'}}>
+            <div style={{fontFamily:FM,fontWeight:700,fontSize:18,
+             color:ok?C.green:C.alert}}>−{line.qte}</div>
+            <div style={{fontSize:10,color:C.textLight}}>unités vendues</div>
+           </div>
+          </div>
+          <div style={{fontSize:11,color:C.textMid,display:'flex',gap:12,flexWrap:'wrap'}}>
+           <span>DGSYS : <strong style={{color:C.text}}>{line.article}</strong></span>
+           <span>Dispo stock : <strong style={{color:ok?C.ok:C.alert}}>{dispo}</strong></span>
+           {!ok&&<span style={{color:C.alert,fontWeight:600}}>⚠ Stock insuffisant (+{line.qte-dispo} manquants)</span>}
+          </div>
+          {lots.length>0&&(
+           <div style={{marginTop:6,padding:'5px 8px',background:C.bg,borderRadius:6,
+            fontSize:10,color:C.textLight,fontFamily:FM}}>
+            FIFO : {lots.map(l=>`lot ${l.lot} (${l.qteDispo} dispo)`).join(' → ')}
+           </div>
+          )}
+         </div>
+        );
+       })}
+
+       <div style={{display:'flex',gap:10,justifyContent:'flex-end',marginTop:14}}>
+        <button onClick={()=>{setImportLines(null);setImportMeta(null);}}
+         style={{padding:'11px 20px',borderRadius:8,border:`1px solid ${C.border}`,
+          background:'transparent',color:C.textMid,fontWeight:700,fontSize:14,minHeight:46}}>
+         Annuler
+        </button>
+        <button onClick={confirmerImport} disabled={importLines.length===0}
+         style={{padding:'11px 28px',borderRadius:8,border:'none',
+          background:importLines.length>0?C.amber:'#555',color:'#000',
+          fontWeight:900,fontSize:14,minHeight:46,cursor:importLines.length>0?'pointer':'default'}}>
+         ✓ Appliquer {importLines.reduce((s,l)=>s+l.qte,0)} sorties
+        </button>
+       </div>
+      </div>
+     )}
+
+     {importDone&&(
+      <div style={{textAlign:'center',padding:'48px 20px'}}>
+       <div style={{fontSize:48,marginBottom:12}}>✅</div>
+       <div style={{fontFamily:FA,fontSize:20,color:C.text,marginBottom:6}}>Import appliqué</div>
+       <div style={{fontSize:13,color:C.textLight,marginBottom:24}}>
+        Le stock produits finis a été mis à jour
+       </div>
+       <button onClick={()=>{setImportDone(false);setView('stock');}}
+        style={{padding:'12px 28px',borderRadius:8,border:'none',
+         background:C.amber,color:'#000',fontWeight:700,fontSize:14,minHeight:46}}>
+        Voir le stock mis à jour →
+       </button>
+      </div>
+     )}
+    </div>
+   )}
+
+   {view!=='import'&&<SearchBar value={q} onChange={setQ} placeholder="Bière, lot, format…"/>}
+   {view!=='import'&&<div style={{display:'flex',gap:6,overflowX:'auto',paddingBottom:6,
     marginBottom:14,scrollbarWidth:'none'}}>
     {bieres.map(b=>(
      <button key={b} onClick={()=>setFiltre(b)}
@@ -6367,9 +6636,9 @@ function ModuleStockPF({condSessions,recettes,stockCond,stockPF,setStockPF}){
       {b}
      </button>
     ))}
-   </div>
+   </div>}
 
-   {filtered.length===0&&(
+   {view!=='import'&&filtered.length===0&&(
     <div style={{textAlign:'center',padding:'60px 20px',color:C.textLight}}>
      <div style={{fontSize:40,marginBottom:10}}>🍾</div>
      <div style={{fontWeight:600,marginBottom:6}}>Aucun lot conditionné</div>
