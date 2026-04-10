@@ -16122,19 +16122,29 @@ function parseDGSYSSheet(data) {
   let headerRow = -1;
   for (let i = 0; i < Math.min(data.length, 10); i++) {
     const row = data[i];
-    if (row && String(row[0] || '').toLowerCase().includes('article')) {
+    const cell0 = String(row?.[0] || '').toLowerCase();
+    if (cell0.includes('article')) {
       headerRow = i;
       break;
     }
   }
   if (headerRow < 0) return [];
+
+  // Détecter les indices de colonnes depuis la ligne d'en-tête
+  const headers = (data[headerRow] || []).map(h => String(h || '').toLowerCase().trim());
+  const colArticle = headers.findIndex(h => h.includes('article'));
+  const colType = headers.findIndex(h => h === 'type' || h.startsWith('type'));
+  const colQte = headers.findIndex(h => h === 'qté' || h === 'qte' || h.startsWith('qt'));
+  const iA = colArticle >= 0 ? colArticle : 0;
+  const iT = colType >= 0 ? colType : 1;
+  const iQ = colQte >= 0 ? colQte : 4;
   const rows = data.slice(headerRow + 1);
   const result = [];
   rows.forEach(row => {
-    if (!row || !row[0]) return;
-    const article = normDGSYS(row[0]); // col A
-    const type = String(row[1] || ''); // col B
-    const qte = parseFloat(row[4]) || 0; // col E = Qté
+    if (!row || !row[iA]) return;
+    const article = normDGSYS(row[iA]);
+    const type = String(row[iT] || '');
+    const qte = parseFloat(String(row[iQ] || '').replace(',', '.').replace(/\s/g, '')) || 0;
     if (qte <= 0) return;
     // Cherche dans DGSYS_MAP par nom exact puis par début de chaîne
     let match = DGSYS_MAP[article];
