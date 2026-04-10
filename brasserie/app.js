@@ -2192,6 +2192,7 @@ const RECETTES_INIT = [{
 }];
 const PRODUCTION_INIT = [{
   id: 1,
+  lotBK: "",
   recette: "La Pèrilleuse",
   volume: 460,
   statut: "terminé",
@@ -2215,6 +2216,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 2,
+  lotBK: "B69",
   recette: "L'Impèrtinente",
   volume: 1629,
   statut: "terminé",
@@ -2238,6 +2240,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 3,
+  lotBK: "",
   recette: "La Blonde des Papas",
   volume: 1840,
   statut: "terminé",
@@ -2261,6 +2264,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 4,
+  lotBK: "",
   recette: "La Supère",
   volume: 915,
   statut: "terminé",
@@ -2284,6 +2288,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 5,
+  lotBK: "",
   recette: "La Mamagascar",
   volume: 1108,
   statut: "terminé",
@@ -2307,6 +2312,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 6,
+  lotBK: "",
   recette: "La Pèrchée",
   volume: 593,
   statut: "terminé",
@@ -2330,6 +2336,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 7,
+  lotBK: "",
   recette: "La Mary'Stout",
   volume: 475,
   statut: "terminé",
@@ -2353,6 +2360,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 8,
+  lotBK: "",
   recette: "La Pèrlimpinpin",
   volume: 1624,
   statut: "terminé",
@@ -2376,6 +2384,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 9,
+  lotBK: "",
   recette: "Papa Noël",
   volume: 1503,
   statut: "terminé",
@@ -2399,6 +2408,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 10,
+  lotBK: "",
   recette: "La Pèrilleuse",
   volume: 974,
   statut: "terminé",
@@ -2422,6 +2432,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 11,
+  lotBK: "",
   recette: "La Pèrchée",
   volume: 1261,
   statut: "terminé",
@@ -2445,6 +2456,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 12,
+  lotBK: "",
   recette: "La Mèrveilleuse",
   volume: 475,
   statut: "terminé",
@@ -2468,6 +2480,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 13,
+  lotBK: "",
   recette: "L'Impèrtinente",
   volume: 1810,
   statut: "terminé",
@@ -2491,6 +2504,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 14,
+  lotBK: "",
   recette: "La Pèrlimpinpin",
   volume: 1789,
   statut: "terminé",
@@ -2514,6 +2528,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 15,
+  lotBK: "",
   recette: "La Mèrlimpinpin",
   volume: 468,
   statut: "terminé",
@@ -2537,6 +2552,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 16,
+  lotBK: "",
   recette: "La Pèrilleuse",
   volume: 1008,
   statut: "terminé",
@@ -2560,6 +2576,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 17,
+  lotBK: "",
   recette: "La Blonde des Papas",
   volume: 1320,
   statut: "terminé",
@@ -2583,6 +2600,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 18,
+  lotBK: "",
   recette: "Single Hop Idaho7",
   volume: 570,
   statut: "terminé",
@@ -2606,6 +2624,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 19,
+  lotBK: "",
   recette: "La Supère",
   volume: 975,
   statut: "terminé",
@@ -2629,6 +2648,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 20,
+  lotBK: "",
   recette: "La Mèrveilleuse",
   volume: 1453,
   statut: "terminé",
@@ -2652,6 +2672,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 21,
+  lotBK: "",
   recette: "La Papa Poule",
   volume: 534,
   statut: "terminé",
@@ -2670,6 +2691,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 22,
+  lotBK: "",
   recette: "Farmère",
   volume: 1279,
   statut: "terminé",
@@ -2693,6 +2715,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 23,
+  lotBK: "",
   recette: "La Mamagascar",
   volume: 554,
   statut: "terminé",
@@ -2711,6 +2734,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 24,
+  lotBK: "",
   recette: "L'Impèrtinente",
   volume: 1735,
   statut: "terminé",
@@ -2734,6 +2758,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 25,
+  lotBK: "",
   recette: "La Pèrlimpinpin",
   volume: 1740,
   statut: "terminé",
@@ -2757,6 +2782,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 26,
+  lotBK: "",
   recette: "La Mèrlimpinpin",
   volume: 879,
   statut: "terminé",
@@ -2780,6 +2806,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 27,
+  lotBK: "",
   recette: "La Mèrcure",
   volume: 1159,
   statut: "terminé",
@@ -2798,6 +2825,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 28,
+  lotBK: "",
   recette: "La Pèrchée",
   volume: 600,
   statut: "terminé",
@@ -2821,6 +2849,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 29,
+  lotBK: "B61",
   recette: "La Pèrlimpinpin",
   volume: 1675,
   statut: "terminé",
@@ -2844,6 +2873,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 30,
+  lotBK: "B72",
   recette: "L'Impèrtinente",
   volume: 1851,
   statut: "terminé",
@@ -2853,7 +2883,7 @@ const PRODUCTION_INIT = [{
   og: 1.055,
   fg: 1.008,
   abv: 6,
-  notes: "pH=4,45. Lot 72",
+  notes: "pH=4,45",
   mesures: [{
     date: "2026-02-13",
     valeur: 1.055,
@@ -2867,6 +2897,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 31,
+  lotBK: "",
   recette: "Comère",
   volume: 947,
   statut: "terminé",
@@ -2890,6 +2921,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 32,
+  lotBK: "",
   recette: "La Supère",
   volume: 0,
   statut: "terminé",
@@ -2913,6 +2945,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 33,
+  lotBK: "",
   recette: "La Pèrilleuse",
   volume: 470,
   statut: "terminé",
@@ -2936,6 +2969,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 34,
+  lotBK: "",
   recette: "La Blonde des Papas",
   volume: 2000,
   statut: "terminé",
@@ -2959,6 +2993,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 35,
+  lotBK: "B73",
   recette: "L'Impèrtinente",
   volume: 1724,
   statut: "terminé",
@@ -2968,7 +3003,7 @@ const PRODUCTION_INIT = [{
   og: 1.046,
   fg: 1.013,
   abv: 6,
-  notes: "pH=4,36. Lot 73",
+  notes: "pH=4,36",
   mesures: [{
     date: "2026-03-13",
     valeur: 1.046,
@@ -2984,6 +3019,7 @@ const PRODUCTION_INIT = [{
 // ── 5 brassins en cours (cuves C1–C5) ──
 {
   id: 36,
+  lotBK: "V5",
   recette: "Chromamatik",
   volume: 0,
   statut: "garde",
@@ -3002,6 +3038,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 37,
+  lotBK: "V4",
   recette: "BCDC",
   volume: 0,
   statut: "fermentation",
@@ -3020,6 +3057,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 38,
+  lotBK: "",
   recette: "La Mèrveilleuse",
   volume: 0,
   statut: "fermentation",
@@ -3038,6 +3076,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 39,
+  lotBK: "",
   recette: "La Pèrlimpinpin",
   volume: 0,
   statut: "brassage",
@@ -3056,6 +3095,7 @@ const PRODUCTION_INIT = [{
   }]
 }, {
   id: 40,
+  lotBK: "",
   recette: "Foot Montaigu",
   volume: 0,
   statut: "planifié",
@@ -7437,7 +7477,18 @@ function ModuleProduction({
         fontSize: 10,
         color: C.textLight
       }
-    }, b.fermenteur), /*#__PURE__*/React.createElement("span", {
+    }, b.fermenteur), b.lotBK && /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontFamily: FM,
+        fontSize: 10,
+        fontWeight: 700,
+        color: C.amber,
+        background: C.amberPale,
+        padding: '2px 7px',
+        borderRadius: 8,
+        border: `1px solid ${C.amber}40`
+      }
+    }, b.lotBK), /*#__PURE__*/React.createElement("span", {
       style: {
         fontFamily: FM,
         fontSize: 10,
@@ -8618,7 +8669,7 @@ function ModuleProduction({
     }, v)))), /*#__PURE__*/React.createElement("div", {
       style: {
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
+        gridTemplateColumns: '1fr 1fr 1fr',
         gap: 10
       }
     }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Label, {
@@ -8629,6 +8680,15 @@ function ModuleProduction({
       onChange: e => updB(b, {
         volume: parseInt(e.target.value) || 0
       }),
+      style: iSt
+    })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Label, {
+      t: "N\xB0 lot BK"
+    }), /*#__PURE__*/React.createElement("input", {
+      value: b.lotBK || '',
+      onChange: e => updB(b, {
+        lotBK: e.target.value.trim()
+      }),
+      placeholder: "ex: B61",
       style: iSt
     })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Label, {
       t: "Date conditionnement"
@@ -9282,10 +9342,12 @@ function ModuleConditionnement({
     setCondForm(f => {
       const newId = f.brassinId === idStr ? '' : idStr;
       const b = newId ? brassins.find(x => x.id === parseInt(newId)) : null;
-      const lots = newId && b && f.lotBK ? rebuildLotNums(f.lots, f.lotBK, b.fermenteur, f.date) : f.lots;
+      const newLotBK = newId && b?.lotBK ? b.lotBK : f.lotBK;
+      const lots = newId && b && newLotBK ? rebuildLotNums(f.lots, newLotBK, b.fermenteur, f.date) : f.lots;
       return {
         ...f,
         brassinId: newId,
+        lotBK: newLotBK,
         lots
       };
     });

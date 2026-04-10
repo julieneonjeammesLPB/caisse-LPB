@@ -241,47 +241,47 @@ const RECETTES_INIT=[
  {id:20,nom:"La Témèraire",style:"Black IPA",abv:5.0,ibu:53,srm:40,og:1.048,fg:1.01,volume:500,permanent:false,prix:{b33:2.8,b75:6.5,f20:85,f30:125},description:"Black IPA — robe noire, amertume tranchante, Sabro + Simcoe en dry hop.",houblons:["Sabro","Simcoe"],levure:"Nottingham",ingredients:[{nom:"Pale",qte:62.5,"u":"kg"},{nom:"Cara Vienne 55",qte:25,"u":"kg"},{nom:"Cara 240",qte:7,"u":"kg"},{nom:"Chocolat",qte:6,"u":"kg"},{nom:"Black",qte:6,"u":"kg"},{nom:"Flocon Avoine",qte:12.5,"u":"kg",note:"non concassé"},{nom:"Amèrisant",qte:0.8,"u":"kg",note:"60min"},{nom:"Sabro",qte:1.0,"u":"kg",note:"aroma 80°C"},{nom:"Nottingham",qte:0.25,"u":"kg"},{nom:"Sabro",qte:1.5,"u":"kg",note:"DH"},{nom:"Simcoe",qte:0.5,"u":"kg",note:"DH"}]},
 ];
 const PRODUCTION_INIT=[
- {id:1,recette:"La Pèrilleuse",volume:460,statut:"terminé",dateDebut:"2025-09-19",dateCond:"2025-10-07",fermenteur:"C5",og:1.061,fg:1.020,abv:6,notes:"pH=4,37",mesures:[{date:"2025-09-19",valeur:1.061,temp:20,note:"DI"},{date:"2025-10-07",valeur:1.020,temp:5,note:"DF"}]},
- {id:2,recette:"L'Impèrtinente",volume:1629,statut:"terminé",dateDebut:"2025-09-16",dateCond:"2025-10-09",fermenteur:"C1",og:1.049,fg:1.006,abv:6,notes:"pH=4,31",mesures:[{date:"2025-09-16",valeur:1.049,temp:20,note:"DI"},{date:"2025-10-09",valeur:1.006,temp:5,note:"DF"}]},
- {id:3,recette:"La Blonde des Papas",volume:1840,statut:"terminé",dateDebut:"2025-09-25",dateCond:"2025-10-16",fermenteur:"C2",og:1.047,fg:1.011,abv:5,notes:"",mesures:[{date:"2025-09-25",valeur:1.047,temp:20,note:"DI"},{date:"2025-10-16",valeur:1.011,temp:5,note:"DF"}]},
- {id:4,recette:"La Supère",volume:915,statut:"terminé",dateDebut:"2025-09-30",dateCond:"2025-10-23",fermenteur:"C3",og:1.070,fg:1.007,abv:8.5,notes:"",mesures:[{date:"2025-09-30",valeur:1.070,temp:20,note:"DI"},{date:"2025-10-23",valeur:1.007,temp:5,note:"DF"}]},
- {id:5,recette:"La Mamagascar",volume:1108,statut:"terminé",dateDebut:"2025-10-03",dateCond:"2025-10-28",fermenteur:"C4",og:1.069,fg:1.018,abv:7,notes:"",mesures:[{date:"2025-10-03",valeur:1.069,temp:20,note:"DI"},{date:"2025-10-28",valeur:1.018,temp:5,note:"DF"}]},
- {id:6,recette:"La Pèrchée",volume:593,statut:"terminé",dateDebut:"2025-10-07",dateCond:"2025-10-30",fermenteur:"C5",og:1.036,fg:1.004,abv:4.5,notes:"",mesures:[{date:"2025-10-07",valeur:1.036,temp:20,note:"DI"},{date:"2025-10-30",valeur:1.004,temp:5,note:"DF"}]},
- {id:7,recette:"La Mary'Stout",volume:475,statut:"terminé",dateDebut:"2025-10-07",dateCond:"2025-11-04",fermenteur:"C1",og:1.071,fg:1.027,abv:6,notes:"",mesures:[{date:"2025-10-07",valeur:1.071,temp:20,note:"DI"},{date:"2025-11-04",valeur:1.027,temp:5,note:"DF"}]},
- {id:8,recette:"La Pèrlimpinpin",volume:1624,statut:"terminé",dateDebut:"2025-10-17",dateCond:"2025-11-06",fermenteur:"C1",og:1.056,fg:1.008,abv:6.5,notes:"",mesures:[{date:"2025-10-17",valeur:1.056,temp:20,note:"DI"},{date:"2025-11-06",valeur:1.008,temp:5,note:"DF"}]},
- {id:9,recette:"Papa Noël",volume:1503,statut:"terminé",dateDebut:"2025-10-21",dateCond:"2025-11-13",fermenteur:"C2",og:1.053,fg:1.003,abv:7.2,notes:"Coriandre 0.5kg",mesures:[{date:"2025-10-21",valeur:1.053,temp:20,note:"DI"},{date:"2025-11-13",valeur:1.003,temp:5,note:"DF"}]},
- {id:10,recette:"La Pèrilleuse",volume:974,statut:"terminé",dateDebut:"2025-10-28",dateCond:"2025-11-18",fermenteur:"C3",og:1.061,fg:1.021,abv:6,notes:"",mesures:[{date:"2025-10-28",valeur:1.061,temp:20,note:"DI"},{date:"2025-11-18",valeur:1.021,temp:5,note:"DF"}]},
- {id:11,recette:"La Pèrchée",volume:1261,statut:"terminé",dateDebut:"2025-10-30",dateCond:"2025-11-25",fermenteur:"C4",og:1.037,fg:1.006,abv:4.5,notes:"",mesures:[{date:"2025-10-30",valeur:1.037,temp:20,note:"DI"},{date:"2025-11-25",valeur:1.006,temp:5,note:"DF"}]},
- {id:12,recette:"La Mèrveilleuse",volume:475,statut:"terminé",dateDebut:"2025-11-03",dateCond:"2025-11-27",fermenteur:"C5",og:1.059,fg:1.015,abv:6,notes:"",mesures:[{date:"2025-11-03",valeur:1.059,temp:20,note:"DI"},{date:"2025-11-27",valeur:1.015,temp:5,note:"DF"}]},
- {id:13,recette:"L'Impèrtinente",volume:1810,statut:"terminé",dateDebut:"2025-11-13",dateCond:"2025-12-02",fermenteur:"C1",og:1.049,fg:1.006,abv:6,notes:"",mesures:[{date:"2025-11-13",valeur:1.049,temp:20,note:"DI"},{date:"2025-12-02",valeur:1.006,temp:5,note:"DF"}]},
- {id:14,recette:"La Pèrlimpinpin",volume:1789,statut:"terminé",dateDebut:"2025-11-20",dateCond:"2025-12-09",fermenteur:"C2",og:1.052,fg:1.006,abv:6.5,notes:"",mesures:[{date:"2025-11-20",valeur:1.052,temp:20,note:"DI"},{date:"2025-12-09",valeur:1.006,temp:5,note:"DF"}]},
- {id:15,recette:"La Mèrlimpinpin",volume:468,statut:"terminé",dateDebut:"2025-11-25",dateCond:"2025-12-11",fermenteur:"C3",og:1.070,fg:1.015,abv:8,notes:"",mesures:[{date:"2025-11-25",valeur:1.070,temp:20,note:"DI"},{date:"2025-12-11",valeur:1.015,temp:5,note:"DF"}]},
- {id:16,recette:"La Pèrilleuse",volume:1008,statut:"terminé",dateDebut:"2025-12-02",dateCond:"2025-12-16",fermenteur:"C4",og:1.059,fg:1.020,abv:6,notes:"",mesures:[{date:"2025-12-02",valeur:1.059,temp:20,note:"DI"},{date:"2025-12-16",valeur:1.020,temp:5,note:"DF"}]},
- {id:17,recette:"La Blonde des Papas",volume:1320,statut:"terminé",dateDebut:"2025-12-04",dateCond:"2025-12-23",fermenteur:"C1",og:1.040,fg:1.011,abv:5,notes:"",mesures:[{date:"2025-12-04",valeur:1.040,temp:20,note:"DI"},{date:"2025-12-23",valeur:1.011,temp:5,note:"DF"}]},
- {id:18,recette:"Single Hop Idaho7",volume:570,statut:"terminé",dateDebut:"2025-12-09",dateCond:"2025-12-29",fermenteur:"C5",og:1.046,fg:1.006,abv:5,notes:"",mesures:[{date:"2025-12-09",valeur:1.046,temp:20,note:"DI"},{date:"2025-12-29",valeur:1.006,temp:5,note:"DF"}]},
- {id:19,recette:"La Supère",volume:975,statut:"terminé",dateDebut:"2025-12-17",dateCond:"2026-01-15",fermenteur:"C3",og:1.069,fg:1.009,abv:8.5,notes:"",mesures:[{date:"2025-12-17",valeur:1.069,temp:20,note:"DI"},{date:"2026-01-15",valeur:1.009,temp:5,note:"DF"}]},
- {id:20,recette:"La Mèrveilleuse",volume:1453,statut:"terminé",dateDebut:"2025-12-12",dateCond:"2026-01-16",fermenteur:"C2",og:1.054,fg:1.018,abv:6,notes:"",mesures:[{date:"2025-12-12",valeur:1.054,temp:20,note:"DI"},{date:"2026-01-16",valeur:1.018,temp:5,note:"DF"}]},
- {id:21,recette:"La Papa Poule",volume:534,statut:"terminé",dateDebut:"2025-11-21",dateCond:"2026-01-19",fermenteur:"Eau",og:1.045,fg:null,abv:4.5,notes:"Sour",mesures:[{date:"2025-11-21",valeur:1.045,temp:20,note:"DI"}]},
- {id:22,recette:"Farmère",volume:1279,statut:"terminé",dateDebut:"2025-12-19",dateCond:"2026-01-23",fermenteur:"C4",og:1.048,fg:1.012,abv:5,notes:"",mesures:[{date:"2025-12-19",valeur:1.048,temp:20,note:"DI"},{date:"2026-01-23",valeur:1.012,temp:5,note:"DF"}]},
- {id:23,recette:"La Mamagascar",volume:554,statut:"terminé",dateDebut:"2025-12-30",dateCond:"2026-01-26",fermenteur:"C5",og:1.069,fg:null,abv:7,notes:"Poivre 0.75kg",mesures:[{date:"2025-12-30",valeur:1.069,temp:20,note:"DI"}]},
- {id:24,recette:"L'Impèrtinente",volume:1735,statut:"terminé",dateDebut:"2026-01-09",dateCond:"2026-02-03",fermenteur:"C1",og:1.049,fg:1.006,abv:6,notes:"",mesures:[{date:"2026-01-09",valeur:1.049,temp:20,note:"DI"},{date:"2026-02-03",valeur:1.006,temp:5,note:"DF"}]},
- {id:25,recette:"La Pèrlimpinpin",volume:1740,statut:"terminé",dateDebut:"2026-01-19",dateCond:"2026-02-10",fermenteur:"C2",og:1.052,fg:1.008,abv:6.5,notes:"",mesures:[{date:"2026-01-19",valeur:1.052,temp:20,note:"DI"},{date:"2026-02-10",valeur:1.008,temp:5,note:"DF"}]},
- {id:26,recette:"La Mèrlimpinpin",volume:879,statut:"terminé",dateDebut:"2026-01-14",dateCond:"2026-02-12",fermenteur:"C3",og:1.073,fg:1.016,abv:8,notes:"",mesures:[{date:"2026-01-14",valeur:1.073,temp:20,note:"DI"},{date:"2026-02-12",valeur:1.016,temp:5,note:"DF"}]},
- {id:27,recette:"La Mèrcure",volume:1159,statut:"terminé",dateDebut:"2026-01-26",dateCond:"2026-02-19",fermenteur:"C4",og:1.034,fg:null,abv:4,notes:"Session IPA",mesures:[{date:"2026-01-26",valeur:1.034,temp:20,note:"DI"}]},
- {id:28,recette:"La Pèrchée",volume:600,statut:"terminé",dateDebut:"2026-01-29",dateCond:"2026-02-24",fermenteur:"C5",og:1.037,fg:1.005,abv:4.5,notes:"",mesures:[{date:"2026-01-29",valeur:1.037,temp:20,note:"DI"},{date:"2026-02-24",valeur:1.005,temp:5,note:"DF"}]},
- {id:29,recette:"La Pèrlimpinpin",volume:1675,statut:"terminé",dateDebut:"2026-02-06",dateCond:"2026-03-03",fermenteur:"C1",og:1.055,fg:1.008,abv:6.5,notes:"",mesures:[{date:"2026-02-06",valeur:1.055,temp:20,note:"DI"},{date:"2026-03-03",valeur:1.008,temp:5,note:"DF"}]},
- {id:30,recette:"L'Impèrtinente",volume:1851,statut:"terminé",dateDebut:"2026-02-13",dateCond:"2026-03-06",fermenteur:"C2",og:1.055,fg:1.008,abv:6,notes:"pH=4,45. Lot 72",mesures:[{date:"2026-02-13",valeur:1.055,temp:20,note:"DI"},{date:"2026-03-06",valeur:1.008,temp:5,note:"DF"}]},
- {id:31,recette:"Comère",volume:947,statut:"terminé",dateDebut:"2026-02-19",dateCond:"2026-03-12",fermenteur:"C3",og:1.049,fg:1.007,abv:5,notes:"pH=4,37. Azacca + Centennial",mesures:[{date:"2026-02-19",valeur:1.049,temp:20,note:"DI"},{date:"2026-03-12",valeur:1.007,temp:5,note:"DF"}]},
- {id:32,recette:"La Supère",volume:0,statut:"terminé",dateDebut:"2026-02-26",dateCond:"2026-03-19",fermenteur:"C4",og:1.069,fg:1.009,abv:8.5,notes:"pH=4,4. Coriandre 0.8kg",mesures:[{date:"2026-02-26",valeur:1.069,temp:20,note:"DI"},{date:"2026-03-19",valeur:1.009,temp:5,note:"DF"}]},
- {id:33,recette:"La Pèrilleuse",volume:470,statut:"terminé",dateDebut:"2026-02-27",dateCond:"2026-03-20",fermenteur:"C5",og:1.060,fg:1.020,abv:6,notes:"pH=4,41",mesures:[{date:"2026-02-27",valeur:1.060,temp:20,note:"DI"},{date:"2026-03-20",valeur:1.020,temp:5,note:"DF"}]},
- {id:34,recette:"La Blonde des Papas",volume:2000,statut:"terminé",dateDebut:"2026-03-06",dateCond:"2026-03-27",fermenteur:"C1",og:1.043,fg:1.007,abv:5,notes:"pH=4,4",mesures:[{date:"2026-03-06",valeur:1.043,temp:20,note:"DI"},{date:"2026-03-27",valeur:1.007,temp:5,note:"DF"}]},
- {id:35,recette:"L'Impèrtinente",volume:1724,statut:"terminé",dateDebut:"2026-03-13",dateCond:"2026-04-03",fermenteur:"C2",og:1.046,fg:1.013,abv:6,notes:"pH=4,36. Lot 73",mesures:[{date:"2026-03-13",valeur:1.046,temp:20,note:"DI"},{date:"2026-04-03",valeur:1.013,temp:5,note:"DF"}]},
+ {id:1, lotBK:"",    recette:"La Pèrilleuse",      volume:460,  statut:"terminé",    dateDebut:"2025-09-19",dateCond:"2025-10-07",fermenteur:"C5",og:1.061,fg:1.020,abv:6,  notes:"pH=4,37",                   mesures:[{date:"2025-09-19",valeur:1.061,temp:20,note:"DI"},{date:"2025-10-07",valeur:1.020,temp:5,note:"DF"}]},
+ {id:2, lotBK:"B69", recette:"L'Impèrtinente",     volume:1629, statut:"terminé",    dateDebut:"2025-09-16",dateCond:"2025-10-09",fermenteur:"C1",og:1.049,fg:1.006,abv:6,  notes:"pH=4,31",                   mesures:[{date:"2025-09-16",valeur:1.049,temp:20,note:"DI"},{date:"2025-10-09",valeur:1.006,temp:5,note:"DF"}]},
+ {id:3, lotBK:"",    recette:"La Blonde des Papas", volume:1840, statut:"terminé",    dateDebut:"2025-09-25",dateCond:"2025-10-16",fermenteur:"C2",og:1.047,fg:1.011,abv:5,  notes:"",                          mesures:[{date:"2025-09-25",valeur:1.047,temp:20,note:"DI"},{date:"2025-10-16",valeur:1.011,temp:5,note:"DF"}]},
+ {id:4, lotBK:"",    recette:"La Supère",           volume:915,  statut:"terminé",    dateDebut:"2025-09-30",dateCond:"2025-10-23",fermenteur:"C3",og:1.070,fg:1.007,abv:8.5,notes:"",                          mesures:[{date:"2025-09-30",valeur:1.070,temp:20,note:"DI"},{date:"2025-10-23",valeur:1.007,temp:5,note:"DF"}]},
+ {id:5, lotBK:"",    recette:"La Mamagascar",       volume:1108, statut:"terminé",    dateDebut:"2025-10-03",dateCond:"2025-10-28",fermenteur:"C4",og:1.069,fg:1.018,abv:7,  notes:"",                          mesures:[{date:"2025-10-03",valeur:1.069,temp:20,note:"DI"},{date:"2025-10-28",valeur:1.018,temp:5,note:"DF"}]},
+ {id:6, lotBK:"",    recette:"La Pèrchée",          volume:593,  statut:"terminé",    dateDebut:"2025-10-07",dateCond:"2025-10-30",fermenteur:"C5",og:1.036,fg:1.004,abv:4.5,notes:"",                          mesures:[{date:"2025-10-07",valeur:1.036,temp:20,note:"DI"},{date:"2025-10-30",valeur:1.004,temp:5,note:"DF"}]},
+ {id:7, lotBK:"",    recette:"La Mary'Stout",       volume:475,  statut:"terminé",    dateDebut:"2025-10-07",dateCond:"2025-11-04",fermenteur:"C1",og:1.071,fg:1.027,abv:6,  notes:"",                          mesures:[{date:"2025-10-07",valeur:1.071,temp:20,note:"DI"},{date:"2025-11-04",valeur:1.027,temp:5,note:"DF"}]},
+ {id:8, lotBK:"",    recette:"La Pèrlimpinpin",     volume:1624, statut:"terminé",    dateDebut:"2025-10-17",dateCond:"2025-11-06",fermenteur:"C1",og:1.056,fg:1.008,abv:6.5,notes:"",                          mesures:[{date:"2025-10-17",valeur:1.056,temp:20,note:"DI"},{date:"2025-11-06",valeur:1.008,temp:5,note:"DF"}]},
+ {id:9, lotBK:"",    recette:"Papa Noël",           volume:1503, statut:"terminé",    dateDebut:"2025-10-21",dateCond:"2025-11-13",fermenteur:"C2",og:1.053,fg:1.003,abv:7.2,notes:"Coriandre 0.5kg",           mesures:[{date:"2025-10-21",valeur:1.053,temp:20,note:"DI"},{date:"2025-11-13",valeur:1.003,temp:5,note:"DF"}]},
+ {id:10,lotBK:"",    recette:"La Pèrilleuse",       volume:974,  statut:"terminé",    dateDebut:"2025-10-28",dateCond:"2025-11-18",fermenteur:"C3",og:1.061,fg:1.021,abv:6,  notes:"",                          mesures:[{date:"2025-10-28",valeur:1.061,temp:20,note:"DI"},{date:"2025-11-18",valeur:1.021,temp:5,note:"DF"}]},
+ {id:11,lotBK:"",    recette:"La Pèrchée",          volume:1261, statut:"terminé",    dateDebut:"2025-10-30",dateCond:"2025-11-25",fermenteur:"C4",og:1.037,fg:1.006,abv:4.5,notes:"",                          mesures:[{date:"2025-10-30",valeur:1.037,temp:20,note:"DI"},{date:"2025-11-25",valeur:1.006,temp:5,note:"DF"}]},
+ {id:12,lotBK:"",    recette:"La Mèrveilleuse",     volume:475,  statut:"terminé",    dateDebut:"2025-11-03",dateCond:"2025-11-27",fermenteur:"C5",og:1.059,fg:1.015,abv:6,  notes:"",                          mesures:[{date:"2025-11-03",valeur:1.059,temp:20,note:"DI"},{date:"2025-11-27",valeur:1.015,temp:5,note:"DF"}]},
+ {id:13,lotBK:"",    recette:"L'Impèrtinente",      volume:1810, statut:"terminé",    dateDebut:"2025-11-13",dateCond:"2025-12-02",fermenteur:"C1",og:1.049,fg:1.006,abv:6,  notes:"",                          mesures:[{date:"2025-11-13",valeur:1.049,temp:20,note:"DI"},{date:"2025-12-02",valeur:1.006,temp:5,note:"DF"}]},
+ {id:14,lotBK:"",    recette:"La Pèrlimpinpin",     volume:1789, statut:"terminé",    dateDebut:"2025-11-20",dateCond:"2025-12-09",fermenteur:"C2",og:1.052,fg:1.006,abv:6.5,notes:"",                          mesures:[{date:"2025-11-20",valeur:1.052,temp:20,note:"DI"},{date:"2025-12-09",valeur:1.006,temp:5,note:"DF"}]},
+ {id:15,lotBK:"",    recette:"La Mèrlimpinpin",     volume:468,  statut:"terminé",    dateDebut:"2025-11-25",dateCond:"2025-12-11",fermenteur:"C3",og:1.070,fg:1.015,abv:8,  notes:"",                          mesures:[{date:"2025-11-25",valeur:1.070,temp:20,note:"DI"},{date:"2025-12-11",valeur:1.015,temp:5,note:"DF"}]},
+ {id:16,lotBK:"",    recette:"La Pèrilleuse",       volume:1008, statut:"terminé",    dateDebut:"2025-12-02",dateCond:"2025-12-16",fermenteur:"C4",og:1.059,fg:1.020,abv:6,  notes:"",                          mesures:[{date:"2025-12-02",valeur:1.059,temp:20,note:"DI"},{date:"2025-12-16",valeur:1.020,temp:5,note:"DF"}]},
+ {id:17,lotBK:"",    recette:"La Blonde des Papas", volume:1320, statut:"terminé",    dateDebut:"2025-12-04",dateCond:"2025-12-23",fermenteur:"C1",og:1.040,fg:1.011,abv:5,  notes:"",                          mesures:[{date:"2025-12-04",valeur:1.040,temp:20,note:"DI"},{date:"2025-12-23",valeur:1.011,temp:5,note:"DF"}]},
+ {id:18,lotBK:"",    recette:"Single Hop Idaho7",   volume:570,  statut:"terminé",    dateDebut:"2025-12-09",dateCond:"2025-12-29",fermenteur:"C5",og:1.046,fg:1.006,abv:5,  notes:"",                          mesures:[{date:"2025-12-09",valeur:1.046,temp:20,note:"DI"},{date:"2025-12-29",valeur:1.006,temp:5,note:"DF"}]},
+ {id:19,lotBK:"",    recette:"La Supère",           volume:975,  statut:"terminé",    dateDebut:"2025-12-17",dateCond:"2026-01-15",fermenteur:"C3",og:1.069,fg:1.009,abv:8.5,notes:"",                          mesures:[{date:"2025-12-17",valeur:1.069,temp:20,note:"DI"},{date:"2026-01-15",valeur:1.009,temp:5,note:"DF"}]},
+ {id:20,lotBK:"",    recette:"La Mèrveilleuse",     volume:1453, statut:"terminé",    dateDebut:"2025-12-12",dateCond:"2026-01-16",fermenteur:"C2",og:1.054,fg:1.018,abv:6,  notes:"",                          mesures:[{date:"2025-12-12",valeur:1.054,temp:20,note:"DI"},{date:"2026-01-16",valeur:1.018,temp:5,note:"DF"}]},
+ {id:21,lotBK:"",    recette:"La Papa Poule",       volume:534,  statut:"terminé",    dateDebut:"2025-11-21",dateCond:"2026-01-19",fermenteur:"Eau",og:1.045,fg:null,abv:4.5,notes:"Sour",                      mesures:[{date:"2025-11-21",valeur:1.045,temp:20,note:"DI"}]},
+ {id:22,lotBK:"",    recette:"Farmère",             volume:1279, statut:"terminé",    dateDebut:"2025-12-19",dateCond:"2026-01-23",fermenteur:"C4",og:1.048,fg:1.012,abv:5,  notes:"",                          mesures:[{date:"2025-12-19",valeur:1.048,temp:20,note:"DI"},{date:"2026-01-23",valeur:1.012,temp:5,note:"DF"}]},
+ {id:23,lotBK:"",    recette:"La Mamagascar",       volume:554,  statut:"terminé",    dateDebut:"2025-12-30",dateCond:"2026-01-26",fermenteur:"C5",og:1.069,fg:null, abv:7,  notes:"Poivre 0.75kg",             mesures:[{date:"2025-12-30",valeur:1.069,temp:20,note:"DI"}]},
+ {id:24,lotBK:"",    recette:"L'Impèrtinente",      volume:1735, statut:"terminé",    dateDebut:"2026-01-09",dateCond:"2026-02-03",fermenteur:"C1",og:1.049,fg:1.006,abv:6,  notes:"",                          mesures:[{date:"2026-01-09",valeur:1.049,temp:20,note:"DI"},{date:"2026-02-03",valeur:1.006,temp:5,note:"DF"}]},
+ {id:25,lotBK:"",    recette:"La Pèrlimpinpin",     volume:1740, statut:"terminé",    dateDebut:"2026-01-19",dateCond:"2026-02-10",fermenteur:"C2",og:1.052,fg:1.008,abv:6.5,notes:"",                          mesures:[{date:"2026-01-19",valeur:1.052,temp:20,note:"DI"},{date:"2026-02-10",valeur:1.008,temp:5,note:"DF"}]},
+ {id:26,lotBK:"",    recette:"La Mèrlimpinpin",     volume:879,  statut:"terminé",    dateDebut:"2026-01-14",dateCond:"2026-02-12",fermenteur:"C3",og:1.073,fg:1.016,abv:8,  notes:"",                          mesures:[{date:"2026-01-14",valeur:1.073,temp:20,note:"DI"},{date:"2026-02-12",valeur:1.016,temp:5,note:"DF"}]},
+ {id:27,lotBK:"",    recette:"La Mèrcure",          volume:1159, statut:"terminé",    dateDebut:"2026-01-26",dateCond:"2026-02-19",fermenteur:"C4",og:1.034,fg:null, abv:4,  notes:"Session IPA",               mesures:[{date:"2026-01-26",valeur:1.034,temp:20,note:"DI"}]},
+ {id:28,lotBK:"",    recette:"La Pèrchée",          volume:600,  statut:"terminé",    dateDebut:"2026-01-29",dateCond:"2026-02-24",fermenteur:"C5",og:1.037,fg:1.005,abv:4.5,notes:"",                          mesures:[{date:"2026-01-29",valeur:1.037,temp:20,note:"DI"},{date:"2026-02-24",valeur:1.005,temp:5,note:"DF"}]},
+ {id:29,lotBK:"B61", recette:"La Pèrlimpinpin",     volume:1675, statut:"terminé",    dateDebut:"2026-02-06",dateCond:"2026-03-03",fermenteur:"C1",og:1.055,fg:1.008,abv:6.5,notes:"",                          mesures:[{date:"2026-02-06",valeur:1.055,temp:20,note:"DI"},{date:"2026-03-03",valeur:1.008,temp:5,note:"DF"}]},
+ {id:30,lotBK:"B72", recette:"L'Impèrtinente",      volume:1851, statut:"terminé",    dateDebut:"2026-02-13",dateCond:"2026-03-06",fermenteur:"C2",og:1.055,fg:1.008,abv:6,  notes:"pH=4,45",                   mesures:[{date:"2026-02-13",valeur:1.055,temp:20,note:"DI"},{date:"2026-03-06",valeur:1.008,temp:5,note:"DF"}]},
+ {id:31,lotBK:"",    recette:"Comère",              volume:947,  statut:"terminé",    dateDebut:"2026-02-19",dateCond:"2026-03-12",fermenteur:"C3",og:1.049,fg:1.007,abv:5,  notes:"pH=4,37. Azacca + Centennial",mesures:[{date:"2026-02-19",valeur:1.049,temp:20,note:"DI"},{date:"2026-03-12",valeur:1.007,temp:5,note:"DF"}]},
+ {id:32,lotBK:"",    recette:"La Supère",           volume:0,    statut:"terminé",    dateDebut:"2026-02-26",dateCond:"2026-03-19",fermenteur:"C4",og:1.069,fg:1.009,abv:8.5,notes:"pH=4,4. Coriandre 0.8kg",   mesures:[{date:"2026-02-26",valeur:1.069,temp:20,note:"DI"},{date:"2026-03-19",valeur:1.009,temp:5,note:"DF"}]},
+ {id:33,lotBK:"",    recette:"La Pèrilleuse",       volume:470,  statut:"terminé",    dateDebut:"2026-02-27",dateCond:"2026-03-20",fermenteur:"C5",og:1.060,fg:1.020,abv:6,  notes:"pH=4,41",                   mesures:[{date:"2026-02-27",valeur:1.060,temp:20,note:"DI"},{date:"2026-03-20",valeur:1.020,temp:5,note:"DF"}]},
+ {id:34,lotBK:"",    recette:"La Blonde des Papas", volume:2000, statut:"terminé",    dateDebut:"2026-03-06",dateCond:"2026-03-27",fermenteur:"C1",og:1.043,fg:1.007,abv:5,  notes:"pH=4,4",                    mesures:[{date:"2026-03-06",valeur:1.043,temp:20,note:"DI"},{date:"2026-03-27",valeur:1.007,temp:5,note:"DF"}]},
+ {id:35,lotBK:"B73", recette:"L'Impèrtinente",      volume:1724, statut:"terminé",    dateDebut:"2026-03-13",dateCond:"2026-04-03",fermenteur:"C2",og:1.046,fg:1.013,abv:6,  notes:"pH=4,36",                   mesures:[{date:"2026-03-13",valeur:1.046,temp:20,note:"DI"},{date:"2026-04-03",valeur:1.013,temp:5,note:"DF"}]},
  // ── 5 brassins en cours (cuves C1–C5) ──
- {id:36,recette:"Chromamatik",volume:0,statut:"garde",dateDebut:"2026-03-17",dateCond:null,fermenteur:"C4",og:1.079,fg:null,abv:8,notes:"Malts: Pilsen 200kg, Pale 125kg, Blé 50kg. Cascade 2kg",mesures:[{date:"2026-03-17",valeur:1.079,temp:20,note:"DI"}]},
- {id:37,recette:"BCDC",volume:0,statut:"fermentation",dateDebut:"2026-03-25",dateCond:null,fermenteur:"C5",og:1.043,fg:null,abv:5,notes:"Malts: Pilsen 50kg, Pale 50kg",mesures:[{date:"2026-03-25",valeur:1.043,temp:20,note:"DI"}]},
- {id:38,recette:"La Mèrveilleuse",volume:0,statut:"fermentation",dateDebut:"2026-03-27",dateCond:null,fermenteur:"C3",og:1.054,fg:null,abv:6,notes:"Malts: Pilsen 75kg, Pale 50kg, Blé 50kg. Verdant",mesures:[{date:"2026-03-27",valeur:1.054,temp:20,note:"DI"}]},
- {id:39,recette:"La Pèrlimpinpin",volume:0,statut:"brassage",dateDebut:"2026-04-02",dateCond:null,fermenteur:"C1",og:1.052,fg:null,abv:6.5,notes:"Malts: Pilsen 262.5kg, Pale 150kg, Cara240 12kg",mesures:[{date:"2026-04-02",valeur:1.052,temp:20,note:"DI"}]},
- {id:40,recette:"Foot Montaigu",volume:0,statut:"planifié",dateDebut:"2026-04-10",dateCond:null,fermenteur:"C2",og:null,fg:null,abv:5.5,notes:"Malts: Pilsen 262.5kg. Brassage prévu 10/04",mesures:[]},
+ {id:36,lotBK:"V5",  recette:"Chromamatik",         volume:0,    statut:"garde",      dateDebut:"2026-03-17",dateCond:null,fermenteur:"C4",og:1.079,fg:null,abv:8,  notes:"Malts: Pilsen 200kg, Pale 125kg, Blé 50kg. Cascade 2kg",mesures:[{date:"2026-03-17",valeur:1.079,temp:20,note:"DI"}]},
+ {id:37,lotBK:"V4",  recette:"BCDC",                volume:0,    statut:"fermentation",dateDebut:"2026-03-25",dateCond:null,fermenteur:"C5",og:1.043,fg:null,abv:5,  notes:"Malts: Pilsen 50kg, Pale 50kg",mesures:[{date:"2026-03-25",valeur:1.043,temp:20,note:"DI"}]},
+ {id:38,lotBK:"",    recette:"La Mèrveilleuse",     volume:0,    statut:"fermentation",dateDebut:"2026-03-27",dateCond:null,fermenteur:"C3",og:1.054,fg:null,abv:6,  notes:"Malts: Pilsen 75kg, Pale 50kg, Blé 50kg. Verdant",mesures:[{date:"2026-03-27",valeur:1.054,temp:20,note:"DI"}]},
+ {id:39,lotBK:"",    recette:"La Pèrlimpinpin",     volume:0,    statut:"brassage",   dateDebut:"2026-04-02",dateCond:null,fermenteur:"C1",og:1.052,fg:null,abv:6.5,notes:"Malts: Pilsen 262.5kg, Pale 150kg, Cara240 12kg",mesures:[{date:"2026-04-02",valeur:1.052,temp:20,note:"DI"}]},
+ {id:40,lotBK:"",    recette:"Foot Montaigu",       volume:0,    statut:"planifié",   dateDebut:"2026-04-10",dateCond:null,fermenteur:"C2",og:null,fg:null,abv:5.5,notes:"Malts: Pilsen 262.5kg. Brassage prévu 10/04",mesures:[]},
 ];
 const STOCK_COND_INIT=[
  {id:1,nom:"Bouteille 33cl",cat:"Bouteille",qte:4800,u:"unités",seuil:500,prix:0.28,four:"Verallia",dateAjout:"2026-01-15"},
@@ -2173,6 +2173,11 @@ function ModuleProduction({brassins,setBrassins,recettes}){
         <Badge statut={b.statut}/>
         <span style={{fontFamily:FM,fontSize:10,
          color:C.textLight}}>{b.fermenteur}</span>
+        {b.lotBK&&<span style={{fontFamily:FM,fontSize:10,fontWeight:700,
+         color:C.amber,background:C.amberPale,padding:'2px 7px',
+         borderRadius:8,border:`1px solid ${C.amber}40`}}>
+         {b.lotBK}
+        </span>}
         <span style={{fontFamily:FM,fontSize:10,
          color:C.textLight}}>{fmtDate(b.dateDebut)} · J+{jours}</span>
        </div>
@@ -2765,11 +2770,18 @@ function ModuleProduction({brassins,setBrassins,recettes}){
         ))}
        </div>
       )}
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:10}}>
        <div>
         <Label t="Volume final (L)"/>
         <input type="number" value={b.volume||''}
          onChange={e=>updB(b,{volume:parseInt(e.target.value)||0})}
+         style={iSt}/>
+       </div>
+       <div>
+        <Label t="N° lot BK"/>
+        <input value={b.lotBK||''}
+         onChange={e=>updB(b,{lotBK:e.target.value.trim()})}
+         placeholder="ex: B61"
          style={iSt}/>
        </div>
        <div>
@@ -3130,9 +3142,10 @@ function ModuleConditionnement({brassins,setBrassins,stockCond,setStockCond,cond
   setCondForm(f => {
    const newId = f.brassinId===idStr ? '' : idStr;
    const b = newId ? brassins.find(x=>x.id===parseInt(newId)) : null;
-   const lots = (newId && b && f.lotBK)
-    ? rebuildLotNums(f.lots, f.lotBK, b.fermenteur, f.date) : f.lots;
-   return {...f, brassinId: newId, lots};
+   const newLotBK = (newId && b?.lotBK) ? b.lotBK : f.lotBK;
+   const lots = (newId && b && newLotBK)
+    ? rebuildLotNums(f.lots, newLotBK, b.fermenteur, f.date) : f.lots;
+   return {...f, brassinId: newId, lotBK: newLotBK, lots};
   });
  };
 
